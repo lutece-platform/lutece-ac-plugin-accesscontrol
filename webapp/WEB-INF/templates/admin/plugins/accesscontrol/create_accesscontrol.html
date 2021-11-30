@@ -1,0 +1,31 @@
+<#include "manageaccesscontrol_tabs.html" />
+<@tabs2 tab="accesscontrol" />
+<@box>
+	<@boxHeader title='#i18n{accesscontrol.create_accesscontrol.title}' />
+	<@boxBody>
+    <@tform name='create_accesscontrol' action='jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp'>
+
+        <@messages errors=errors />
+        <input type="hidden" id="id" name="id"/>
+        <input type="hidden" value="${token}" name="token" />
+
+		<@formGroup labelFor='name' labelKey='#i18n{accesscontrol.modify_accesscontrol.labelName}' mandatory=true>
+          	<@input type='text' id='name' name='name'  maxlength=255 value='${accesscontrol.name!\'\'}' tabIndex='0' />
+		</@formGroup>
+		<@formGroup labelFor='description' labelKey='#i18n{accesscontrol.modify_accesscontrol.labelDescription}' mandatory=true>
+          	<@input type='text' id='description' name='description'  value='${accesscontrol.description!\'\'}' tabIndex='1' />
+		</@formGroup>
+		<@formGroup labelFor='creation_date' labelKey='#i18n{accesscontrol.modify_accesscontrol.labelCreationDate}' mandatory=true>
+          	<@input type='text' id='creation_date' name='creation_date'  value='${accesscontrol.creationDate!\'\'}' tabIndex='2' />
+		</@formGroup>
+		<@formGroup labelFor='is_enabled' labelKey='#i18n{accesscontrol.modify_accesscontrol.labelIsEnabled}' mandatory=true>
+			<@checkBox id="is_enabled" name="is_enabled"  value="1" checked=accesscontrol.isEnabled!'false' tabIndex='3' />
+		</@formGroup>
+		<@formGroup labelFor='workgroup_key' labelKey='#i18n{accesscontrol.modify_accesscontrol.labelWorkgroupKey}' mandatory=true>
+          	<@input type='text' id='workgroup_key' name='workgroup_key'  maxlength=255 value='${accesscontrol.workgroupKey!\'\'}' tabIndex='4' />
+		</@formGroup>
+				
+		<@actionButtons button1Name="action_createAccessControl" button2Name="view_manageAccessControl"/>
+    </@tform>
+	</@boxBody>
+</@box>

@@ -1,0 +1,40 @@
+<@row>
+	<@columns>
+		<@box style='primary'>
+			<@boxHeader title='#i18n{accesscontrol.manage_accesscontrol.title}' boxTools=true>
+				<@tform class='form-inline pull-right' name='manage_accesscontrol' action='jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp'>
+					<@button type='submit' name='view_createAccessControl' buttonIcon='plus' title='#i18n{accesscontrol.manage_accesscontrols.buttonAdd}' />
+				</@tform>
+			</@boxHeader>
+			<@boxBody>    
+			    <@messages infos=infos />
+			    <@paginationAdmin paginator=paginator combo=1 />
+			    <div class="clearfix"></div>
+			    <@table>
+			        <@tr>
+			            <@th>#i18n{accesscontrol.manage_accesscontrols.columnName}</@th>
+			            <@th>#i18n{accesscontrol.manage_accesscontrols.columnDescription}</@th>
+			            <@th>#i18n{portal.util.labelActions}</@th>
+			        </@tr>
+			        <@tableHeadBodySeparator />
+			        <#list accesscontrol_list as accesscontrol >
+				        <@tr>
+				            <@td>${accesscontrol.name}</@td>
+				            <@td>${accesscontrol.description}</@td>
+				        	<@td>
+								<@aButton href='jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp?view=modifyAccessControl&id=${accesscontrol.id}' title='#i18n{portal.util.labelModify}' hideTitle=['all'] buttonIcon='pencil' />
+								<@aButton href='jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp?action=confirmRemoveAccessControl&id=${accesscontrol.id}' title='#i18n{portal.util.labelDelete}' buttonIcon='trash' hideTitle=['all'] color='btn-danger'  />
+								<#if accesscontrol.enabled>
+									<@aButton href='jsp/admin/plugins/workflow/ManageAccessControls.jsp?action=disableAccessControl&id=${accesscontrol.id}' hideTitle=['all'] buttonIcon='stop' color='danger' title='#i18n{accesscontrol.manage_accesscontrol.title_disable}' size='sm' />
+								<#else>
+									<@aButton href='jsp/admin/plugins/workflow/ManageAccessControls.jsp?action=enableAccessControl&id=${accesscontrol.id}' hideTitle=['all'] buttonIcon='play' color='success' title='#i18n{accesscontrol.manage_accesscontrol.title_enable}' size='sm' />
+								</#if>
+					        </@td>
+				        </@tr>
+				    </#list>
+			    </@table>
+			    <@paginationAdmin paginator=paginator />
+		  </@boxBody>
+		</@box>
+	</@columns>
+</@row>
