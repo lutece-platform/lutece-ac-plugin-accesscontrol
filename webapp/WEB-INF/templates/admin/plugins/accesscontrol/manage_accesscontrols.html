@@ -22,12 +22,12 @@
 				            <@td>${accesscontrol.name}</@td>
 				            <@td>${accesscontrol.description}</@td>
 				        	<@td>
-								<@aButton href='jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp?view=modifyAccessControl&id=${accesscontrol.id}' title='#i18n{portal.util.labelModify}' hideTitle=['all'] buttonIcon='pencil' />
-								<@aButton href='jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp?action=confirmRemoveAccessControl&id=${accesscontrol.id}' title='#i18n{portal.util.labelDelete}' buttonIcon='trash' hideTitle=['all'] color='btn-danger'  />
+								<@aButton href='jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp?view=modifyAccessControl&id=${accesscontrol.id}' title='#i18n{portal.util.labelModify}' hideTitle=['all'] buttonIcon='pencil' size='sm' />
+								<@aButton href='jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp?action=confirmRemoveAccessControl&id=${accesscontrol.id}' title='#i18n{portal.util.labelDelete}' buttonIcon='trash' hideTitle=['all'] color='danger' size='sm'  />
 								<#if accesscontrol.enabled>
-									<@aButton href='jsp/admin/plugins/workflow/ManageAccessControls.jsp?action=disableAccessControl&id=${accesscontrol.id}' hideTitle=['all'] buttonIcon='stop' color='danger' title='#i18n{accesscontrol.manage_accesscontrol.title_disable}' size='sm' />
+									<@aButton href='jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp?action=disableAccessControl&id=${accesscontrol.id}' hideTitle=['all'] buttonIcon='stop' color='danger' title='#i18n{accesscontrol.manage_accesscontrol.title_disable}' size='sm' />
 								<#else>
-									<@aButton href='jsp/admin/plugins/workflow/ManageAccessControls.jsp?action=enableAccessControl&id=${accesscontrol.id}' hideTitle=['all'] buttonIcon='play' color='success' title='#i18n{accesscontrol.manage_accesscontrol.title_enable}' size='sm' />
+									<@aButton href='jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp?action=enableAccessControl&id=${accesscontrol.id}' hideTitle=['all'] buttonIcon='play' color='success' title='#i18n{accesscontrol.manage_accesscontrol.title_enable}' size='sm' />
 								</#if>
 					        </@td>
 				        </@tr>

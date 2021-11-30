@@ -37,13 +37,17 @@ package fr.paris.lutece.plugins.accesscontrol.web;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.security.SecurityTokenService;
+import fr.paris.lutece.portal.service.workgroup.AdminWorkgroupService;
+import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.admin.AccessDeniedException;
 import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.util.url.UrlItem;
 
+import java.sql.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import fr.paris.lutece.plugins.accesscontrol.business.AccessControl;
@@ -73,7 +77,9 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
     // Markers
     private static final String MARK_ACCESSCONTROL_LIST = "accesscontrol_list";
     private static final String MARK_ACCESSCONTROL = "accesscontrol";
-
+    private static final String MARK_DEFAULT_VALUE_WORKGROUP_KEY = "workgroup_key_default_value";
+    private static final String MARK_USER_WORKGROUP_REF_LIST = "user_workgroup_list";
+    
     private static final String JSP_MANAGE_ACCESSCONTROLS = "jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp";
 
     // Properties
@@ -128,9 +134,13 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
     public String getCreateAccessControl( HttpServletRequest request )
     {
         _accesControl = ( _accesControl != null ) ? _accesControl : new AccessControl(  );
-
+        AdminUser adminUser = getUser( );
+        Locale locale = getLocale( );
+        
         Map<String, Object> model = getModel(  );
         model.put( MARK_ACCESSCONTROL, _accesControl );
+        model.put( MARK_USER_WORKGROUP_REF_LIST, AdminWorkgroupService.getUserWorkgroups( adminUser, locale ) );
+        model.put( MARK_DEFAULT_VALUE_WORKGROUP_KEY, AdminWorkgroupService.ALL_GROUPS );
         model.put( SecurityTokenService.MARK_TOKEN, SecurityTokenService.getInstance( ).getToken( request, ACTION_CREATE_ACCESSCONTROL ) );
 
         return getPage( PROPERTY_PAGE_TITLE_CREATE_ACCESSCONTROL, TEMPLATE_CREATE_ACCESSCONTROL, model );
@@ -159,6 +169,7 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
             return redirectView( request, VIEW_CREATE_ACCESSCONTROL );
         }
 
+        _accesControl.setCreationDate( new Date( System.currentTimeMillis( ) ) );
         AccessControlHome.create( _accesControl );
         addInfo( INFO_ACCESSCONTROL_CREATED, getLocale(  ) );
 
