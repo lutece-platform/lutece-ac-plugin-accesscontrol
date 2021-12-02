@@ -1,15 +1,13 @@
-
 --
 -- Structure for table accesscontrol_accesscontrol
 --
-
 DROP TABLE IF EXISTS accesscontrol_accesscontrol;
 CREATE TABLE accesscontrol_accesscontrol (
 	id_access_control int AUTO_INCREMENT,
 	name varchar(255) default '',
 	description long varchar,
-	creation_date date NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	is_enabled SMALLINT NOT NULL DEFAULT 0,
+	creation_date date DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	is_enabled SMALLINT DEFAULT 0 NOT NULL,
 	workgroup_key varchar(255) default '',
 	PRIMARY KEY (id_access_control)
 );
@@ -17,7 +15,6 @@ CREATE TABLE accesscontrol_accesscontrol (
 --
 -- Structure for table accesscontrol_accesscontroller
 --
-
 DROP TABLE IF EXISTS accesscontrol_accesscontroller;
 CREATE TABLE accesscontrol_accesscontroller (
 	id_access_controller int AUTO_INCREMENT,

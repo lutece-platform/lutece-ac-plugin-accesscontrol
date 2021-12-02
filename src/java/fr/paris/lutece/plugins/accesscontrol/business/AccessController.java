@@ -41,22 +41,23 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 /**
  * This is the business class for the object AccessController
- */ 
+ */
 public class AccessController implements Serializable
 {
     private static final long serialVersionUID = 1L;
 
-    // Variables declarations 
+    // Variables declarations
     private int _nId;
     private String _strType;
     private int _nOrder;
     private int _nIdAccesscontrol;
     private String _strBoolCond;
-    
+
     private transient String _title;
-    
+
     /**
      * Returns the Id
+     * 
      * @return The Id
      */
     public int getId( )
@@ -66,15 +67,18 @@ public class AccessController implements Serializable
 
     /**
      * Sets the Id
-     * @param nId The Id
-     */ 
+     * 
+     * @param nId
+     *            The Id
+     */
     public void setId( int nId )
     {
         _nId = nId;
     }
-    
+
     /**
      * Returns the Type
+     * 
      * @return The Type
      */
     public String getType( )
@@ -84,15 +88,18 @@ public class AccessController implements Serializable
 
     /**
      * Sets the Type
-     * @param strType The Type
-     */ 
+     * 
+     * @param strType
+     *            The Type
+     */
     public void setType( String strType )
     {
         _strType = strType;
     }
-    
+
     /**
      * Returns the Order
+     * 
      * @return The Order
      */
     public int getOrder( )
@@ -102,15 +109,18 @@ public class AccessController implements Serializable
 
     /**
      * Sets the Order
-     * @param nOrder The Order
-     */ 
+     * 
+     * @param nOrder
+     *            The Order
+     */
     public void setOrder( int nOrder )
     {
         _nOrder = nOrder;
     }
-    
+
     /**
      * Returns the IdAccesscontrol
+     * 
      * @return The IdAccesscontrol
      */
     public int getIdAccesscontrol( )
@@ -120,15 +130,18 @@ public class AccessController implements Serializable
 
     /**
      * Sets the IdAccesscontrol
-     * @param nIdAccesscontrol The IdAccesscontrol
-     */ 
+     * 
+     * @param nIdAccesscontrol
+     *            The IdAccesscontrol
+     */
     public void setIdAccesscontrol( int nIdAccesscontrol )
     {
         _nIdAccesscontrol = nIdAccesscontrol;
     }
-    
+
     /**
      * Returns the BoolCond
+     * 
      * @return The BoolCond
      */
     public String getBoolCond( )
@@ -138,30 +151,34 @@ public class AccessController implements Serializable
 
     /**
      * Sets the BoolCond
-     * @param strBoolCond The BoolCond
-     */ 
+     * 
+     * @param strBoolCond
+     *            The BoolCond
+     */
     public void setBoolCond( String strBoolCond )
     {
         _strBoolCond = strBoolCond;
     }
-    
+
     /**
      * set the title of the control
+     * 
      * @param locale
      * @return
      */
     public void setTitle( Locale locale )
     {
         _title = "";
-        IAccessControllerType controller = SpringContextService.getBean( _strType ); 
+        IAccessControllerType controller = SpringContextService.getBean( _strType );
         if ( controller != null )
         {
             _title = controller.getTitle( locale );
         }
     }
-    
+
     /**
      * get the title of the control
+     * 
      * @return
      */
     public String getTitle( )

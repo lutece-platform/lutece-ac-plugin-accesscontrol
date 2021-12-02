@@ -31,7 +31,7 @@
  *
  * License 1.0
  */
- 
+
 package fr.paris.lutece.plugins.accesscontrol.business;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
@@ -45,22 +45,31 @@ public interface IAccessControllerDAO
 {
     /**
      * Insert a new record in the table.
-     * @param accessController instance of the AccessController object to insert
-     * @param plugin the Plugin
+     * 
+     * @param accessController
+     *            instance of the AccessController object to insert
+     * @param plugin
+     *            the Plugin
      */
     void insert( AccessController accessController, Plugin plugin );
 
     /**
      * Update the record in the table
-     * @param accessController the reference of the AccessController
-     * @param plugin the Plugin
+     * 
+     * @param accessController
+     *            the reference of the AccessController
+     * @param plugin
+     *            the Plugin
      */
     void store( AccessController accessController, Plugin plugin );
 
     /**
      * Delete a record from the table
-     * @param nKey The identifier of the AccessController to delete
-     * @param plugin the Plugin
+     * 
+     * @param nKey
+     *            The identifier of the AccessController to delete
+     * @param plugin
+     *            the Plugin
      */
     void delete( int nKey, Plugin plugin );
 
@@ -69,36 +78,47 @@ public interface IAccessControllerDAO
 
     /**
      * Load the data from the table
-     * @param nKey The identifier of the accessController
-     * @param plugin the Plugin
+     * 
+     * @param nKey
+     *            The identifier of the accessController
+     * @param plugin
+     *            the Plugin
      * @return The instance of the accessController
      */
     AccessController load( int nKey, Plugin plugin );
 
     /**
      * Load the data of all the accessController objects and returns them as a list
-     * @param plugin the Plugin
+     * 
+     * @param plugin
+     *            the Plugin
      * @return The list which contains the data of all the accessController objects
      */
     List<AccessController> selectAccessControllersList( Plugin plugin );
-    
+
     /**
      * Load the data of all the accessController objects of an accesscontrol and returns them as a list
-     * @param plugin the Plugin
+     * 
+     * @param plugin
+     *            the Plugin
      * @return The list which contains the data of all the accessController objects
      */
     List<AccessController> selectAccessControllersListByAccessControl( int idAccessControl, Plugin plugin );
-    
+
     /**
      * Load the id of all the accessController objects and returns them as a list
-     * @param plugin the Plugin
+     * 
+     * @param plugin
+     *            the Plugin
      * @return The list which contains the id of all the accessController objects
      */
     List<Integer> selectIdAccessControllersList( Plugin plugin );
-    
+
     /**
      * Load the data of all the accessController objects and returns them as a referenceList
-     * @param plugin the Plugin
+     * 
+     * @param plugin
+     *            the Plugin
      * @return The referenceList which contains the data of all the accessController objects
      */
     ReferenceList selectAccessControllersReferenceList( Plugin plugin );

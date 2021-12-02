@@ -3,8 +3,8 @@
 	<@boxBody>
     <@tform name='create_accesscontrol' action='jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp'>
         <@messages errors=errors />
-        <input type="hidden" id="id" name="id"/>
-        <input type="hidden" value="${token}" name="token" />
+        <@input type="hidden" id="id" name="id"/>
+        <@input type="hidden" value="${token}" name="token" />
 
 		<@formGroup labelFor='name' labelKey='#i18n{accesscontrol.manage_accesscontrols.columnName}' mandatory=true>
           	<@input type='text' id='name' name='name'  maxlength=255 value='${accesscontrol.name!\'\'}' tabIndex='0' />

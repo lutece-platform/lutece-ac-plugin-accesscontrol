@@ -28,10 +28,9 @@
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- *"
+ *
  * License 1.0
  */
-
 package fr.paris.lutece.plugins.accesscontrol.business;
 
 import fr.paris.lutece.test.LuteceTestCase;
@@ -47,20 +46,20 @@ public class AccessControlBusinessTest extends LuteceTestCase
     private static final String NAME2 = "Name2";
     private static final String DESCRIPTION1 = "Description1";
     private static final String DESCRIPTION2 = "Description2";
-	private static final Date CREATIONDATE1 = new Date( 1000000l );
+    private static final Date CREATIONDATE1 = new Date( 1000000l );
     private static final Date CREATIONDATE2 = new Date( 2000000l );
-	private static final boolean ISENABLED1 = true;
+    private static final boolean ISENABLED1 = true;
     private static final boolean ISENABLED2 = false;
     private static final String WORKGROUPKEY1 = "WorkgroupKey1";
     private static final String WORKGROUPKEY2 = "WorkgroupKey2";
 
-	/**
-	* test AccessControl
-	*/
-    public void testBusiness(  )
+    /**
+     * test AccessControl
+     */
+    public void testBusiness( )
     {
         // Initialize an object
-        AccessControl accessControl = new AccessControl();
+        AccessControl accessControl = new AccessControl( );
         accessControl.setName( NAME1 );
         accessControl.setDescription( DESCRIPTION1 );
         accessControl.setCreationDate( CREATIONDATE1 );
@@ -70,11 +69,11 @@ public class AccessControlBusinessTest extends LuteceTestCase
         // Create test
         AccessControlHome.create( accessControl );
         AccessControl accessControlStored = AccessControlHome.findByPrimaryKey( accessControl.getId( ) );
-        assertEquals( accessControlStored.getName() , accessControl.getName( ) );
-        assertEquals( accessControlStored.getDescription() , accessControl.getDescription( ) );
-        assertEquals( accessControlStored.getCreationDate().toString() , accessControl.getCreationDate( ).toString() );
-        assertEquals( accessControlStored.isEnabled() , accessControl.isEnabled( ) );
-        assertEquals( accessControlStored.getWorkgroupKey() , accessControl.getWorkgroupKey( ) );
+        assertEquals( accessControlStored.getName( ), accessControl.getName( ) );
+        assertEquals( accessControlStored.getDescription( ), accessControl.getDescription( ) );
+        assertEquals( accessControlStored.getCreationDate( ).toString( ), accessControl.getCreationDate( ).toString( ) );
+        assertEquals( accessControlStored.isEnabled( ), accessControl.isEnabled( ) );
+        assertEquals( accessControlStored.getWorkgroupKey( ), accessControl.getWorkgroupKey( ) );
 
         // Update test
         accessControl.setName( NAME2 );
@@ -84,11 +83,11 @@ public class AccessControlBusinessTest extends LuteceTestCase
         accessControl.setWorkgroupKey( WORKGROUPKEY2 );
         AccessControlHome.update( accessControl );
         accessControlStored = AccessControlHome.findByPrimaryKey( accessControl.getId( ) );
-        assertEquals( accessControlStored.getName() , accessControl.getName( ) );
-        assertEquals( accessControlStored.getDescription() , accessControl.getDescription( ) );
-        assertEquals( accessControlStored.getCreationDate().toString() , accessControl.getCreationDate( ).toString() );
-        assertEquals( accessControlStored.isEnabled() , accessControl.isEnabled( ) );
-        assertEquals( accessControlStored.getWorkgroupKey() , accessControl.getWorkgroupKey( ) );
+        assertEquals( accessControlStored.getName( ), accessControl.getName( ) );
+        assertEquals( accessControlStored.getDescription( ), accessControl.getDescription( ) );
+        assertEquals( accessControlStored.getCreationDate( ).toString( ), accessControl.getCreationDate( ).toString( ) );
+        assertEquals( accessControlStored.isEnabled( ), accessControl.isEnabled( ) );
+        assertEquals( accessControlStored.getWorkgroupKey( ), accessControl.getWorkgroupKey( ) );
 
         // List test
         AccessControlHome.getAccessControlsList( );
@@ -97,10 +96,7 @@ public class AccessControlBusinessTest extends LuteceTestCase
         AccessControlHome.remove( accessControl.getId( ) );
         accessControlStored = AccessControlHome.findByPrimaryKey( accessControl.getId( ) );
         assertNull( accessControlStored );
-        
+
     }
-    
-    
-     
 
 }

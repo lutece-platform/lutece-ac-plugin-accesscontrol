@@ -31,7 +31,7 @@
  *
  * License 1.0
  */
- 	
+
 package fr.paris.lutece.plugins.accesscontrol.web;
 
 import fr.paris.lutece.portal.service.message.AdminMessage;
@@ -71,9 +71,9 @@ import fr.paris.lutece.plugins.accesscontrol.util.BoolCondition;
 public class AccessControlJspBean extends AbstractManageAccessControlJspBean
 {
     private static final long serialVersionUID = 128971112958212947L;
-    
+
     public static final String RIGHT_MANAGE_ACCESS_CONTROL = "ACCESSCONTROL_MANAGEMENT";
-    
+
     // Templates
     private static final String TEMPLATE_MANAGE_ACCESSCONTROLS = "/admin/plugins/accesscontrol/manage_accesscontrols.html";
     private static final String TEMPLATE_CREATE_ACCESSCONTROL = "/admin/plugins/accesscontrol/create_accesscontrol.html";
@@ -83,7 +83,7 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
     private static final String PARAMETER_ID_ACCESSCONTROL = "id";
     private static final String PARAMETER_ID_CONTROLLER = "id_controller";
     private static final String PARAMETER_ORDER = "new_order";
-    private static final String PARAMETER_BOOL_CONDITON = "boolCond"; 
+    private static final String PARAMETER_BOOL_CONDITON = "boolCond";
     private static final String PARAMETER_CONTROLLER_TYPE = "controller_type";
 
     // Properties for page titles
@@ -125,27 +125,29 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
     private static final String ACTION_CHANGE_CONDITON = "changeCondition";
     private static final String ACTION_CHANGE_ORDER = "changeOrder";
     private static final String ACTION_REMOVE_ACCESSCONTROLLER = "removeAccessController";
-    
+
     // Infos
     private static final String INFO_ACCESSCONTROL_CREATED = "accesscontrol.info.accesscontrol.created";
     private static final String INFO_ACCESSCONTROL_UPDATED = "accesscontrol.info.accesscontrol.updated";
     private static final String INFO_ACCESSCONTROL_REMOVED = "accesscontrol.info.accesscontrol.removed";
-    
+
     private IAccessControlService _accessControlService = SpringContextService.getBean( AccessControlService.BEAN_NAME );
-    
+
     // Session variable to store working values
     private AccessControl _accesControl;
-    
+
     /**
      * Build the Manage View
-     * @param request The HTTP request
+     * 
+     * @param request
+     *            The HTTP request
      * @return The page
      */
     @View( value = VIEW_MANAGE_ACCESSCONTROLS, defaultView = true )
     public String getManageAccessControls( HttpServletRequest request )
     {
         _accesControl = null;
-        List<AccessControl> listAccessControls = AccessControlHome.getAccessControlsList(  );
+        List<AccessControl> listAccessControls = AccessControlHome.getAccessControlsList( );
         Map<String, Object> model = getPaginatedListModel( request, MARK_ACCESSCONTROL_LIST, listAccessControls, JSP_MANAGE_ACCESSCONTROLS );
 
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_ACCESSCONTROLS, TEMPLATE_MANAGE_ACCESSCONTROLS, model );
@@ -154,17 +156,18 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
     /**
      * Returns the form to create a accesscontrol
      *
-     * @param request The Http request
+     * @param request
+     *            The Http request
      * @return the html code of the accesscontrol form
      */
     @View( VIEW_CREATE_ACCESSCONTROL )
     public String getCreateAccessControl( HttpServletRequest request )
     {
-        _accesControl = ( _accesControl != null ) ? _accesControl : new AccessControl(  );
+        _accesControl = ( _accesControl != null ) ? _accesControl : new AccessControl( );
         AdminUser adminUser = getUser( );
         Locale locale = getLocale( );
-        
-        Map<String, Object> model = getModel(  );
+
+        Map<String, Object> model = getModel( );
         model.put( MARK_ACCESSCONTROL, _accesControl );
         model.put( MARK_USER_WORKGROUP_REF_LIST, AdminWorkgroupService.getUserWorkgroups( adminUser, locale ) );
         model.put( MARK_DEFAULT_VALUE_WORKGROUP_KEY, AdminWorkgroupService.ALL_GROUPS );
@@ -176,7 +179,8 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
     /**
      * Process the data capture form of a new accesscontrol
      *
-     * @param request The Http Request
+     * @param request
+     *            The Http Request
      * @return The Jsp URL of the process result
      * @throws AccessDeniedException
      */
@@ -187,7 +191,7 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
 
         if ( !SecurityTokenService.getInstance( ).validate( request, ACTION_CREATE_ACCESSCONTROL ) )
         {
-            throw new AccessDeniedException ( "Invalid security token" );
+            throw new AccessDeniedException( "Invalid security token" );
         }
 
         // Check constraints
@@ -198,16 +202,16 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
 
         _accesControl.setCreationDate( new Date( System.currentTimeMillis( ) ) );
         AccessControlHome.create( _accesControl );
-        addInfo( INFO_ACCESSCONTROL_CREATED, getLocale(  ) );
+        addInfo( INFO_ACCESSCONTROL_CREATED, getLocale( ) );
 
         return redirectView( request, VIEW_MANAGE_ACCESSCONTROLS );
     }
 
     /**
-     * Manages the removal form of a accesscontrol whose identifier is in the http
-     * request
+     * Manages the removal form of a accesscontrol whose identifier is in the http request
      *
-     * @param request The Http request
+     * @param request
+     *            The Http request
      * @return the html code to confirm
      */
     @Action( ACTION_CONFIRM_REMOVE_ACCESSCONTROL )
@@ -217,16 +221,17 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
         UrlItem url = new UrlItem( getActionUrl( ACTION_REMOVE_ACCESSCONTROL ) );
         url.addParameter( PARAMETER_ID_ACCESSCONTROL, nId );
 
-        String strMessageUrl = AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_ACCESSCONTROL, url.getUrl(  ), AdminMessage.TYPE_CONFIRMATION );
+        String strMessageUrl = AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_ACCESSCONTROL, url.getUrl( ),
+                AdminMessage.TYPE_CONFIRMATION );
 
         return redirect( request, strMessageUrl );
     }
-    
+
     /**
-     * Manages the removal form of a accesscontroller whose identifier is in the http
-     * request
+     * Manages the removal form of a accesscontroller whose identifier is in the http request
      *
-     * @param request The Http request
+     * @param request
+     *            The Http request
      * @return the html code to confirm
      */
     @Action( ACTION_CONFIRM_REMOVE_ACCESSCONTROLLER )
@@ -236,7 +241,8 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
         UrlItem url = new UrlItem( getActionUrl( ACTION_REMOVE_ACCESSCONTROLLER ) );
         url.addParameter( PARAMETER_ID_CONTROLLER, nId );
 
-        String strMessageUrl = AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_ACCESSCONTROLLER, url.getUrl(  ), AdminMessage.TYPE_CONFIRMATION );
+        String strMessageUrl = AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_ACCESSCONTROLLER, url.getUrl( ),
+                AdminMessage.TYPE_CONFIRMATION );
 
         return redirect( request, strMessageUrl );
     }
@@ -244,39 +250,41 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
     /**
      * Handles the removal form of a accesscontrol
      *
-     * @param request The Http request
+     * @param request
+     *            The Http request
      * @return the jsp URL to display the form to manage accesscontrols
      */
     @Action( ACTION_REMOVE_ACCESSCONTROL )
     public String doRemoveAccessControl( HttpServletRequest request )
     {
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_ACCESSCONTROL ) );
-        
+
         List<AccessController> controllerList = AccessControllerHome.getAccessControllersListByAccessControlId( nId );
         for ( AccessController controller : controllerList )
         {
             _accessControlService.deleteAccessController( controller.getId( ) );
         }
         AccessControlHome.remove( nId );
-        addInfo( INFO_ACCESSCONTROL_REMOVED, getLocale(  ) );
+        addInfo( INFO_ACCESSCONTROL_REMOVED, getLocale( ) );
 
         return redirectView( request, VIEW_MANAGE_ACCESSCONTROLS );
     }
-    
+
     /**
      * Handles the removal form of a accesscontroller
      *
-     * @param request The Http request
+     * @param request
+     *            The Http request
      * @return the jsp URL to display the form to manage accesscontrols
      */
     @Action( ACTION_REMOVE_ACCESSCONTROLLER )
     public String doRemoveAccessController( HttpServletRequest request )
     {
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_CONTROLLER ) );
-        
+
         AccessController controllerToDelete = AccessControllerHome.findByPrimaryKey( nId );
         int idAccessControl = controllerToDelete.getIdAccesscontrol( );
-        
+
         AccessControllerHome.remove( nId );
         List<AccessController> controllerList = AccessControllerHome.getAccessControllersListByAccessControlId( idAccessControl );
         int newOrder = 1;
@@ -285,14 +293,15 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
             controller.setOrder( newOrder++ );
             AccessControllerHome.update( controller );
         }
-        addInfo( INFO_ACCESSCONTROL_REMOVED, getLocale(  ) );
+        addInfo( INFO_ACCESSCONTROL_REMOVED, getLocale( ) );
         return redirect( request, VIEW_MODIFY_ACCESSCONTROL, PARAMETER_ID_ACCESSCONTROL, idAccessControl );
     }
 
     /**
      * Returns the form to update info about a accesscontrol
      *
-     * @param request The Http request
+     * @param request
+     *            The Http request
      * @return The HTML form to update info
      */
     @View( VIEW_MODIFY_ACCESSCONTROL )
@@ -302,22 +311,22 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
 
         AdminUser adminUser = getUser( );
         Locale locale = getLocale( );
-        
-        if ( _accesControl == null || ( _accesControl.getId(  ) != nId ) )
+
+        if ( _accesControl == null || ( _accesControl.getId( ) != nId ) )
         {
             _accesControl = AccessControlHome.findByPrimaryKey( nId );
         }
 
         List<AccessController> listController = AccessControllerHome.getAccessControllersListByAccessControlId( nId );
-        listController.forEach( ac -> ac.setTitle(locale) );
-        
+        listController.forEach( ac -> ac.setTitle( locale ) );
+
         ReferenceList conditionList = new ReferenceList( );
         for ( BoolCondition bc : BoolCondition.values( ) )
         {
             conditionList.addItem( bc.name( ), bc.getLabel( locale ) );
         }
-        
-        Map<String, Object> model = getModel(  );
+
+        Map<String, Object> model = getModel( );
         model.put( MARK_ACCESSCONTROL, _accesControl );
         model.put( MARK_CONDITION_LIST, conditionList );
         model.put( MARK_USER_WORKGROUP_REF_LIST, AdminWorkgroupService.getUserWorkgroups( adminUser, locale ) );
@@ -331,7 +340,8 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
     /**
      * Process the change form of a accesscontrol
      *
-     * @param request The Http request
+     * @param request
+     *            The Http request
      * @return The Jsp URL of the process result
      * @throws AccessDeniedException
      */
@@ -342,7 +352,7 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
 
         if ( !SecurityTokenService.getInstance( ).validate( request, ACTION_MODIFY_ACCESSCONTROL ) )
         {
-            throw new AccessDeniedException ( "Invalid security token" );
+            throw new AccessDeniedException( "Invalid security token" );
         }
 
         // Check constraints
@@ -352,22 +362,23 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
         }
 
         AccessControlHome.update( _accesControl );
-        addInfo( INFO_ACCESSCONTROL_UPDATED, getLocale(  ) );
+        addInfo( INFO_ACCESSCONTROL_UPDATED, getLocale( ) );
 
         return redirectView( request, VIEW_MANAGE_ACCESSCONTROLS );
     }
-    
+
     /**
      * Enables the accesscontrol
      *
-     * @param request The Http Request
+     * @param request
+     *            The Http Request
      * @return The Jsp URL of the process result
      */
     @Action( ACTION_ENABLE_ACCESSCONTROL )
     public String doEnableAccessControl( HttpServletRequest request )
     {
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_ACCESSCONTROL ) );
-        
+
         AccessControl accessControl = AccessControlHome.findByPrimaryKey( nId );
         if ( accessControl != null )
         {
@@ -376,18 +387,19 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
         }
         return redirectView( request, VIEW_MANAGE_ACCESSCONTROLS );
     }
-    
+
     /**
      * Disables the accesscontrol
      *
-     * @param request The Http Request
+     * @param request
+     *            The Http Request
      * @return The Jsp URL of the process result
      */
     @Action( ACTION_DISABLE_ACCESSCONTROL )
     public String doDisableAccessControl( HttpServletRequest request )
     {
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_ACCESSCONTROL ) );
-        
+
         AccessControl accessControl = AccessControlHome.findByPrimaryKey( nId );
         if ( accessControl != null )
         {
@@ -396,9 +408,10 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
         }
         return redirectView( request, VIEW_MANAGE_ACCESSCONTROLS );
     }
-    
+
     /**
      * Create a new {@link AccessController}
+     * 
      * @param request
      * @return
      */
@@ -406,7 +419,7 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
     public String doCreateController( HttpServletRequest request )
     {
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_ACCESSCONTROL ) );
-        
+
         AccessControl accessControl = AccessControlHome.findByPrimaryKey( nId );
         if ( accessControl != null )
         {
@@ -414,20 +427,21 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
             controller.setIdAccesscontrol( nId );
             controller.setType( request.getParameter( PARAMETER_CONTROLLER_TYPE ) );
             controller.setBoolCond( BoolCondition.AND.name( ) );
-            
+
             List<AccessController> listController = AccessControllerHome.getAccessControllersListByAccessControlId( nId );
-            
+
             int maxOrder = listController.stream( ).max( Comparator.comparingInt( AccessController::getOrder ) ).map( AccessController::getOrder ).orElse( 0 );
             controller.setOrder( maxOrder + 1 );
             AccessControllerHome.create( controller );
-            
+
         }
-        
+
         return redirect( request, VIEW_MODIFY_ACCESSCONTROL, PARAMETER_ID_ACCESSCONTROL, nId );
     }
-    
+
     /**
      * Change the condition of the controller
+     * 
      * @param request
      * @return
      */
@@ -441,13 +455,14 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
             controller.setBoolCond( request.getParameter( PARAMETER_BOOL_CONDITON ) );
             AccessControllerHome.update( controller );
         }
-        
+
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_ACCESSCONTROL ) );
         return redirect( request, VIEW_MODIFY_ACCESSCONTROL, PARAMETER_ID_ACCESSCONTROL, nId );
     }
-    
+
     /**
      * Change the order of the controller
+     * 
      * @param request
      * @return
      */
@@ -457,29 +472,34 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_ACCESSCONTROL ) );
         int nIdController = Integer.parseInt( request.getParameter( PARAMETER_ID_CONTROLLER ) );
         AccessController controllerToChange = AccessControllerHome.findByPrimaryKey( nIdController );
-        if ( controllerToChange != null )
+        if ( controllerToChange == null )
         {
-            int nOrderToSet = Integer.parseInt( request.getParameter( PARAMETER_ORDER ) );
-            
-            List<AccessController> controllerList = AccessControllerHome.getAccessControllersListByAccessControlId( nId );
-            
-            // order goes up
-            if ( nOrderToSet < controllerToChange.getOrder( ) )
+            return redirect( request, VIEW_MODIFY_ACCESSCONTROL, PARAMETER_ID_ACCESSCONTROL, nId );
+        }
+        
+        int nOrderToSet = Integer.parseInt( request.getParameter( PARAMETER_ORDER ) );
+        List<AccessController> controllerList = AccessControllerHome.getAccessControllersListByAccessControlId( nId );
+
+        // order goes up
+        if ( nOrderToSet < controllerToChange.getOrder( ) )
+        {
+            controllerList = controllerList.stream( ).filter( ac -> ac.getOrder( ) >= nOrderToSet && ac.getOrder( ) < controllerToChange.getOrder( ) )
+                    .collect( Collectors.toList( ) );
+            for ( AccessController controller : controllerList )
             {
-                controllerList = controllerList.stream( ).filter( ac -> ac.getOrder( ) >= nOrderToSet && ac.getOrder( ) < controllerToChange.getOrder( ) ).collect( Collectors.toList( ) );
-                for ( AccessController controller : controllerList )
+                if ( controller.getOrder( ) < controllerToChange.getOrder( ) )
                 {
-                    if ( controller.getOrder( ) < controllerToChange.getOrder( ) )
-                    {
-                        controller.setOrder( controller.getOrder( ) + 1 );
-                        AccessControllerHome.update( controller );
-                    }
+                    controller.setOrder( controller.getOrder( ) + 1 );
+                    AccessControllerHome.update( controller );
                 }
             }
-            // order goes down
-            else if ( nOrderToSet > controllerToChange.getOrder( ) )
+        }
+        // order goes down
+        else
+            if ( nOrderToSet > controllerToChange.getOrder( ) )
             {
-                controllerList = controllerList.stream( ).filter( ac -> ac.getOrder( ) < nOrderToSet && ac.getOrder( ) > controllerToChange.getOrder( ) ).collect( Collectors.toList( ) );
+                controllerList = controllerList.stream( ).filter( ac -> ac.getOrder( ) < nOrderToSet && ac.getOrder( ) > controllerToChange.getOrder( ) )
+                        .collect( Collectors.toList( ) );
                 for ( AccessController controller : controllerList )
                 {
                     if ( controller.getOrder( ) > controllerToChange.getOrder( ) )
@@ -489,10 +509,9 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
                     }
                 }
             }
-            controllerToChange.setOrder( nOrderToSet );
-            AccessControllerHome.update( controllerToChange );
-        }
-       
+        controllerToChange.setOrder( nOrderToSet );
+        AccessControllerHome.update( controllerToChange );
+
         return redirect( request, VIEW_MODIFY_ACCESSCONTROL, PARAMETER_ID_ACCESSCONTROL, nId );
     }
 }

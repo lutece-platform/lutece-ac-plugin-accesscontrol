@@ -62,21 +62,21 @@ public final class AccessControllerDAO implements IAccessControllerDAO
     @Override
     public void insert( AccessController accessController, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, Statement.RETURN_GENERATED_KEYS, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, Statement.RETURN_GENERATED_KEYS, plugin ) )
         {
             int nIndex = 1;
-            daoUtil.setString( nIndex++ , accessController.getType( ) );
-            daoUtil.setInt( nIndex++ , accessController.getOrder( ) );
-            daoUtil.setInt( nIndex++ , accessController.getIdAccesscontrol( ) );
-            daoUtil.setString( nIndex++ , accessController.getBoolCond( ) );
-            
+            daoUtil.setString( nIndex++, accessController.getType( ) );
+            daoUtil.setInt( nIndex++, accessController.getOrder( ) );
+            daoUtil.setInt( nIndex++, accessController.getIdAccesscontrol( ) );
+            daoUtil.setString( nIndex++, accessController.getBoolCond( ) );
+
             daoUtil.executeUpdate( );
-            if ( daoUtil.nextGeneratedKey( ) ) 
+            if ( daoUtil.nextGeneratedKey( ) )
             {
                 accessController.setId( daoUtil.getGeneratedKeyInt( 1 ) );
             }
         }
-        
+
     }
 
     /**
@@ -86,15 +86,15 @@ public final class AccessControllerDAO implements IAccessControllerDAO
     public AccessController load( int nKey, Plugin plugin )
     {
         AccessController accessController = null;
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin ) )
         {
-	        daoUtil.setInt( 1 , nKey );
-	        daoUtil.executeQuery( );
-	        
-	        if ( daoUtil.next( ) )
-	        {
-	            accessController  = dataToObject( daoUtil );
-	        }
+            daoUtil.setInt( 1, nKey );
+            daoUtil.executeQuery( );
+
+            if ( daoUtil.next( ) )
+            {
+                accessController = dataToObject( daoUtil );
+            }
         }
         return accessController;
     }
@@ -105,10 +105,10 @@ public final class AccessControllerDAO implements IAccessControllerDAO
     @Override
     public void delete( int nKey, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin ) )
         {
-	        daoUtil.setInt( 1 , nKey );
-	        daoUtil.executeUpdate( );
+            daoUtil.setInt( 1, nKey );
+            daoUtil.executeUpdate( );
         }
     }
 
@@ -118,18 +118,18 @@ public final class AccessControllerDAO implements IAccessControllerDAO
     @Override
     public void store( AccessController accessController, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
         {
-	        int nIndex = 1;
-	        
-	        daoUtil.setInt( nIndex++ , accessController.getId( ) );
-	        daoUtil.setString( nIndex++ , accessController.getType( ) );
-	        daoUtil.setInt( nIndex++ , accessController.getOrder( ) );
-	        daoUtil.setInt( nIndex++ , accessController.getIdAccesscontrol( ) );
-	        daoUtil.setString( nIndex++ , accessController.getBoolCond( ) );
-	        daoUtil.setInt( nIndex , accessController.getId( ) );
-	
-	        daoUtil.executeUpdate( );
+            int nIndex = 1;
+
+            daoUtil.setInt( nIndex++, accessController.getId( ) );
+            daoUtil.setString( nIndex++, accessController.getType( ) );
+            daoUtil.setInt( nIndex++, accessController.getOrder( ) );
+            daoUtil.setInt( nIndex++, accessController.getIdAccesscontrol( ) );
+            daoUtil.setString( nIndex++, accessController.getBoolCond( ) );
+            daoUtil.setInt( nIndex, accessController.getId( ) );
+
+            daoUtil.executeUpdate( );
         }
     }
 
@@ -139,67 +139,11 @@ public final class AccessControllerDAO implements IAccessControllerDAO
     @Override
     public List<AccessController> selectAccessControllersList( Plugin plugin )
     {
-        List<AccessController> accessControllerList = new ArrayList<>(  );
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin ) )
-        {
-	        daoUtil.executeQuery(  );
-	
-	        while ( daoUtil.next(  ) )
-	        {
-	            AccessController accessController = dataToObject( daoUtil );
-	            accessControllerList.add( accessController );
-	        }
-        }
-        return accessControllerList;
-    }
-    
-    /**
-     * {@inheritDoc }
-     */
-    @Override
-    public List<Integer> selectIdAccessControllersList( Plugin plugin )
-    {
-        List<Integer> accessControllerList = new ArrayList<>( );
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL_ID, plugin ) )
-        {
-	        daoUtil.executeQuery(  );
-	
-	        while ( daoUtil.next(  ) )
-	        {
-	            accessControllerList.add( daoUtil.getInt( 1 ) );
-	        }
-        }
-        return accessControllerList;
-    }
-    
-    /**
-     * {@inheritDoc }
-     */
-    @Override
-    public ReferenceList selectAccessControllersReferenceList( Plugin plugin )
-    {
-        ReferenceList accessControllerList = new ReferenceList();
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin ) )
-        {
-	        daoUtil.executeQuery(  );
-	
-	        while ( daoUtil.next(  ) )
-	        {
-	            accessControllerList.addItem( daoUtil.getInt( 1 ) , daoUtil.getString( 2 ) );
-	        }
-    	}
-        return accessControllerList;
-    }
-    
-    @Override
-    public List<AccessController> selectAccessControllersListByAccessControl( int idAccessControl, Plugin plugin )
-    {
         List<AccessController> accessControllerList = new ArrayList<>( );
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_BY_ACCESS_CONTROL, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin ) )
         {
-            daoUtil.setInt( 1 , idAccessControl );
             daoUtil.executeQuery( );
-            
+
             while ( daoUtil.next( ) )
             {
                 AccessController accessController = dataToObject( daoUtil );
@@ -208,18 +152,74 @@ public final class AccessControllerDAO implements IAccessControllerDAO
         }
         return accessControllerList;
     }
-    
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public List<Integer> selectIdAccessControllersList( Plugin plugin )
+    {
+        List<Integer> accessControllerList = new ArrayList<>( );
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL_ID, plugin ) )
+        {
+            daoUtil.executeQuery( );
+
+            while ( daoUtil.next( ) )
+            {
+                accessControllerList.add( daoUtil.getInt( 1 ) );
+            }
+        }
+        return accessControllerList;
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public ReferenceList selectAccessControllersReferenceList( Plugin plugin )
+    {
+        ReferenceList accessControllerList = new ReferenceList( );
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin ) )
+        {
+            daoUtil.executeQuery( );
+
+            while ( daoUtil.next( ) )
+            {
+                accessControllerList.addItem( daoUtil.getInt( 1 ), daoUtil.getString( 2 ) );
+            }
+        }
+        return accessControllerList;
+    }
+
+    @Override
+    public List<AccessController> selectAccessControllersListByAccessControl( int idAccessControl, Plugin plugin )
+    {
+        List<AccessController> accessControllerList = new ArrayList<>( );
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_BY_ACCESS_CONTROL, plugin ) )
+        {
+            daoUtil.setInt( 1, idAccessControl );
+            daoUtil.executeQuery( );
+
+            while ( daoUtil.next( ) )
+            {
+                AccessController accessController = dataToObject( daoUtil );
+                accessControllerList.add( accessController );
+            }
+        }
+        return accessControllerList;
+    }
+
     private AccessController dataToObject( DAOUtil daoUtil )
     {
-        AccessController accessController = new AccessController();
+        AccessController accessController = new AccessController( );
         int nIndex = 0;
-        
+
         accessController.setId( daoUtil.getInt( ++nIndex ) );
-        accessController.setType( daoUtil.getString( ++nIndex ) );            
-        accessController.setOrder( daoUtil.getInt( ++nIndex ) );            
-        accessController.setIdAccesscontrol( daoUtil.getInt( ++nIndex ) );            
+        accessController.setType( daoUtil.getString( ++nIndex ) );
+        accessController.setOrder( daoUtil.getInt( ++nIndex ) );
+        accessController.setIdAccesscontrol( daoUtil.getInt( ++nIndex ) );
         accessController.setBoolCond( daoUtil.getString( ++nIndex ) );
-        
+
         return accessController;
     }
 }

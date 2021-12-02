@@ -61,22 +61,22 @@ public final class AccessControlDAO implements IAccessControlDAO
     @Override
     public void insert( AccessControl accessControl, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, Statement.RETURN_GENERATED_KEYS, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, Statement.RETURN_GENERATED_KEYS, plugin ) )
         {
             int nIndex = 1;
-            daoUtil.setString( nIndex++ , accessControl.getName( ) );
-            daoUtil.setString( nIndex++ , accessControl.getDescription( ) );
-            daoUtil.setDate( nIndex++ , accessControl.getCreationDate( ) );
-            daoUtil.setBoolean( nIndex++ , accessControl.isEnabled( ) );
-            daoUtil.setString( nIndex++ , accessControl.getWorkgroupKey( ) );
-            
+            daoUtil.setString( nIndex++, accessControl.getName( ) );
+            daoUtil.setString( nIndex++, accessControl.getDescription( ) );
+            daoUtil.setDate( nIndex++, accessControl.getCreationDate( ) );
+            daoUtil.setBoolean( nIndex++, accessControl.isEnabled( ) );
+            daoUtil.setString( nIndex++, accessControl.getWorkgroupKey( ) );
+
             daoUtil.executeUpdate( );
-            if ( daoUtil.nextGeneratedKey( ) ) 
+            if ( daoUtil.nextGeneratedKey( ) )
             {
                 accessControl.setId( daoUtil.getGeneratedKeyInt( 1 ) );
             }
         }
-        
+
     }
 
     /**
@@ -86,23 +86,23 @@ public final class AccessControlDAO implements IAccessControlDAO
     public AccessControl load( int nKey, Plugin plugin )
     {
         AccessControl accessControl = null;
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin ) )
         {
-	        daoUtil.setInt( 1 , nKey );
-	        daoUtil.executeQuery( );
-	
-	        if ( daoUtil.next( ) )
-	        {
-	            accessControl = new AccessControl();
-	            int nIndex = 1;
-	            
-	            accessControl.setId( daoUtil.getInt( nIndex++ ) );
-	            accessControl.setName( daoUtil.getString( nIndex++ ) );            
-	            accessControl.setDescription( daoUtil.getString( nIndex++ ) );            
-	            accessControl.setCreationDate( daoUtil.getDate( nIndex++ ) );            
-	            accessControl.setEnabled( daoUtil.getBoolean( nIndex++ ) );            
-	            accessControl.setWorkgroupKey( daoUtil.getString( nIndex ) );            
-	        }
+            daoUtil.setInt( 1, nKey );
+            daoUtil.executeQuery( );
+
+            if ( daoUtil.next( ) )
+            {
+                accessControl = new AccessControl( );
+                int nIndex = 1;
+
+                accessControl.setId( daoUtil.getInt( nIndex++ ) );
+                accessControl.setName( daoUtil.getString( nIndex++ ) );
+                accessControl.setDescription( daoUtil.getString( nIndex++ ) );
+                accessControl.setCreationDate( daoUtil.getDate( nIndex++ ) );
+                accessControl.setEnabled( daoUtil.getBoolean( nIndex++ ) );
+                accessControl.setWorkgroupKey( daoUtil.getString( nIndex ) );
+            }
         }
         return accessControl;
     }
@@ -113,10 +113,10 @@ public final class AccessControlDAO implements IAccessControlDAO
     @Override
     public void delete( int nKey, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin ) )
         {
-	        daoUtil.setInt( 1 , nKey );
-	        daoUtil.executeUpdate( );
+            daoUtil.setInt( 1, nKey );
+            daoUtil.executeUpdate( );
         }
     }
 
@@ -126,19 +126,19 @@ public final class AccessControlDAO implements IAccessControlDAO
     @Override
     public void store( AccessControl accessControl, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
         {
-	        int nIndex = 1;
-	        
-	        daoUtil.setInt( nIndex++ , accessControl.getId( ) );
-	        daoUtil.setString( nIndex++ , accessControl.getName( ) );
-	        daoUtil.setString( nIndex++ , accessControl.getDescription( ) );
-	        daoUtil.setDate( nIndex++ , accessControl.getCreationDate( ) );
-	        daoUtil.setBoolean( nIndex++ , accessControl.isEnabled( ) );
-	        daoUtil.setString( nIndex++ , accessControl.getWorkgroupKey( ) );
-	        daoUtil.setInt( nIndex , accessControl.getId( ) );
-	
-	        daoUtil.executeUpdate( );
+            int nIndex = 1;
+
+            daoUtil.setInt( nIndex++, accessControl.getId( ) );
+            daoUtil.setString( nIndex++, accessControl.getName( ) );
+            daoUtil.setString( nIndex++, accessControl.getDescription( ) );
+            daoUtil.setDate( nIndex++, accessControl.getCreationDate( ) );
+            daoUtil.setBoolean( nIndex++, accessControl.isEnabled( ) );
+            daoUtil.setString( nIndex++, accessControl.getWorkgroupKey( ) );
+            daoUtil.setInt( nIndex, accessControl.getId( ) );
+
+            daoUtil.executeUpdate( );
         }
     }
 
@@ -148,29 +148,29 @@ public final class AccessControlDAO implements IAccessControlDAO
     @Override
     public List<AccessControl> selectAccessControlsList( Plugin plugin )
     {
-        List<AccessControl> accessControlList = new ArrayList<>(  );
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin ) )
+        List<AccessControl> accessControlList = new ArrayList<>( );
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin ) )
         {
-	        daoUtil.executeQuery(  );
-	
-	        while ( daoUtil.next(  ) )
-	        {
-	            AccessControl accessControl = new AccessControl(  );
-	            int nIndex = 1;
-	            
-	            accessControl.setId( daoUtil.getInt( nIndex++ ) );
-	            accessControl.setName( daoUtil.getString( nIndex++ ) );
-	            accessControl.setDescription( daoUtil.getString( nIndex++ ) );
-	            accessControl.setCreationDate( daoUtil.getDate( nIndex++ ) );
-	            accessControl.setEnabled( daoUtil.getBoolean( nIndex++ ) );
-	            accessControl.setWorkgroupKey( daoUtil.getString( nIndex ) );            
-	
-	            accessControlList.add( accessControl );
-	        }
+            daoUtil.executeQuery( );
+
+            while ( daoUtil.next( ) )
+            {
+                AccessControl accessControl = new AccessControl( );
+                int nIndex = 1;
+
+                accessControl.setId( daoUtil.getInt( nIndex++ ) );
+                accessControl.setName( daoUtil.getString( nIndex++ ) );
+                accessControl.setDescription( daoUtil.getString( nIndex++ ) );
+                accessControl.setCreationDate( daoUtil.getDate( nIndex++ ) );
+                accessControl.setEnabled( daoUtil.getBoolean( nIndex++ ) );
+                accessControl.setWorkgroupKey( daoUtil.getString( nIndex ) );
+
+                accessControlList.add( accessControl );
+            }
         }
         return accessControlList;
     }
-    
+
     /**
      * {@inheritDoc }
      */
@@ -178,34 +178,34 @@ public final class AccessControlDAO implements IAccessControlDAO
     public List<Integer> selectIdAccessControlsList( Plugin plugin )
     {
         List<Integer> accessControlList = new ArrayList<>( );
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL_ID, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL_ID, plugin ) )
         {
-	        daoUtil.executeQuery(  );
-	
-	        while ( daoUtil.next(  ) )
-	        {
-	            accessControlList.add( daoUtil.getInt( 1 ) );
-	        }
+            daoUtil.executeQuery( );
+
+            while ( daoUtil.next( ) )
+            {
+                accessControlList.add( daoUtil.getInt( 1 ) );
+            }
         }
         return accessControlList;
     }
-    
+
     /**
      * {@inheritDoc }
      */
     @Override
     public ReferenceList selectAccessControlsReferenceList( Plugin plugin )
     {
-        ReferenceList accessControlList = new ReferenceList();
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin ) )
+        ReferenceList accessControlList = new ReferenceList( );
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin ) )
         {
-	        daoUtil.executeQuery(  );
-	
-	        while ( daoUtil.next(  ) )
-	        {
-	            accessControlList.addItem( daoUtil.getInt( 1 ) , daoUtil.getString( 2 ) );
-	        }
-    	}
+            daoUtil.executeQuery( );
+
+            while ( daoUtil.next( ) )
+            {
+                accessControlList.addItem( daoUtil.getInt( 1 ), daoUtil.getString( 2 ) );
+            }
+        }
         return accessControlList;
     }
 }

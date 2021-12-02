@@ -31,7 +31,7 @@
  *
  * License 1.0
  */
- package fr.paris.lutece.plugins.accesscontrol.business;
+package fr.paris.lutece.plugins.accesscontrol.business;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
@@ -52,14 +52,16 @@ public final class AccessControllerHome
     /**
      * Private constructor - this class need not be instantiated
      */
-    private AccessControllerHome(  )
+    private AccessControllerHome( )
     {
     }
 
     /**
      * Create an instance of the accessController class
-     * @param accessController The instance of the AccessController which contains the informations to store
-     * @return The  instance of accessController which has been created with its primary key.
+     * 
+     * @param accessController
+     *            The instance of the AccessController which contains the informations to store
+     * @return The instance of accessController which has been created with its primary key.
      */
     public static AccessController create( AccessController accessController )
     {
@@ -70,8 +72,10 @@ public final class AccessControllerHome
 
     /**
      * Update of the accessController which is specified in parameter
-     * @param accessController The instance of the AccessController which contains the data to store
-     * @return The instance of the  accessController which has been updated
+     * 
+     * @param accessController
+     *            The instance of the AccessController which contains the data to store
+     * @return The instance of the accessController which has been updated
      */
     public static AccessController update( AccessController accessController )
     {
@@ -82,7 +86,9 @@ public final class AccessControllerHome
 
     /**
      * Remove the accessController whose identifier is specified in parameter
-     * @param nKey The accessController Id
+     * 
+     * @param nKey
+     *            The accessController Id
      */
     public static void remove( int nKey )
     {
@@ -91,7 +97,9 @@ public final class AccessControllerHome
 
     /**
      * Returns an instance of a accessController whose identifier is specified in parameter
-     * @param nKey The accessController primary key
+     * 
+     * @param nKey
+     *            The accessController primary key
      * @return an instance of AccessController
      */
     public static AccessController findByPrimaryKey( int nKey )
@@ -101,33 +109,37 @@ public final class AccessControllerHome
 
     /**
      * Load the data of all the accessController objects and returns them as a list
+     * 
      * @return the list which contains the data of all the accessController objects
      */
     public static List<AccessController> getAccessControllersList( )
     {
         return _dao.selectAccessControllersList( _plugin );
     }
-    
+
     /**
      * Load the id of all the accessController objects and returns them as a list
+     * 
      * @return the list which contains the id of all the accessController objects
      */
     public static List<Integer> getIdAccessControllersList( )
     {
         return _dao.selectIdAccessControllersList( _plugin );
     }
-    
+
     /**
      * Load the data of all the accessController objects and returns them as a referenceList
+     * 
      * @return the referenceList which contains the data of all the accessController objects
      */
     public static ReferenceList getAccessControllersReferenceList( )
     {
         return _dao.selectAccessControllersReferenceList( _plugin );
     }
-    
+
     /**
      * Load the data of all the accessController objects and returns them as a list
+     * 
      * @return the list which contains the data of all the accessController objects
      */
     public static List<AccessController> getAccessControllersListByAccessControlId( int idAccessControl )
@@ -135,4 +147,3 @@ public final class AccessControllerHome
         return _dao.selectAccessControllersListByAccessControl( idAccessControl, _plugin );
     }
 }
-

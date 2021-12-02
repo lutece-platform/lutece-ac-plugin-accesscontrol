@@ -28,14 +28,12 @@
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- *"
+ *
  * License 1.0
  */
-
 package fr.paris.lutece.plugins.accesscontrol.business;
 
 import fr.paris.lutece.test.LuteceTestCase;
-
 
 /**
  * This is the business class test for the object AccessController
@@ -51,13 +49,13 @@ public class AccessControllerBusinessTest extends LuteceTestCase
     private static final String BOOLCOND1 = "BoolCond1";
     private static final String BOOLCOND2 = "BoolCond2";
 
-	/**
-	* test AccessController
-	*/
-    public void testBusiness(  )
+    /**
+     * test AccessController
+     */
+    public void testBusiness( )
     {
         // Initialize an object
-        AccessController accessController = new AccessController();
+        AccessController accessController = new AccessController( );
         accessController.setType( TYPE1 );
         accessController.setOrder( ORDER1 );
         accessController.setIdAccesscontrol( IDACCESSCONTROL1 );
@@ -66,10 +64,10 @@ public class AccessControllerBusinessTest extends LuteceTestCase
         // Create test
         AccessControllerHome.create( accessController );
         AccessController accessControllerStored = AccessControllerHome.findByPrimaryKey( accessController.getId( ) );
-        assertEquals( accessControllerStored.getType() , accessController.getType( ) );
-        assertEquals( accessControllerStored.getOrder() , accessController.getOrder( ) );
-        assertEquals( accessControllerStored.getIdAccesscontrol() , accessController.getIdAccesscontrol( ) );
-        assertEquals( accessControllerStored.getBoolCond() , accessController.getBoolCond( ) );
+        assertEquals( accessControllerStored.getType( ), accessController.getType( ) );
+        assertEquals( accessControllerStored.getOrder( ), accessController.getOrder( ) );
+        assertEquals( accessControllerStored.getIdAccesscontrol( ), accessController.getIdAccesscontrol( ) );
+        assertEquals( accessControllerStored.getBoolCond( ), accessController.getBoolCond( ) );
 
         // Update test
         accessController.setType( TYPE2 );
@@ -78,10 +76,10 @@ public class AccessControllerBusinessTest extends LuteceTestCase
         accessController.setBoolCond( BOOLCOND2 );
         AccessControllerHome.update( accessController );
         accessControllerStored = AccessControllerHome.findByPrimaryKey( accessController.getId( ) );
-        assertEquals( accessControllerStored.getType() , accessController.getType( ) );
-        assertEquals( accessControllerStored.getOrder() , accessController.getOrder( ) );
-        assertEquals( accessControllerStored.getIdAccesscontrol() , accessController.getIdAccesscontrol( ) );
-        assertEquals( accessControllerStored.getBoolCond() , accessController.getBoolCond( ) );
+        assertEquals( accessControllerStored.getType( ), accessController.getType( ) );
+        assertEquals( accessControllerStored.getOrder( ), accessController.getOrder( ) );
+        assertEquals( accessControllerStored.getIdAccesscontrol( ), accessController.getIdAccesscontrol( ) );
+        assertEquals( accessControllerStored.getBoolCond( ), accessController.getBoolCond( ) );
 
         // List test
         AccessControllerHome.getAccessControllersList( );
@@ -90,10 +88,7 @@ public class AccessControllerBusinessTest extends LuteceTestCase
         AccessControllerHome.remove( accessController.getId( ) );
         accessControllerStored = AccessControllerHome.findByPrimaryKey( accessController.getId( ) );
         assertNull( accessControllerStored );
-        
+
     }
-    
-    
-     
 
 }

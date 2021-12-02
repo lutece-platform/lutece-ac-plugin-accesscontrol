@@ -31,7 +31,7 @@
  *
  * License 1.0
  */
- package fr.paris.lutece.plugins.accesscontrol.business;
+package fr.paris.lutece.plugins.accesscontrol.business;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
@@ -52,14 +52,16 @@ public final class AccessControlHome
     /**
      * Private constructor - this class need not be instantiated
      */
-    private AccessControlHome(  )
+    private AccessControlHome( )
     {
     }
 
     /**
      * Create an instance of the accessControl class
-     * @param accessControl The instance of the AccessControl which contains the informations to store
-     * @return The  instance of accessControl which has been created with its primary key.
+     * 
+     * @param accessControl
+     *            The instance of the AccessControl which contains the informations to store
+     * @return The instance of accessControl which has been created with its primary key.
      */
     public static AccessControl create( AccessControl accessControl )
     {
@@ -70,8 +72,10 @@ public final class AccessControlHome
 
     /**
      * Update of the accessControl which is specified in parameter
-     * @param accessControl The instance of the AccessControl which contains the data to store
-     * @return The instance of the  accessControl which has been updated
+     * 
+     * @param accessControl
+     *            The instance of the AccessControl which contains the data to store
+     * @return The instance of the accessControl which has been updated
      */
     public static AccessControl update( AccessControl accessControl )
     {
@@ -82,7 +86,9 @@ public final class AccessControlHome
 
     /**
      * Remove the accessControl whose identifier is specified in parameter
-     * @param nKey The accessControl Id
+     * 
+     * @param nKey
+     *            The accessControl Id
      */
     public static void remove( int nKey )
     {
@@ -91,7 +97,9 @@ public final class AccessControlHome
 
     /**
      * Returns an instance of a accessControl whose identifier is specified in parameter
-     * @param nKey The accessControl primary key
+     * 
+     * @param nKey
+     *            The accessControl primary key
      * @return an instance of AccessControl
      */
     public static AccessControl findByPrimaryKey( int nKey )
@@ -101,24 +109,27 @@ public final class AccessControlHome
 
     /**
      * Load the data of all the accessControl objects and returns them as a list
+     * 
      * @return the list which contains the data of all the accessControl objects
      */
     public static List<AccessControl> getAccessControlsList( )
     {
         return _dao.selectAccessControlsList( _plugin );
     }
-    
+
     /**
      * Load the id of all the accessControl objects and returns them as a list
+     * 
      * @return the list which contains the id of all the accessControl objects
      */
     public static List<Integer> getIdAccessControlsList( )
     {
         return _dao.selectIdAccessControlsList( _plugin );
     }
-    
+
     /**
      * Load the data of all the accessControl objects and returns them as a referenceList
+     * 
      * @return the referenceList which contains the data of all the accessControl objects
      */
     public static ReferenceList getAccessControlsReferenceList( )
@@ -126,4 +137,3 @@ public final class AccessControlHome
         return _dao.selectAccessControlsReferenceList( _plugin );
     }
 }
-

@@ -31,7 +31,7 @@
  *
  * License 1.0
  */
- 
+
 package fr.paris.lutece.plugins.accesscontrol.web;
 
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
@@ -53,47 +53,51 @@ public abstract class AbstractManageAccessControlJspBean extends MVCAdminJspBean
 
     // Rights
     public static final String RIGHT_MANAGEACCESSCONTROL = "ACCESSCONTROL_MANAGEMENT";
-    
+
     // Properties
     private static final String PROPERTY_DEFAULT_LIST_ITEM_PER_PAGE = "accesscontrol.listItems.itemsPerPage";
-    
+
     // Parameters
     private static final String PARAMETER_PAGE_INDEX = "page_index";
-    
+
     // Markers
     private static final String MARK_PAGINATOR = "paginator";
     private static final String MARK_NB_ITEMS_PER_PAGE = "nb_items_per_page";
 
-    //Variables
+    // Variables
     private String _strCurrentPageIndex;
     private int _nItemsPerPage;
 
     /**
      * Return a model that contains the list and paginator infos
-     * @param request The HTTP request
-     * @param strBookmark The bookmark
-     * @param list The list of item
-     * @param strManageJsp The JSP
+     * 
+     * @param request
+     *            The HTTP request
+     * @param strBookmark
+     *            The bookmark
+     * @param list
+     *            The list of item
+     * @param strManageJsp
+     *            The JSP
      * @return The model
      */
-    protected <T> Map<String, Object> getPaginatedListModel( HttpServletRequest request, String strBookmark, List<T> list,
-        String strManageJsp )
+    protected <T> Map<String, Object> getPaginatedListModel( HttpServletRequest request, String strBookmark, List<T> list, String strManageJsp )
     {
         int nDefaultItemsPerPage = AppPropertiesService.getPropertyInt( PROPERTY_DEFAULT_LIST_ITEM_PER_PAGE, 50 );
         _strCurrentPageIndex = AbstractPaginator.getPageIndex( request, AbstractPaginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
         _nItemsPerPage = AbstractPaginator.getItemsPerPage( request, AbstractPaginator.PARAMETER_ITEMS_PER_PAGE, _nItemsPerPage, nDefaultItemsPerPage );
 
         UrlItem url = new UrlItem( strManageJsp );
-        String strUrl = url.getUrl(  );
+        String strUrl = url.getUrl( );
 
         // PAGINATOR
-        LocalizedPaginator<T> paginator = new LocalizedPaginator<>( list, _nItemsPerPage, strUrl, PARAMETER_PAGE_INDEX, _strCurrentPageIndex, getLocale(  ) );
+        LocalizedPaginator<T> paginator = new LocalizedPaginator<>( list, _nItemsPerPage, strUrl, PARAMETER_PAGE_INDEX, _strCurrentPageIndex, getLocale( ) );
 
-        Map<String, Object> model = getModel(  );
+        Map<String, Object> model = getModel( );
 
         model.put( MARK_NB_ITEMS_PER_PAGE, String.valueOf( _nItemsPerPage ) );
         model.put( MARK_PAGINATOR, paginator );
-        model.put( strBookmark, paginator.getPageItems(  ) );
+        model.put( strBookmark, paginator.getPageItems( ) );
 
         return model;
     }

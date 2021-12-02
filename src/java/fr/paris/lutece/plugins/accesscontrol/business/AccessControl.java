@@ -38,14 +38,14 @@ import java.sql.Date;
 
 /**
  * This is the business class for the object AccessControl
- */ 
+ */
 public class AccessControl implements Serializable
 {
     private static final long serialVersionUID = 1L;
 
-    // Variables declarations 
+    // Variables declarations
     private int _nId;
-    
+
     private String _strName;
     private String _strDescription;
     private Date _dateCreationDate;
@@ -54,6 +54,7 @@ public class AccessControl implements Serializable
 
     /**
      * Returns the Id
+     * 
      * @return The Id
      */
     public int getId( )
@@ -63,15 +64,18 @@ public class AccessControl implements Serializable
 
     /**
      * Sets the Id
-     * @param nId The Id
-     */ 
+     * 
+     * @param nId
+     *            The Id
+     */
     public void setId( int nId )
     {
         _nId = nId;
     }
-    
+
     /**
      * Returns the Name
+     * 
      * @return The Name
      */
     public String getName( )
@@ -81,15 +85,18 @@ public class AccessControl implements Serializable
 
     /**
      * Sets the Name
-     * @param strName The Name
-     */ 
+     * 
+     * @param strName
+     *            The Name
+     */
     public void setName( String strName )
     {
         _strName = strName;
     }
-    
+
     /**
      * Returns the Description
+     * 
      * @return The Description
      */
     public String getDescription( )
@@ -99,15 +106,18 @@ public class AccessControl implements Serializable
 
     /**
      * Sets the Description
-     * @param strDescription The Description
-     */ 
+     * 
+     * @param strDescription
+     *            The Description
+     */
     public void setDescription( String strDescription )
     {
         _strDescription = strDescription;
     }
-    
+
     /**
      * Returns the CreationDate
+     * 
      * @return The CreationDate
      */
     public Date getCreationDate( )
@@ -117,15 +127,18 @@ public class AccessControl implements Serializable
 
     /**
      * Sets the CreationDate
-     * @param dateCreationDate The CreationDate
-     */ 
+     * 
+     * @param dateCreationDate
+     *            The CreationDate
+     */
     public void setCreationDate( Date dateCreationDate )
     {
         _dateCreationDate = dateCreationDate;
     }
-    
+
     /**
      * Returns the IsEnabled
+     * 
      * @return The IsEnabled
      */
     public boolean isEnabled( )
@@ -135,15 +148,18 @@ public class AccessControl implements Serializable
 
     /**
      * Sets the IsEnabled
-     * @param bIsEnabled The IsEnabled
-     */ 
+     * 
+     * @param bIsEnabled
+     *            The IsEnabled
+     */
     public void setEnabled( boolean bIsEnabled )
     {
         _bIsEnabled = bIsEnabled;
     }
-    
+
     /**
      * Returns the WorkgroupKey
+     * 
      * @return The WorkgroupKey
      */
     public String getWorkgroupKey( )
@@ -153,8 +169,10 @@ public class AccessControl implements Serializable
 
     /**
      * Sets the WorkgroupKey
-     * @param strWorkgroupKey The WorkgroupKey
-     */ 
+     * 
+     * @param strWorkgroupKey
+     *            The WorkgroupKey
+     */
     public void setWorkgroupKey( String strWorkgroupKey )
     {
         _strWorkgroupKey = strWorkgroupKey;
