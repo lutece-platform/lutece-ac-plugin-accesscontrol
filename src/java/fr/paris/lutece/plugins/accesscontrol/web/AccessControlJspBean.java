@@ -37,21 +37,32 @@ package fr.paris.lutece.plugins.accesscontrol.web;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.security.SecurityTokenService;
+import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.workgroup.AdminWorkgroupService;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.admin.AccessDeniedException;
 import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
+import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.url.UrlItem;
 
 import java.sql.Date;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.stream.Collectors;
+
 import javax.servlet.http.HttpServletRequest;
+
 import fr.paris.lutece.plugins.accesscontrol.business.AccessControl;
 import fr.paris.lutece.plugins.accesscontrol.business.AccessControlHome;
+import fr.paris.lutece.plugins.accesscontrol.business.AccessController;
+import fr.paris.lutece.plugins.accesscontrol.business.AccessControllerHome;
+import fr.paris.lutece.plugins.accesscontrol.service.AccessControlService;
+import fr.paris.lutece.plugins.accesscontrol.service.IAccessControlService;
+import fr.paris.lutece.plugins.accesscontrol.util.BoolCondition;
 
 /**
  * This class provides the user interface to manage AccessControl features ( manage, create, modify, remove )
@@ -61,6 +72,8 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
 {
     private static final long serialVersionUID = 128971112958212947L;
     
+    public static final String RIGHT_MANAGE_ACCESS_CONTROL = "ACCESSCONTROL_MANAGEMENT";
+    
     // Templates
     private static final String TEMPLATE_MANAGE_ACCESSCONTROLS = "/admin/plugins/accesscontrol/manage_accesscontrols.html";
     private static final String TEMPLATE_CREATE_ACCESSCONTROL = "/admin/plugins/accesscontrol/create_accesscontrol.html";
@@ -68,6 +81,10 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
 
     // Parameters
     private static final String PARAMETER_ID_ACCESSCONTROL = "id";
+    private static final String PARAMETER_ID_CONTROLLER = "id_controller";
+    private static final String PARAMETER_ORDER = "new_order";
+    private static final String PARAMETER_BOOL_CONDITON = "boolCond"; 
+    private static final String PARAMETER_CONTROLLER_TYPE = "controller_type";
 
     // Properties for page titles
     private static final String PROPERTY_PAGE_TITLE_MANAGE_ACCESSCONTROLS = "accesscontrol.manage_accesscontrols.pageTitle";
@@ -79,7 +96,9 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
     private static final String MARK_ACCESSCONTROL = "accesscontrol";
     private static final String MARK_DEFAULT_VALUE_WORKGROUP_KEY = "workgroup_key_default_value";
     private static final String MARK_USER_WORKGROUP_REF_LIST = "user_workgroup_list";
-    
+    private static final String MARK_CONTROLLER_TYPE_LIST = "controller_type_list";
+    private static final String MARK_CONTROLLER_LIST = "controller_list";
+    private static final String MARK_CONDITION_LIST = "condition_list";
     private static final String JSP_MANAGE_ACCESSCONTROLS = "jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp";
 
     // Properties
@@ -100,11 +119,16 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
     private static final String ACTION_CONFIRM_REMOVE_ACCESSCONTROL = "confirmRemoveAccessControl";
     private static final String ACTION_ENABLE_ACCESSCONTROL = "enableAccessControl";
     private static final String ACTION_DISABLE_ACCESSCONTROL = "disableAccessControl";
+    private static final String ACTION_CREATE_CONTROLLER = "createController";
+    private static final String ACTION_CHANGE_CONDITON = "changeCondition";
+    private static final String ACTION_CHANGE_ORDER = "changeOrder";
     
     // Infos
     private static final String INFO_ACCESSCONTROL_CREATED = "accesscontrol.info.accesscontrol.created";
     private static final String INFO_ACCESSCONTROL_UPDATED = "accesscontrol.info.accesscontrol.updated";
     private static final String INFO_ACCESSCONTROL_REMOVED = "accesscontrol.info.accesscontrol.removed";
+    
+    private IAccessControlService _accessControlService = SpringContextService.getBean( AccessControlService.BEAN_NAME );
     
     // Session variable to store working values
     private AccessControl _accesControl;
@@ -222,13 +246,29 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
     {
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_ACCESSCONTROL ) );
 
+        AdminUser adminUser = getUser( );
+        Locale locale = getLocale( );
+        
         if ( _accesControl == null || ( _accesControl.getId(  ) != nId ) )
         {
             _accesControl = AccessControlHome.findByPrimaryKey( nId );
         }
 
+        List<AccessController> listController = AccessControllerHome.getAccessControllersListByAccessControlId( nId );
+        listController.forEach( ac -> ac.setTitle(locale) );
+        
+        ReferenceList conditionList = new ReferenceList( );
+        for ( BoolCondition bc : BoolCondition.values( ) )
+        {
+            conditionList.addItem( bc.name( ), bc.getLabel( locale ) );
+        }
+        
         Map<String, Object> model = getModel(  );
         model.put( MARK_ACCESSCONTROL, _accesControl );
+        model.put( MARK_CONDITION_LIST, conditionList );
+        model.put( MARK_USER_WORKGROUP_REF_LIST, AdminWorkgroupService.getUserWorkgroups( adminUser, locale ) );
+        model.put( MARK_CONTROLLER_LIST, listController );
+        model.put( MARK_CONTROLLER_TYPE_LIST, _accessControlService.createAccessControllerReferenceList( locale ) );
         model.put( SecurityTokenService.MARK_TOKEN, SecurityTokenService.getInstance( ).getToken( request, ACTION_MODIFY_ACCESSCONTROL ) );
 
         return getPage( PROPERTY_PAGE_TITLE_MODIFY_ACCESSCONTROL, TEMPLATE_MODIFY_ACCESSCONTROL, model );
@@ -301,5 +341,104 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
             AccessControlHome.update( accessControl );
         }
         return redirectView( request, VIEW_MANAGE_ACCESSCONTROLS );
+    }
+    
+    /**
+     * Create a new {@link AccessController}
+     * @param request
+     * @return
+     */
+    @Action( ACTION_CREATE_CONTROLLER )
+    public String doCreateController( HttpServletRequest request )
+    {
+        int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_ACCESSCONTROL ) );
+        
+        AccessControl accessControl = AccessControlHome.findByPrimaryKey( nId );
+        if ( accessControl != null )
+        {
+            AccessController controller = new AccessController( );
+            controller.setIdAccesscontrol( nId );
+            controller.setType( request.getParameter( PARAMETER_CONTROLLER_TYPE ) );
+            controller.setBoolCond( BoolCondition.AND.name( ) );
+            
+            List<AccessController> listController = AccessControllerHome.getAccessControllersListByAccessControlId( nId );
+            
+            int maxOrder = listController.stream( ).max( Comparator.comparingInt( AccessController::getOrder ) ).map( AccessController::getOrder ).orElse( 0 );
+            controller.setOrder( maxOrder + 1 );
+            AccessControllerHome.create( controller );
+            
+        }
+        
+        return redirect( request, VIEW_MODIFY_ACCESSCONTROL, PARAMETER_ID_ACCESSCONTROL, nId );
+    }
+    
+    /**
+     * Change the condition of the controller
+     * @param request
+     * @return
+     */
+    @Action( ACTION_CHANGE_CONDITON )
+    public String doChangeControllerCondition( HttpServletRequest request )
+    {
+        int nIdController = Integer.parseInt( request.getParameter( PARAMETER_ID_CONTROLLER ) );
+        AccessController controller = AccessControllerHome.findByPrimaryKey( nIdController );
+        if ( controller != null )
+        {
+            controller.setBoolCond( request.getParameter( PARAMETER_BOOL_CONDITON ) );
+            AccessControllerHome.update( controller );
+        }
+        
+        int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_ACCESSCONTROL ) );
+        return redirect( request, VIEW_MODIFY_ACCESSCONTROL, PARAMETER_ID_ACCESSCONTROL, nId );
+    }
+    
+    /**
+     * Change the order of the controller
+     * @param request
+     * @return
+     */
+    @Action( ACTION_CHANGE_ORDER )
+    public String doChangeControllerOrder( HttpServletRequest request )
+    {
+        int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_ACCESSCONTROL ) );
+        int nIdController = Integer.parseInt( request.getParameter( PARAMETER_ID_CONTROLLER ) );
+        AccessController controllerToChange = AccessControllerHome.findByPrimaryKey( nIdController );
+        if ( controllerToChange != null )
+        {
+            int nOrderToSet = Integer.parseInt( request.getParameter( PARAMETER_ORDER ) );
+            
+            List<AccessController> controllerList = AccessControllerHome.getAccessControllersListByAccessControlId( nId );
+            
+            // order goes up
+            if ( nOrderToSet < controllerToChange.getOrder( ) )
+            {
+                controllerList = controllerList.stream( ).filter( ac -> ac.getOrder( ) >= nOrderToSet && ac.getOrder( ) < controllerToChange.getOrder( ) ).collect( Collectors.toList( ) );
+                for ( AccessController controller : controllerList )
+                {
+                    if ( controller.getOrder( ) < controllerToChange.getOrder( ) )
+                    {
+                        controller.setOrder( controller.getOrder( ) + 1 );
+                        AccessControllerHome.update( controller );
+                    }
+                }
+            }
+            // order goes down
+            else if ( nOrderToSet > controllerToChange.getOrder( ) )
+            {
+                controllerList = controllerList.stream( ).filter( ac -> ac.getOrder( ) < nOrderToSet && ac.getOrder( ) > controllerToChange.getOrder( ) ).collect( Collectors.toList( ) );
+                for ( AccessController controller : controllerList )
+                {
+                    if ( controller.getOrder( ) > controllerToChange.getOrder( ) )
+                    {
+                        controller.setOrder( controller.getOrder( ) - 1 );
+                        AccessControllerHome.update( controller );
+                    }
+                }
+            }
+            controllerToChange.setOrder( nOrderToSet );
+            AccessControllerHome.update( controllerToChange );
+        }
+       
+        return redirect( request, VIEW_MODIFY_ACCESSCONTROL, PARAMETER_ID_ACCESSCONTROL, nId );
     }
 }

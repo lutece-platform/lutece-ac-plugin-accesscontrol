@@ -125,5 +125,14 @@ public final class AccessControllerHome
     {
         return _dao.selectAccessControllersReferenceList( _plugin );
     }
+    
+    /**
+     * Load the data of all the accessController objects and returns them as a list
+     * @return the list which contains the data of all the accessController objects
+     */
+    public static List<AccessController> getAccessControllersListByAccessControlId( int idAccessControl )
+    {
+        return _dao.selectAccessControllersListByAccessControl( idAccessControl, _plugin );
+    }
 }
 

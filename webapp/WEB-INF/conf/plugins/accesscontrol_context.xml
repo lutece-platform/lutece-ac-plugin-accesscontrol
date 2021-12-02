@@ -7,5 +7,8 @@
     <bean id="accesscontrol.accessControlDAO" class="fr.paris.lutece.plugins.accesscontrol.business.AccessControlDAO" />
     <bean id="accesscontrol.accessControllerDAO" class="fr.paris.lutece.plugins.accesscontrol.business.AccessControllerDAO" />
 
-
+    <bean id="accesscontrol.mockTempAccessControllerType" class="fr.paris.lutece.plugins.accesscontrol.service.MockTempAccessControllerType" />
+    
+    <bean id="accesscontrol.accessControlService" class="fr.paris.lutece.plugins.accesscontrol.service.AccessControlService" />
+    
 </beans>

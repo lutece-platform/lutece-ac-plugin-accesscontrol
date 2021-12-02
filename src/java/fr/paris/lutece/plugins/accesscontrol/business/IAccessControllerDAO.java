@@ -83,6 +83,13 @@ public interface IAccessControllerDAO
     List<AccessController> selectAccessControllersList( Plugin plugin );
     
     /**
+     * Load the data of all the accessController objects of an accesscontrol and returns them as a list
+     * @param plugin the Plugin
+     * @return The list which contains the data of all the accessController objects
+     */
+    List<AccessController> selectAccessControllersListByAccessControl( int idAccessControl, Plugin plugin );
+    
+    /**
      * Load the id of all the accessController objects and returns them as a list
      * @param plugin the Plugin
      * @return The list which contains the id of all the accessController objects

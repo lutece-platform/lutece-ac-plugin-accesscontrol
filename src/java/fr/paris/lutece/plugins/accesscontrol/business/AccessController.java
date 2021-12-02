@@ -34,6 +34,10 @@
 package fr.paris.lutece.plugins.accesscontrol.business;
 
 import java.io.Serializable;
+import java.util.Locale;
+
+import fr.paris.lutece.plugins.accesscontrol.service.IAccessControllerType;
+import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 /**
  * This is the business class for the object AccessController
@@ -48,7 +52,9 @@ public class AccessController implements Serializable
     private int _nOrder;
     private int _nIdAccesscontrol;
     private String _strBoolCond;
-
+    
+    private transient String _title;
+    
     /**
      * Returns the Id
      * @return The Id
@@ -137,5 +143,29 @@ public class AccessController implements Serializable
     public void setBoolCond( String strBoolCond )
     {
         _strBoolCond = strBoolCond;
+    }
+    
+    /**
+     * set the title of the control
+     * @param locale
+     * @return
+     */
+    public void setTitle( Locale locale )
+    {
+        _title = "";
+        IAccessControllerType controller = SpringContextService.getBean( _strType ); 
+        if ( controller != null )
+        {
+            _title = controller.getTitle( locale );
+        }
+    }
+    
+    /**
+     * get the title of the control
+     * @return
+     */
+    public String getTitle( )
+    {
+        return _title;
     }
 }

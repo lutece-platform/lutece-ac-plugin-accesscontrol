@@ -48,11 +48,12 @@ import java.util.List;
 public final class AccessControllerDAO implements IAccessControllerDAO
 {
     // Constants
-    private static final String SQL_QUERY_SELECT = "SELECT id_access_controller, type, display_order, id_accesscontrol, bool_cond FROM accesscontrol_accesscontroller WHERE id_access_controller = ?";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO accesscontrol_accesscontroller ( type, display_order, id_accesscontrol, bool_cond ) VALUES ( ?, ?, ?, ? ) ";
+    private static final String SQL_QUERY_SELECTALL = "SELECT id_access_controller, type, display_order, id_access_control, bool_cond FROM accesscontrol_accesscontroller ";
+    private static final String SQL_QUERY_SELECT = SQL_QUERY_SELECTALL + " WHERE id_access_controller = ?";
+    private static final String SQL_QUERY_SELECT_BY_ACCESS_CONTROL = SQL_QUERY_SELECTALL + " WHERE id_access_control = ? ORDER BY display_order ASC ";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO accesscontrol_accesscontroller ( type, display_order, id_access_control, bool_cond ) VALUES ( ?, ?, ?, ? ) ";
     private static final String SQL_QUERY_DELETE = "DELETE FROM accesscontrol_accesscontroller WHERE id_access_controller = ? ";
-    private static final String SQL_QUERY_UPDATE = "UPDATE accesscontrol_accesscontroller SET id_access_controller = ?, type = ?, display_order = ?, id_accesscontrol = ?, bool_cond = ? WHERE id_access_controller = ?";
-    private static final String SQL_QUERY_SELECTALL = "SELECT id_access_controller, type, display_order, id_accesscontrol, bool_cond FROM accesscontrol_accesscontroller";
+    private static final String SQL_QUERY_UPDATE = "UPDATE accesscontrol_accesscontroller SET id_access_controller = ?, type = ?, display_order = ?, id_access_control = ?, bool_cond = ? WHERE id_access_controller = ?";
     private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_access_controller FROM accesscontrol_accesscontroller";
 
     /**
@@ -92,14 +93,7 @@ public final class AccessControllerDAO implements IAccessControllerDAO
 	        
 	        if ( daoUtil.next( ) )
 	        {
-	            accessController = new AccessController();
-	            int nIndex = 1;
-	            
-	            accessController.setId( daoUtil.getInt( nIndex++ ) );
-	            accessController.setType( daoUtil.getString( nIndex++ ) );            
-	            accessController.setOrder( daoUtil.getInt( nIndex++ ) );            
-	            accessController.setIdAccesscontrol( daoUtil.getInt( nIndex++ ) );            
-	            accessController.setBoolCond( daoUtil.getString( nIndex ) );            
+	            accessController  = dataToObject( daoUtil );
 	        }
         }
         return accessController;
@@ -152,15 +146,7 @@ public final class AccessControllerDAO implements IAccessControllerDAO
 	
 	        while ( daoUtil.next(  ) )
 	        {
-	            AccessController accessController = new AccessController(  );
-	            int nIndex = 1;
-	            
-	            accessController.setId( daoUtil.getInt( nIndex++ ) );
-	            accessController.setType( daoUtil.getString( nIndex++ ) );
-	            accessController.setOrder( daoUtil.getInt( nIndex++ ) );
-	            accessController.setIdAccesscontrol( daoUtil.getInt( nIndex++ ) );
-	            accessController.setBoolCond( daoUtil.getString( nIndex ) );            
-	
+	            AccessController accessController = dataToObject( daoUtil );
 	            accessControllerList.add( accessController );
 	        }
         }
@@ -203,5 +189,37 @@ public final class AccessControllerDAO implements IAccessControllerDAO
 	        }
     	}
         return accessControllerList;
+    }
+    
+    @Override
+    public List<AccessController> selectAccessControllersListByAccessControl( int idAccessControl, Plugin plugin )
+    {
+        List<AccessController> accessControllerList = new ArrayList<>( );
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_BY_ACCESS_CONTROL, plugin ) )
+        {
+            daoUtil.setInt( 1 , idAccessControl );
+            daoUtil.executeQuery( );
+            
+            while ( daoUtil.next( ) )
+            {
+                AccessController accessController = dataToObject( daoUtil );
+                accessControllerList.add( accessController );
+            }
+        }
+        return accessControllerList;
+    }
+    
+    private AccessController dataToObject( DAOUtil daoUtil )
+    {
+        AccessController accessController = new AccessController();
+        int nIndex = 0;
+        
+        accessController.setId( daoUtil.getInt( ++nIndex ) );
+        accessController.setType( daoUtil.getString( ++nIndex ) );            
+        accessController.setOrder( daoUtil.getInt( ++nIndex ) );            
+        accessController.setIdAccesscontrol( daoUtil.getInt( ++nIndex ) );            
+        accessController.setBoolCond( daoUtil.getString( ++nIndex ) );
+        
+        return accessController;
     }
 }
