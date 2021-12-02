@@ -9,24 +9,31 @@ public interface IAccessControllerType
 {
 
     /**
-     * Gets The bean name of the controller
+     * Gets The bean name of the controllerType
      * @return
      */
     String getBeanName( );
     
     /**
-     * Gets The display title of the controller
+     * Gets The display title of the controllerType
      * @param locale
      * @return
      */
     String getTitle( Locale locale );
     
     /**
-     * Indicates if the controller needs a config
+     * Indicates if the controllerType needs a config
      * @return
      */
     default boolean hasConfig( )
     {
         return false;
+    }
+    
+    /**
+     * Delete the config of the controllerType
+     */
+    default void deleteConfig( int idControlType )
+    {
     }
 }

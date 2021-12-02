@@ -103,6 +103,7 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
 
     // Properties
     private static final String MESSAGE_CONFIRM_REMOVE_ACCESSCONTROL = "accesscontrol.message.confirmRemoveAccessControl";
+    private static final String MESSAGE_CONFIRM_REMOVE_ACCESSCONTROLLER = "accesscontrol.message.confirmRemoveAccessController";
 
     // Validations
     private static final String VALIDATION_ATTRIBUTES_PREFIX = "accesscontrol.model.entity.accesscontrol.attribute.";
@@ -117,11 +118,13 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
     private static final String ACTION_MODIFY_ACCESSCONTROL = "modifyAccessControl";
     private static final String ACTION_REMOVE_ACCESSCONTROL = "removeAccessControl";
     private static final String ACTION_CONFIRM_REMOVE_ACCESSCONTROL = "confirmRemoveAccessControl";
+    private static final String ACTION_CONFIRM_REMOVE_ACCESSCONTROLLER = "confirmRemoveAccessController";
     private static final String ACTION_ENABLE_ACCESSCONTROL = "enableAccessControl";
     private static final String ACTION_DISABLE_ACCESSCONTROL = "disableAccessControl";
     private static final String ACTION_CREATE_CONTROLLER = "createController";
     private static final String ACTION_CHANGE_CONDITON = "changeCondition";
     private static final String ACTION_CHANGE_ORDER = "changeOrder";
+    private static final String ACTION_REMOVE_ACCESSCONTROLLER = "removeAccessController";
     
     // Infos
     private static final String INFO_ACCESSCONTROL_CREATED = "accesscontrol.info.accesscontrol.created";
@@ -218,6 +221,25 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
 
         return redirect( request, strMessageUrl );
     }
+    
+    /**
+     * Manages the removal form of a accesscontroller whose identifier is in the http
+     * request
+     *
+     * @param request The Http request
+     * @return the html code to confirm
+     */
+    @Action( ACTION_CONFIRM_REMOVE_ACCESSCONTROLLER )
+    public String getConfirmRemoveAccessController( HttpServletRequest request )
+    {
+        int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_CONTROLLER ) );
+        UrlItem url = new UrlItem( getActionUrl( ACTION_REMOVE_ACCESSCONTROLLER ) );
+        url.addParameter( PARAMETER_ID_CONTROLLER, nId );
+
+        String strMessageUrl = AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_ACCESSCONTROLLER, url.getUrl(  ), AdminMessage.TYPE_CONFIRMATION );
+
+        return redirect( request, strMessageUrl );
+    }
 
     /**
      * Handles the removal form of a accesscontrol
@@ -229,10 +251,42 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
     public String doRemoveAccessControl( HttpServletRequest request )
     {
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_ACCESSCONTROL ) );
+        
+        List<AccessController> controllerList = AccessControllerHome.getAccessControllersListByAccessControlId( nId );
+        for ( AccessController controller : controllerList )
+        {
+            _accessControlService.deleteAccessController( controller.getId( ) );
+        }
         AccessControlHome.remove( nId );
         addInfo( INFO_ACCESSCONTROL_REMOVED, getLocale(  ) );
 
         return redirectView( request, VIEW_MANAGE_ACCESSCONTROLS );
+    }
+    
+    /**
+     * Handles the removal form of a accesscontroller
+     *
+     * @param request The Http request
+     * @return the jsp URL to display the form to manage accesscontrols
+     */
+    @Action( ACTION_REMOVE_ACCESSCONTROLLER )
+    public String doRemoveAccessController( HttpServletRequest request )
+    {
+        int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_CONTROLLER ) );
+        
+        AccessController controllerToDelete = AccessControllerHome.findByPrimaryKey( nId );
+        int idAccessControl = controllerToDelete.getIdAccesscontrol( );
+        
+        AccessControllerHome.remove( nId );
+        List<AccessController> controllerList = AccessControllerHome.getAccessControllersListByAccessControlId( idAccessControl );
+        int newOrder = 1;
+        for ( AccessController controller : controllerList )
+        {
+            controller.setOrder( newOrder++ );
+            AccessControllerHome.update( controller );
+        }
+        addInfo( INFO_ACCESSCONTROL_REMOVED, getLocale(  ) );
+        return redirect( request, VIEW_MODIFY_ACCESSCONTROL, PARAMETER_ID_ACCESSCONTROL, idAccessControl );
     }
 
     /**

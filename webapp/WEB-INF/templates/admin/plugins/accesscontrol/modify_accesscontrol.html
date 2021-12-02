@@ -73,7 +73,9 @@
 									</@inputGroup>
 								</@tform>
 							</@td>
-							<@td></@td>
+							<@td>
+								<@aButton href='jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp?action=confirmRemoveAccessController&id_controller=${controller.id}' title='#i18n{portal.util.labelDelete}' buttonIcon='trash' hideTitle=['all'] color='danger' size='sm'  />
+							</@td>
 							<#assign first=false>
 						</@tr>
 					</#list>

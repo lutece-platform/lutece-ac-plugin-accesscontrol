@@ -17,4 +17,10 @@ public interface IAccessControlService
      * @return
      */
     ReferenceList createAccessControllerReferenceList ( Locale locale );
+    
+    /**
+     * Delete the AccessController
+     * @param idControlType
+     */
+    void deleteAccessController( int idControlType );
 }
