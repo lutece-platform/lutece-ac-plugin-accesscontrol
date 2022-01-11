@@ -65,7 +65,7 @@ public class AccessControlBusinessTest extends LuteceTestCase
         accessControl.setDescription( DESCRIPTION1 );
         accessControl.setCreationDate( CREATIONDATE1 );
         accessControl.setEnabled( ISENABLED1 );
-        accessControl.setWorkgroupKey( WORKGROUPKEY1 );
+        accessControl.setWorkgroup( WORKGROUPKEY1 );
 
         // Create test
         AccessControlHome.create( accessControl );
@@ -74,21 +74,21 @@ public class AccessControlBusinessTest extends LuteceTestCase
         assertEquals( accessControlStored.getDescription( ), accessControl.getDescription( ) );
         assertEquals( accessControlStored.getCreationDate( ).toString( ), accessControl.getCreationDate( ).toString( ) );
         assertEquals( accessControlStored.isEnabled( ), accessControl.isEnabled( ) );
-        assertEquals( accessControlStored.getWorkgroupKey( ), accessControl.getWorkgroupKey( ) );
+        assertEquals( accessControlStored.getWorkgroup( ), accessControl.getWorkgroup( ) );
 
         // Update test
         accessControl.setName( NAME2 );
         accessControl.setDescription( DESCRIPTION2 );
         accessControl.setCreationDate( CREATIONDATE2 );
         accessControl.setEnabled( ISENABLED2 );
-        accessControl.setWorkgroupKey( WORKGROUPKEY2 );
+        accessControl.setWorkgroup( WORKGROUPKEY2 );
         AccessControlHome.update( accessControl );
         accessControlStored = AccessControlHome.findByPrimaryKey( accessControl.getId( ) );
         assertEquals( accessControlStored.getName( ), accessControl.getName( ) );
         assertEquals( accessControlStored.getDescription( ), accessControl.getDescription( ) );
         assertEquals( accessControlStored.getCreationDate( ).toString( ), accessControl.getCreationDate( ).toString( ) );
         assertEquals( accessControlStored.isEnabled( ), accessControl.isEnabled( ) );
-        assertEquals( accessControlStored.getWorkgroupKey( ), accessControl.getWorkgroupKey( ) );
+        assertEquals( accessControlStored.getWorkgroup( ), accessControl.getWorkgroup( ) );
 
         // List test
         AccessControlHome.getAccessControlsList( );

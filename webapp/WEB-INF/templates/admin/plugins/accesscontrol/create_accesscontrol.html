@@ -13,7 +13,7 @@
           	<@input type='text' id='description' name='description'  value='${accesscontrol.description!\'\'}' tabIndex='1' />
 		</@formGroup>
 		<@formGroup labelFor='workgroup_key' labelKey='#i18n{accesscontrol.modify_accesscontrol.labelWorkgroupKey}' mandatory=true>
-          	<@select name='workgroupKey' items=user_workgroup_list default_value=workgroup_key_default_value />
+          	<@select name='workgroup' items=user_workgroup_list default_value=workgroup_key_default_value />
 		</@formGroup>
 		<@actionButtons button1Name="action_createAccessControl" button2Name="view_manageAccessControl"/>
     </@tform>

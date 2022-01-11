@@ -77,7 +77,7 @@ public final class AccessControlDAO implements IAccessControlDAO
             daoUtil.setString( nIndex++, accessControl.getDescription( ) );
             daoUtil.setDate( nIndex++, accessControl.getCreationDate( ) );
             daoUtil.setBoolean( nIndex++, accessControl.isEnabled( ) );
-            daoUtil.setString( nIndex++, accessControl.getWorkgroupKey( ) );
+            daoUtil.setString( nIndex++, accessControl.getWorkgroup( ) );
 
             daoUtil.executeUpdate( );
             if ( daoUtil.nextGeneratedKey( ) )
@@ -136,7 +136,7 @@ public final class AccessControlDAO implements IAccessControlDAO
             daoUtil.setString( nIndex++, accessControl.getDescription( ) );
             daoUtil.setDate( nIndex++, accessControl.getCreationDate( ) );
             daoUtil.setBoolean( nIndex++, accessControl.isEnabled( ) );
-            daoUtil.setString( nIndex++, accessControl.getWorkgroupKey( ) );
+            daoUtil.setString( nIndex++, accessControl.getWorkgroup( ) );
             daoUtil.setInt( nIndex, accessControl.getId( ) );
 
             daoUtil.executeUpdate( );
@@ -302,7 +302,7 @@ public final class AccessControlDAO implements IAccessControlDAO
         accessControl.setDescription( daoUtil.getString( nIndex++ ) );
         accessControl.setCreationDate( daoUtil.getDate( nIndex++ ) );
         accessControl.setEnabled( daoUtil.getBoolean( nIndex++ ) );
-        accessControl.setWorkgroupKey( daoUtil.getString( nIndex ) );
+        accessControl.setWorkgroup( daoUtil.getString( nIndex ) );
         return accessControl;
     }
 }

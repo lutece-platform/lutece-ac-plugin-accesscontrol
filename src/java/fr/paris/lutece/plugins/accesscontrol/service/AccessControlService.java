@@ -38,6 +38,9 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
+import fr.paris.lutece.api.user.User;
+import fr.paris.lutece.plugins.accesscontrol.business.AccessControlResource;
+import fr.paris.lutece.plugins.accesscontrol.business.AccessControlResourceHome;
 import fr.paris.lutece.plugins.accesscontrol.business.AccessController;
 import fr.paris.lutece.plugins.accesscontrol.business.AccessControllerHome;
 import fr.paris.lutece.plugins.accesscontrol.business.IAccessControlDAO;
@@ -45,6 +48,7 @@ import fr.paris.lutece.portal.business.accesscontrol.AccessControl;
 import fr.paris.lutece.portal.business.accesscontrol.AccessControlFilter;
 import fr.paris.lutece.portal.service.accesscontrol.IAccessControlService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
+import fr.paris.lutece.portal.service.workgroup.AdminWorkgroupService;
 import fr.paris.lutece.util.ReferenceList;
 
 /**
@@ -88,5 +92,41 @@ public class AccessControlService implements IAccessControlService
     public List<AccessControl> getListAccessControlsByFilter( AccessControlFilter filter )
     {
         return _accessControlDAO.selectAccessControlByFilter( filter );
+    }
+    
+    @Override
+    public ReferenceList getAccessControlsEnabled( User user, Locale locale )
+    {
+        AccessControlFilter filter = new AccessControlFilter( );
+        filter.setIsEnabled( AccessControlFilter.FILTER_TRUE );
+        List<AccessControl> list = getListAccessControlsByFilter( filter );
+        
+        ReferenceList referenceList = new ReferenceList( );
+        referenceList.addItem( -1, "-" );
+        for ( AccessControl accessControl : AdminWorkgroupService.getAuthorizedCollection( list, user ) )
+        {
+            referenceList.addItem( accessControl.getId( ), accessControl.getName( ) );
+        }
+        return referenceList;
+    }
+    
+    @Override
+    public int findAccessControlForResource( int idResource, String resourceType )
+    {
+        return AccessControlResourceHome.findByResource( idResource, resourceType );
+    }
+    
+    @Override
+    public void createOrUpdateAccessControlResource( int idResource, String resourceType, int idAccessControl )
+    {
+        AccessControlResourceHome.removeByResource( idResource, resourceType );
+        if ( idAccessControl != -1 )
+        {
+            AccessControlResource accessControlResource = new AccessControlResource( );
+            accessControlResource.setIdResource( idResource );
+            accessControlResource.setResourceType( resourceType );
+            accessControlResource.setIdAccessControl( idAccessControl );
+            AccessControlResourceHome.create( accessControlResource );
+        }
     }
 }

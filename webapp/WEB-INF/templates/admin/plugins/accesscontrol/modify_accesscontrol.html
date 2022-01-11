@@ -14,7 +14,7 @@
 		          		<@input type='text' id='description' name='description'  value='${accesscontrol.description!\'\'}' tabIndex='1' />
 					</@formGroup>
 					<@formGroup labelFor='workgroup_key' labelKey='#i18n{accesscontrol.modify_accesscontrol.labelWorkgroupKey}' mandatory=true>
-			          	<@select name='workgroupKey' items=user_workgroup_list default_value='${accesscontrol.workgroupKey}' />
+			          	<@select name='workgroup' items=user_workgroup_list default_value='${accesscontrol.workgroup}' />
 					</@formGroup>
 					<@formGroup rows=2>
 						<@button type='submit' name='cancel' buttonIcon='times-circle' title='#i18n{portal.util.labelCancel}' cancel=true />
