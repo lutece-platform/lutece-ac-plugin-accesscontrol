@@ -37,3 +37,13 @@ CREATE TABLE accesscontrol_resource_accesscontrol (
 	PRIMARY KEY( id_resource, resource_type, id_access_control )
 );
 CREATE INDEX index_ac_accontroller_resource ON accesscontrol_resource_accesscontrol ( id_resource, resource_type );
+
+--
+-- Structure for table accesscontrol_controller_comment_config
+--
+DROP TABLE IF EXISTS accesscontrol_controller_comment_config;
+CREATE TABLE accesscontrol_controller_comment_config (
+	id_access_control int,
+	comment long varchar,
+	PRIMARY KEY( id_access_control )
+);

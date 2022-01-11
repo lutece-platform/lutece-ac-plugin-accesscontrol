@@ -1,7 +1,7 @@
 package fr.paris.lutece.plugins.accesscontrol.business;
 
+import fr.paris.lutece.plugins.accesscontrol.util.AccessControlUtils;
 import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 /**
@@ -10,7 +10,7 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 public final class AccessControlResourceHome
 {
     private static IAccessControlResourceDAO _dao = SpringContextService.getBean( "accesscontrol.accessControlResourceDAO" );
-    private static Plugin _plugin = PluginService.getPlugin( "accesscontrol" );
+    private static Plugin _plugin = AccessControlUtils.getPlugin( );
     
     /**
      * Private constructor - this class need not be instantiated

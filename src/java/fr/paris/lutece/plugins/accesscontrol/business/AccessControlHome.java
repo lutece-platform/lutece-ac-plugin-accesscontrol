@@ -35,9 +35,9 @@ package fr.paris.lutece.plugins.accesscontrol.business;
 
 import java.util.List;
 
+import fr.paris.lutece.plugins.accesscontrol.util.AccessControlUtils;
 import fr.paris.lutece.portal.business.accesscontrol.AccessControl;
 import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.util.ReferenceList;
 
@@ -48,7 +48,7 @@ public final class AccessControlHome
 {
     // Static variable pointed at the DAO instance
     private static IAccessControlDAO _dao = SpringContextService.getBean( "accesscontrol.accessControlDAO" );
-    private static Plugin _plugin = PluginService.getPlugin( "accesscontrol" );
+    private static Plugin _plugin = AccessControlUtils.getPlugin( );
 
     /**
      * Private constructor - this class need not be instantiated
