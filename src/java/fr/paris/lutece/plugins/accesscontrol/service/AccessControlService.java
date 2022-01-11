@@ -37,6 +37,7 @@ import java.util.Locale;
 
 import fr.paris.lutece.plugins.accesscontrol.business.AccessController;
 import fr.paris.lutece.plugins.accesscontrol.business.AccessControllerHome;
+import fr.paris.lutece.portal.service.accesscontrol.IAccessControlService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.util.ReferenceList;
 
