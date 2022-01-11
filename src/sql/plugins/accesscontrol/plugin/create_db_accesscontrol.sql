@@ -25,3 +25,15 @@ CREATE TABLE accesscontrol_accesscontroller (
 	PRIMARY KEY (id_access_controller)
 );
 CREATE INDEX index_ac_accontroller_id ON accesscontrol_accesscontroller ( id_access_control );
+
+--
+-- Structure for table accesscontrol_resource_accesscontrol
+--
+DROP TABLE IF EXISTS accesscontrol_resource_accesscontrol;
+CREATE TABLE accesscontrol_resource_accesscontrol (
+	id_resource int,
+	resource_type varchar(255),
+	id_access_control int,
+	PRIMARY KEY( id_resource, resource_type, id_access_control )
+);
+CREATE INDEX index_ac_accontroller_resource ON accesscontrol_resource_accesscontrol ( id_resource, resource_type );
