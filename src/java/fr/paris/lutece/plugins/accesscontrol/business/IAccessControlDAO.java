@@ -34,9 +34,12 @@
 
 package fr.paris.lutece.plugins.accesscontrol.business;
 
+import java.util.List;
+
+import fr.paris.lutece.portal.business.accesscontrol.AccessControl;
+import fr.paris.lutece.portal.business.accesscontrol.AccessControlFilter;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.ReferenceList;
-import java.util.List;
 
 /**
  * IAccessControlDAO Interface
@@ -113,4 +116,13 @@ public interface IAccessControlDAO
      * @return The referenceList which contains the data of all the accessControl objects
      */
     ReferenceList selectAccessControlsReferenceList( Plugin plugin );
+    
+    /**
+     * select AccessControl by Filter
+     * 
+     * @param filter
+     *            the filter
+     * @return a list of AccessControl
+     */
+    List<AccessControl> selectAccessControlByFilter( AccessControlFilter filter );
 }

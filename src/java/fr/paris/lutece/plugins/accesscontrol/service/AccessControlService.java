@@ -33,10 +33,16 @@
  */
 package fr.paris.lutece.plugins.accesscontrol.service;
 
+import java.util.List;
 import java.util.Locale;
+
+import javax.inject.Inject;
 
 import fr.paris.lutece.plugins.accesscontrol.business.AccessController;
 import fr.paris.lutece.plugins.accesscontrol.business.AccessControllerHome;
+import fr.paris.lutece.plugins.accesscontrol.business.IAccessControlDAO;
+import fr.paris.lutece.portal.business.accesscontrol.AccessControl;
+import fr.paris.lutece.portal.business.accesscontrol.AccessControlFilter;
 import fr.paris.lutece.portal.service.accesscontrol.IAccessControlService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.util.ReferenceList;
@@ -48,6 +54,9 @@ import fr.paris.lutece.util.ReferenceList;
 public class AccessControlService implements IAccessControlService
 {
     public static final String BEAN_NAME = "accesscontrol.accessControlService";
+    
+    @Inject
+    private IAccessControlDAO _accessControlDAO;
 
     @Override
     public ReferenceList createAccessControllerReferenceList( Locale locale )
@@ -73,5 +82,11 @@ public class AccessControlService implements IAccessControlService
             }
             AccessControllerHome.remove( idControlType );
         }
+    }
+    
+    @Override
+    public List<AccessControl> getListAccessControlsByFilter( AccessControlFilter filter )
+    {
+        return _accessControlDAO.selectAccessControlByFilter( filter );
     }
 }

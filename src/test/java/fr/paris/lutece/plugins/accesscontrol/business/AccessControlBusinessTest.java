@@ -33,9 +33,10 @@
  */
 package fr.paris.lutece.plugins.accesscontrol.business;
 
-import fr.paris.lutece.test.LuteceTestCase;
-
 import java.sql.Date;
+
+import fr.paris.lutece.portal.business.accesscontrol.AccessControl;
+import fr.paris.lutece.test.LuteceTestCase;
 
 /**
  * This is the business class test for the object AccessControl
