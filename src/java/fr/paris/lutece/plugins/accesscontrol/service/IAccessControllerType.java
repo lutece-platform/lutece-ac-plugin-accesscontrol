@@ -95,4 +95,21 @@ public interface IAccessControllerType
     default void saveControllerConfig( HttpServletRequest request, Locale locale, AccessController controller )
     {
     }
+    
+    /**
+     * Validate the controller
+     * @param request
+     * @return null if OK, an error message otherwise
+     */
+    default String validate( HttpServletRequest request )
+    {
+        return null;
+    }
+    
+    /**
+     * Get the html form for the config of the controller.
+     * @param idController
+     * @return
+     */
+    String getControllerForm( HttpServletRequest request, Locale locale, AccessController controller );
 }

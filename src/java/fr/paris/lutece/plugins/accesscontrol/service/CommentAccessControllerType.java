@@ -59,6 +59,7 @@ public class CommentAccessControllerType implements IAccessControllerType
     
     private static final String PARAMETER_COMMENT = "comment";
     private static final String TEMPLATE_CONFIG = "/admin/plugins/accesscontrol/config/comment_controller_config.html";
+    private static final String TEMPLATE_CONTROLLER = "skin/plugins/accesscontrol/controller/comment_controller_template.html";
     private static final String MARK_CONFIG = "config";
     
 
@@ -109,5 +110,15 @@ public class CommentAccessControllerType implements IAccessControllerType
         CommentAccessControllerConfig config = _dao.load( controller.getId( ) );
         config.setComment( request.getParameter( PARAMETER_COMMENT ) );
         _dao.store( config );
+    }
+    
+    @Override
+    public String getControllerForm( HttpServletRequest request, Locale locale, AccessController controller )
+    {
+        CommentAccessControllerConfig config = _dao.load( controller.getId( ) );
+        Map<String, Object> model = new HashMap<>( );
+        model.put( MARK_CONFIG, config );
+        
+        return AppTemplateService.getTemplate( TEMPLATE_CONTROLLER, locale, model ).getHtml( );
     }
 }
