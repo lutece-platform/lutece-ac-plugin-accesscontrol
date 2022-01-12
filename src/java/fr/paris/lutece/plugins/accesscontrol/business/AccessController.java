@@ -185,4 +185,14 @@ public class AccessController implements Serializable
     {
         return _title;
     }
+    
+    /**
+     * checks if this controller has a config
+     * @return
+     */
+    public boolean isConfig( )
+    {
+        IAccessControllerType controller = SpringContextService.getBean( _strType );
+        return controller != null && controller.hasConfig( );
+    }
 }

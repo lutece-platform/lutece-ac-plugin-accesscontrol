@@ -1,0 +1,12 @@
+<@row>
+	<@columns>
+		<@fieldSet legend='#i18n{accesscontrol.modify_controller.controller_comment_config.title}'>
+			<@formGroup labelFor='title' labelKey='#i18n{accesscontrol.modify_controller.controller_comment_config.title}' mandatory=true>
+				<@input type='hidden' name="id_controller" value=config.idAccessController />
+				<@input type='textarea' name='comment' id='comment' rows=5 richtext=true>${config.comment!}</@input>
+			</@formGroup>
+		</@fieldSet>
+	</@columns>
+</@row>
+<#include "/admin/util/editor/editor.html" />
+<@initEditor />

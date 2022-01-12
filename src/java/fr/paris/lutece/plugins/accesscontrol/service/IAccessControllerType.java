@@ -35,6 +35,10 @@ package fr.paris.lutece.plugins.accesscontrol.service;
 
 import java.util.Locale;
 
+import javax.servlet.http.HttpServletRequest;
+
+import fr.paris.lutece.plugins.accesscontrol.business.AccessController;
+
 /**
  * Interface for access controllers
  */
@@ -67,9 +71,28 @@ public interface IAccessControllerType
     }
 
     /**
-     * Delete the config of the controllerType
+     * Delete the config of the controller
      */
-    default void deleteConfig( int idControlType )
+    default void deleteConfig( int idController )
+    {
+    }
+    
+    /**
+     * Get the html form for the config of the controller.
+     * @param idController
+     * @return
+     */
+    default String getControllerConfigForm( HttpServletRequest request, Locale locale, AccessController controller )
+    {
+        return "";
+    }
+    
+    /**
+     * Save the config of the controller.
+     * @param idController
+     * @return
+     */
+    default void saveControllerConfig( HttpServletRequest request, Locale locale, AccessController controller )
     {
     }
 }

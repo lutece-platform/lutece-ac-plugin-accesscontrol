@@ -9,7 +9,7 @@
     <bean id="accesscontrol.accessControlResourceDAO" class="fr.paris.lutece.plugins.accesscontrol.business.AccessControlResourceDAO" />
     <bean id="accesscontrol.commentAccessControllerConfigDAO" class="fr.paris.lutece.plugins.accesscontrol.business.config.CommentAccessControllerConfigDAO" />
 
-    <bean id="accesscontrol.mockTempAccessControllerType" class="fr.paris.lutece.plugins.accesscontrol.service.MockTempAccessControllerType" />
+    <bean id="accesscontrol.commentAccessControllerType" class="fr.paris.lutece.plugins.accesscontrol.service.CommentAccessControllerType" />
     
     <bean id="accesscontrol.accessControlService" class="fr.paris.lutece.plugins.accesscontrol.service.AccessControlService" />
     

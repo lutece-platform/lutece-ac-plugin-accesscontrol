@@ -36,6 +36,7 @@ package fr.paris.lutece.plugins.accesscontrol.web;
 
 import java.sql.Date;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -47,6 +48,7 @@ import fr.paris.lutece.plugins.accesscontrol.business.AccessControlHome;
 import fr.paris.lutece.plugins.accesscontrol.business.AccessController;
 import fr.paris.lutece.plugins.accesscontrol.business.AccessControllerHome;
 import fr.paris.lutece.plugins.accesscontrol.service.AccessControlService;
+import fr.paris.lutece.plugins.accesscontrol.service.IAccessControllerType;
 import fr.paris.lutece.plugins.accesscontrol.util.BoolCondition;
 import fr.paris.lutece.portal.business.accesscontrol.AccessControl;
 import fr.paris.lutece.portal.business.user.AdminUser;
@@ -56,11 +58,13 @@ import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.security.SecurityTokenService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
+import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.service.workgroup.AdminWorkgroupService;
 import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.util.ReferenceList;
+import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.url.UrlItem;
 
 /**
@@ -77,6 +81,7 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
     private static final String TEMPLATE_MANAGE_ACCESSCONTROLS = "/admin/plugins/accesscontrol/manage_accesscontrols.html";
     private static final String TEMPLATE_CREATE_ACCESSCONTROL = "/admin/plugins/accesscontrol/create_accesscontrol.html";
     private static final String TEMPLATE_MODIFY_ACCESSCONTROL = "/admin/plugins/accesscontrol/modify_accesscontrol.html";
+    private static final String TEMPLATE_MODIFY_CONTROLLER = "/admin/plugins/accesscontrol/modify_controller.html";
 
     // Parameters
     private static final String PARAMETER_ID_ACCESSCONTROL = "id";
@@ -89,7 +94,8 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
     private static final String PROPERTY_PAGE_TITLE_MANAGE_ACCESSCONTROLS = "accesscontrol.manage_accesscontrols.pageTitle";
     private static final String PROPERTY_PAGE_TITLE_MODIFY_ACCESSCONTROL = "accesscontrol.modify_accesscontrol.pageTitle";
     private static final String PROPERTY_PAGE_TITLE_CREATE_ACCESSCONTROL = "accesscontrol.create_accesscontrol.pageTitle";
-
+    private static final String PROPERTY_MODIFY_CONTROLLER_PAGE_TITLE = "accesscontrol.modify_controller.page_title";
+    
     // Markers
     private static final String MARK_ACCESSCONTROL_LIST = "accesscontrol_list";
     private static final String MARK_ACCESSCONTROL = "accesscontrol";
@@ -98,6 +104,7 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
     private static final String MARK_CONTROLLER_TYPE_LIST = "controller_type_list";
     private static final String MARK_CONTROLLER_LIST = "controller_list";
     private static final String MARK_CONDITION_LIST = "condition_list";
+    private static final String MARK_CONTROLLER_CONFIG = "controller_config";
     private static final String JSP_MANAGE_ACCESSCONTROLS = "jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp";
 
     // Properties
@@ -124,6 +131,8 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
     private static final String ACTION_CHANGE_CONDITON = "changeCondition";
     private static final String ACTION_CHANGE_ORDER = "changeOrder";
     private static final String ACTION_REMOVE_ACCESSCONTROLLER = "removeAccessController";
+    private static final String ACTION_MODIFY_CONFIG_CONTROLLER = "modifyConfigController";
+    private static final String ACTION_MODIFY_CONTROLLER = "modifyController";
 
     // Infos
     private static final String INFO_ACCESSCONTROL_CREATED = "accesscontrol.info.accesscontrol.created";
@@ -245,6 +254,71 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
 
         return redirect( request, strMessageUrl );
     }
+    
+    /**
+     * Manages the modificaqtion form of a accesscontroller whose identifier is in the http request
+     *
+     * @param request
+     *            The Http request
+     * @return the html code to confirm
+     */
+    @Action( ACTION_MODIFY_CONFIG_CONTROLLER )
+    public String getModifyConfigController( HttpServletRequest request ) throws AccessDeniedException
+    {
+        int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_CONTROLLER ) );
+        
+        AccessController controller = AccessControllerHome.findByPrimaryKey( nId );
+        if ( controller == null )
+        {
+            throw new AccessDeniedException( "AccessController not found for ID " + nId );
+        }
+        
+        IAccessControllerType controllerType = SpringContextService.getBean( controller.getType( ) );
+        if ( controllerType == null )
+        {
+            throw new AccessDeniedException( "Unknown controller type " + controller.getType( ) );
+        }
+        
+        Map<String, Object> model = new HashMap<>( );
+        model.put( MARK_CONTROLLER_CONFIG, controllerType.getControllerConfigForm( request, getLocale( ), controller ) );
+        model.put( SecurityTokenService.MARK_TOKEN, SecurityTokenService.getInstance( ).getToken( request, ACTION_MODIFY_CONTROLLER ) );
+        
+        setPageTitleProperty( PROPERTY_MODIFY_CONTROLLER_PAGE_TITLE );
+
+        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_MODIFY_CONTROLLER, getLocale( ), model );
+
+        return getAdminPage( template.getHtml( ) );
+    }
+    
+    /**
+     * Do the modificaqtion form of a accesscontroller whose identifier is in the http request
+     *
+     * @param request
+     *            The Http request
+     * @return the html code to confirm
+     */
+    @Action( ACTION_MODIFY_CONTROLLER )
+    public String doModifyConfigController( HttpServletRequest request ) throws AccessDeniedException
+    {
+        int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_CONTROLLER ) );
+        
+        AccessController controller = AccessControllerHome.findByPrimaryKey( nId );
+        if ( controller == null )
+        {
+            throw new AccessDeniedException( "AccessController not found for ID " + nId );
+        }
+        
+        IAccessControllerType controllerType = SpringContextService.getBean( controller.getType( ) );
+        if ( controllerType == null )
+        {
+            throw new AccessDeniedException( "Unknown controller type " + controller.getType( ) );
+        }
+        
+        controllerType.saveControllerConfig( request, getLocale(), controller );
+        
+        return redirect( request, VIEW_MODIFY_ACCESSCONTROL, PARAMETER_ID_ACCESSCONTROL, controller.getIdAccesscontrol( ) );
+    }
+    
 
     /**
      * Handles the removal form of a accesscontrol
