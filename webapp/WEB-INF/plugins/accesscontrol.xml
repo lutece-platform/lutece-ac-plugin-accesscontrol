@@ -33,6 +33,10 @@
 
     <!-- XPages parameters -->
     <applications>
+    	<application>
+            <application-id>accesscontrol</application-id>
+            <application-class>fr.paris.lutece.plugins.accesscontrol.web.AccessControlXPage</application-class>
+        </application>
     </applications>
 
     <!-- Portlet parameters -->

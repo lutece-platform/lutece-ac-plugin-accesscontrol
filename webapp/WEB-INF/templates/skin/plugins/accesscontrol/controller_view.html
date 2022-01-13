@@ -1,0 +1,11 @@
+<form class="form-horizontal" id="form-validate" action="jsp/site/Portal.jsp?page=accesscontrol" method="post">
+	<@messages warnings=warnings />
+	<#if messageInfo?? >
+	<div class="alert alert-info" role="alert">
+		${messageInfo}
+	</div>
+	</#if>
+	${controller_html!}
+	<#if !first_controller><button class="btn btn-primary btn-sm" name="action_doReturnController"  type="submit" >#i18n{portal.util.labelBack}</button></#if>
+	<button class="btn btn-primary btn-sm" name="action_doValidateController"  type="submit">#i18n{portal.util.labelValidate}</button>
+</form>

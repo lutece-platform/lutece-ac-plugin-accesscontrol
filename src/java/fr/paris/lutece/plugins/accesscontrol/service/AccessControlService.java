@@ -33,10 +33,13 @@
  */
 package fr.paris.lutece.plugins.accesscontrol.service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import fr.paris.lutece.api.user.User;
 import fr.paris.lutece.plugins.accesscontrol.business.AccessControlResource;
@@ -44,12 +47,18 @@ import fr.paris.lutece.plugins.accesscontrol.business.AccessControlResourceHome;
 import fr.paris.lutece.plugins.accesscontrol.business.AccessController;
 import fr.paris.lutece.plugins.accesscontrol.business.AccessControllerHome;
 import fr.paris.lutece.plugins.accesscontrol.business.IAccessControlDAO;
+import fr.paris.lutece.plugins.accesscontrol.web.AccessControlXPage;
 import fr.paris.lutece.portal.business.accesscontrol.AccessControl;
 import fr.paris.lutece.portal.business.accesscontrol.AccessControlFilter;
+import fr.paris.lutece.portal.business.accesscontrol.AccessControlSessionData;
 import fr.paris.lutece.portal.service.accesscontrol.IAccessControlService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.workgroup.AdminWorkgroupService;
+import fr.paris.lutece.portal.util.mvc.utils.MVCUtils;
+import fr.paris.lutece.portal.web.LocalVariables;
+import fr.paris.lutece.portal.web.xpages.XPage;
 import fr.paris.lutece.util.ReferenceList;
+import fr.paris.lutece.util.url.UrlItem;
 
 /**
  * Implementation of {@link IAccessControlService}
@@ -58,6 +67,8 @@ import fr.paris.lutece.util.ReferenceList;
 public class AccessControlService implements IAccessControlService
 {
     public static final String BEAN_NAME = "accesscontrol.accessControlService";
+    
+    private static final String URL_PORTAL = "Portal.jsp";
     
     @Inject
     private IAccessControlDAO _accessControlDAO;
@@ -128,5 +139,52 @@ public class AccessControlService implements IAccessControlService
             accessControlResource.setIdAccessControl( idAccessControl );
             AccessControlResourceHome.create( accessControlResource );
         }
+    }
+    
+    @Override
+    public XPage redirectToAccessControlXPage( HttpServletRequest request, int idResource, String resourceType, int idAccessControl )
+    {
+        UrlItem url = new UrlItem( URL_PORTAL );
+        url.addParameter( MVCUtils.PARAMETER_PAGE, AccessControlXPage.XPAGE_NAME );
+        url.addParameter( MVCUtils.PARAMETER_VIEW, AccessControlXPage.VIEW_CONTROLLER );
+        url.addParameter( AccessControlXPage.PARAMETER_INIT, String.valueOf( true ) );
+        url.addParameter( AccessControlXPage.PARAMETER_ID_ACCESS_CONTROL, idAccessControl );
+        url.addParameter( AccessControlXPage.PARAMETER_RESOURCE_ID, idResource );
+        url.addParameter( AccessControlXPage.PARAMETER_RESOURCE_TYPE, resourceType );
+        
+        AccessControlSessionData sessionData = new AccessControlSessionData( );
+        sessionData.setReturnQueryString( request.getQueryString( ) );
+        request.getSession( ).setAttribute( AccessControlSessionData.getSessionKey( idResource, resourceType ), sessionData );
+        
+        String strTarget = url.getUrl( );
+        HttpServletResponse response = LocalVariables.getResponse( );
+        try
+        {
+            MVCUtils.getLogger( ).debug( "Redirect :{}", strTarget );
+            response.sendRedirect( strTarget );
+        }
+        catch( IOException e )
+        {
+            MVCUtils.getLogger( ).error( "Unable to redirect : {} : {}", strTarget, e.getMessage( ), e );
+        }
+        return new XPage( );
+    }
+
+    @Override
+    public AccessControlSessionData getSessionDataForResource( HttpServletRequest request, int idResource, String resourceType )
+    {
+        Object objSessionData = request.getSession( ).getAttribute( AccessControlSessionData.getSessionKey( idResource, resourceType ) );
+        if ( objSessionData == null )
+        {
+            return null;
+        }
+        return (AccessControlSessionData) objSessionData;
+    }
+    
+    @Override
+    public void deleteSessionDataForResource( HttpServletRequest request, int idResource, String resourceType )
+    {
+        request.getSession( ).removeAttribute( AccessControlSessionData.getSessionKey( idResource, resourceType ) );
+        
     }
 }
