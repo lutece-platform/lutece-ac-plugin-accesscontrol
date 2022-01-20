@@ -89,6 +89,7 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
     private static final String PARAMETER_ORDER = "new_order";
     private static final String PARAMETER_BOOL_CONDITON = "boolCond";
     private static final String PARAMETER_CONTROLLER_TYPE = "controller_type";
+    private static final String PARAMETER_CANCEL = "cancel";
 
     // Properties for page titles
     private static final String PROPERTY_PAGE_TITLE_MANAGE_ACCESSCONTROLS = "accesscontrol.manage_accesscontrols.pageTitle";
@@ -421,22 +422,25 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
     @Action( ACTION_MODIFY_ACCESSCONTROL )
     public String doModifyAccessControl( HttpServletRequest request ) throws AccessDeniedException
     {
-        populate( _accesControl, request, getLocale( ) );
-
-        if ( !SecurityTokenService.getInstance( ).validate( request, ACTION_MODIFY_ACCESSCONTROL ) )
+        
+        if ( request.getParameter( PARAMETER_CANCEL ) == null )
         {
-            throw new AccessDeniedException( "Invalid security token" );
+            populate( _accesControl, request, getLocale( ) );
+    
+            if ( !SecurityTokenService.getInstance( ).validate( request, ACTION_MODIFY_ACCESSCONTROL ) )
+            {
+                throw new AccessDeniedException( "Invalid security token" );
+            }
+    
+            // Check constraints
+            if ( !validateBean( _accesControl, VALIDATION_ATTRIBUTES_PREFIX ) )
+            {
+                return redirect( request, VIEW_MODIFY_ACCESSCONTROL, PARAMETER_ID_ACCESSCONTROL, _accesControl.getId( ) );
+            }
+    
+            AccessControlHome.update( _accesControl );
+            addInfo( INFO_ACCESSCONTROL_UPDATED, getLocale( ) );
         }
-
-        // Check constraints
-        if ( !validateBean( _accesControl, VALIDATION_ATTRIBUTES_PREFIX ) )
-        {
-            return redirect( request, VIEW_MODIFY_ACCESSCONTROL, PARAMETER_ID_ACCESSCONTROL, _accesControl.getId( ) );
-        }
-
-        AccessControlHome.update( _accesControl );
-        addInfo( INFO_ACCESSCONTROL_UPDATED, getLocale( ) );
-
         return redirectView( request, VIEW_MANAGE_ACCESSCONTROLS );
     }
 

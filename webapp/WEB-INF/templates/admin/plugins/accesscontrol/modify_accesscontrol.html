@@ -16,6 +16,9 @@
 					<@formGroup labelFor='workgroup_key' labelKey='#i18n{accesscontrol.modify_accesscontrol.labelWorkgroupKey}' mandatory=true>
 			          	<@select name='workgroup' items=user_workgroup_list default_value='${accesscontrol.workgroup}' />
 					</@formGroup>
+					<@formGroup labelFor='returnUrl' labelKey='#i18n{accesscontrol.manage_accesscontrols.labelReturnUrl}'>
+			          	<@input type='text' id='returnUrl' name='returnUrl'  value='${accesscontrol.returnUrl!}' />
+					</@formGroup>
 					<@formGroup rows=2>
 						<@button type='submit' name='cancel' buttonIcon='times-circle' title='#i18n{portal.util.labelCancel}' cancel=true />
 						<@button type='submit' name='save' buttonIcon='check' title='#i18n{portal.util.labelModify}' />

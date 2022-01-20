@@ -11,13 +11,16 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
+import fr.paris.lutece.plugins.accesscontrol.business.AccessControlHome;
 import fr.paris.lutece.plugins.accesscontrol.business.AccessController;
 import fr.paris.lutece.plugins.accesscontrol.business.AccessControllerHome;
 import fr.paris.lutece.plugins.accesscontrol.service.AccessControlService;
 import fr.paris.lutece.plugins.accesscontrol.service.IAccessControllerType;
 import fr.paris.lutece.plugins.accesscontrol.util.BoolCondition;
+import fr.paris.lutece.portal.business.accesscontrol.AccessControl;
 import fr.paris.lutece.portal.business.accesscontrol.AccessControlSessionData;
 import fr.paris.lutece.portal.service.accesscontrol.IAccessControlService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
@@ -68,6 +71,7 @@ public class AccessControlXPage extends MVCApplication
     private Map<Integer, String> _accessControlResult;
     private List<AccessController> _controllerList;
     private AccessController _currentController;
+    private AccessControl _accessControl;
     
     private int _idResource;
     private String _resourceType;
@@ -81,6 +85,7 @@ public class AccessControlXPage extends MVCApplication
         _resourceType = request.getParameter( PARAMETER_RESOURCE_TYPE );
         _nCurrentControllerOrder = 1;
         _accessControlResult = new HashMap<>( );
+        _accessControl = AccessControlHome.findByPrimaryKey( idAccessControl );
         _controllerList = AccessControllerHome.getAccessControllersListByAccessControlId( idAccessControl );
     }
     
@@ -160,7 +165,15 @@ public class AccessControlXPage extends MVCApplication
             return redirect( request, URL_PORTAL + "?" + sessionData.getReturnQueryString( ) );
         }
         
-        UrlItem url = new UrlItem( "jsp/site/" + URL_PORTAL );
+        UrlItem url = null;
+        if ( StringUtils.isEmpty( _accessControl.getReturnUrl( ) ) )
+        {
+            url = new UrlItem( URL_PORTAL );
+        }
+        else
+        {
+            url = new UrlItem( _accessControl.getReturnUrl( ) );
+        }
         Object [ ] messageArgs = new Object[] { _accessControlResult.values( ).stream( ).filter( Objects::nonNull ).collect( Collectors.joining( " - " ) ) };
         SiteMessageService.setMessage( request, "accesscontrol.xpage.accesscontrol.sitemessage.error", messageArgs, "accesscontrol.xpage.accesscontrol.sitemessage.title", url.getUrl( ), null, SiteMessage.TYPE_ERROR );
         return null;

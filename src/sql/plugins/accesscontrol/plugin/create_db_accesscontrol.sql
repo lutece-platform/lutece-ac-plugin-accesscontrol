@@ -9,6 +9,7 @@ CREATE TABLE accesscontrol_accesscontrol (
 	creation_date date DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	is_enabled SMALLINT DEFAULT 0 NOT NULL,
 	workgroup_key varchar(255) default '',
+	return_url varchar(255),
 	PRIMARY KEY (id_access_control)
 );
 

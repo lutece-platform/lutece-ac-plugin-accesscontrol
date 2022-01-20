@@ -15,6 +15,9 @@
 		<@formGroup labelFor='workgroup_key' labelKey='#i18n{accesscontrol.modify_accesscontrol.labelWorkgroupKey}' mandatory=true>
           	<@select name='workgroup' items=user_workgroup_list default_value=workgroup_key_default_value />
 		</@formGroup>
+		<@formGroup labelFor='returnUrl' labelKey='#i18n{accesscontrol.manage_accesscontrols.labelReturnUrl}'>
+          	<@input type='text' id='returnUrl' name='returnUrl'  value='${accesscontrol.returnUrl!\'\'}' tabIndex='1' />
+		</@formGroup>
 		<@actionButtons button1Name="action_createAccessControl" button2Name="view_manageAccessControl"/>
     </@tform>
 	</@boxBody>

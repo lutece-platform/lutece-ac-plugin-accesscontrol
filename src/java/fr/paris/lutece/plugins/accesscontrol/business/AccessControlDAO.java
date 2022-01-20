@@ -51,11 +51,11 @@ import fr.paris.lutece.util.sql.DAOUtil;
 public final class AccessControlDAO implements IAccessControlDAO
 {
     // Constants
-    private static final String SQL_QUERY_SELECTALL = "SELECT id_access_control, name, description, creation_date, is_enabled, workgroup_key FROM accesscontrol_accesscontrol ";
+    private static final String SQL_QUERY_SELECTALL = "SELECT id_access_control, name, description, creation_date, is_enabled, workgroup_key, return_url FROM accesscontrol_accesscontrol ";
     private static final String SQL_QUERY_SELECT = SQL_QUERY_SELECTALL + " WHERE id_access_control = ?";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO accesscontrol_accesscontrol ( name, description, creation_date, is_enabled, workgroup_key ) VALUES ( ?, ?, ?, ?, ? ) ";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO accesscontrol_accesscontrol ( name, description, creation_date, is_enabled, workgroup_key, return_url ) VALUES ( ?, ?, ?, ?, ?, ? ) ";
     private static final String SQL_QUERY_DELETE = "DELETE FROM accesscontrol_accesscontrol WHERE id_access_control = ? ";
-    private static final String SQL_QUERY_UPDATE = "UPDATE accesscontrol_accesscontrol SET id_access_control = ?, name = ?, description = ?, creation_date = ?, is_enabled = ?, workgroup_key = ? WHERE id_access_control = ?";
+    private static final String SQL_QUERY_UPDATE = "UPDATE accesscontrol_accesscontrol SET id_access_control = ?, name = ?, description = ?, creation_date = ?, is_enabled = ?, workgroup_key = ?, return_url = ? WHERE id_access_control = ?";
     private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_access_control FROM accesscontrol_accesscontrol";
     private static final String SQL_FILTER_IS_ENABLED = " is_enabled = ? ";
     private static final String SQL_FILTER_WORKGROUP = " workgroup_key = ? ";
@@ -78,6 +78,7 @@ public final class AccessControlDAO implements IAccessControlDAO
             daoUtil.setDate( nIndex++, accessControl.getCreationDate( ) );
             daoUtil.setBoolean( nIndex++, accessControl.isEnabled( ) );
             daoUtil.setString( nIndex++, accessControl.getWorkgroup( ) );
+            daoUtil.setString( nIndex++, accessControl.getReturnUrl( ) );
 
             daoUtil.executeUpdate( );
             if ( daoUtil.nextGeneratedKey( ) )
@@ -137,6 +138,8 @@ public final class AccessControlDAO implements IAccessControlDAO
             daoUtil.setDate( nIndex++, accessControl.getCreationDate( ) );
             daoUtil.setBoolean( nIndex++, accessControl.isEnabled( ) );
             daoUtil.setString( nIndex++, accessControl.getWorkgroup( ) );
+            daoUtil.setString( nIndex++, accessControl.getReturnUrl( ) );
+            
             daoUtil.setInt( nIndex, accessControl.getId( ) );
 
             daoUtil.executeUpdate( );
@@ -295,14 +298,16 @@ public final class AccessControlDAO implements IAccessControlDAO
     
     private AccessControl dataToObject( DAOUtil daoUtil )
     {
-        int nIndex = 1;
+        int nIndex = 0;
         AccessControl accessControl = new AccessControl( );
-        accessControl.setId( daoUtil.getInt( nIndex++ ) );
-        accessControl.setName( daoUtil.getString( nIndex++ ) );
-        accessControl.setDescription( daoUtil.getString( nIndex++ ) );
-        accessControl.setCreationDate( daoUtil.getDate( nIndex++ ) );
-        accessControl.setEnabled( daoUtil.getBoolean( nIndex++ ) );
-        accessControl.setWorkgroup( daoUtil.getString( nIndex ) );
+        accessControl.setId( daoUtil.getInt( ++nIndex ) );
+        accessControl.setName( daoUtil.getString( ++nIndex ) );
+        accessControl.setDescription( daoUtil.getString( ++nIndex ) );
+        accessControl.setCreationDate( daoUtil.getDate( ++nIndex ) );
+        accessControl.setEnabled( daoUtil.getBoolean( ++nIndex ) );
+        accessControl.setWorkgroup( daoUtil.getString( ++nIndex ) );
+        accessControl.setReturnUrl( daoUtil.getString( ++nIndex ) );
+        
         return accessControl;
     }
 }
