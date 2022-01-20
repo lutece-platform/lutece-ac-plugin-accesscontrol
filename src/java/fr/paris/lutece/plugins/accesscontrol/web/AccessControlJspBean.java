@@ -309,14 +309,16 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
             throw new AccessDeniedException( "AccessController not found for ID " + nId );
         }
         
-        IAccessControllerType controllerType = SpringContextService.getBean( controller.getType( ) );
-        if ( controllerType == null )
+        if ( request.getParameter( PARAMETER_CANCEL ) == null )
         {
-            throw new AccessDeniedException( "Unknown controller type " + controller.getType( ) );
+            IAccessControllerType controllerType = SpringContextService.getBean( controller.getType( ) );
+            if ( controllerType == null )
+            {
+                throw new AccessDeniedException( "Unknown controller type " + controller.getType( ) );
+            }
+            
+            controllerType.saveControllerConfig( request, getLocale(), controller );
         }
-        
-        controllerType.saveControllerConfig( request, getLocale(), controller );
-        
         return redirect( request, VIEW_MODIFY_ACCESSCONTROL, PARAMETER_ID_ACCESSCONTROL, controller.getIdAccesscontrol( ) );
     }
     

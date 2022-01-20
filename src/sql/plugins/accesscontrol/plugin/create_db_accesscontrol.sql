@@ -48,3 +48,14 @@ CREATE TABLE accesscontrol_controller_comment_config (
 	comment long varchar,
 	PRIMARY KEY( id_access_control )
 );
+
+--
+-- Structure for table accesscontrol_controller_tos_config
+--
+DROP TABLE IF EXISTS accesscontrol_controller_tos_config;
+CREATE TABLE accesscontrol_controller_tos_config (
+	id_access_control int,
+	comment long varchar,
+	error_message varchar(100),
+	PRIMARY KEY( id_access_control )
+);

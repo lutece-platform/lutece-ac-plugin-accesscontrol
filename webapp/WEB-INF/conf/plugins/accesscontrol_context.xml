@@ -8,8 +8,10 @@
     <bean id="accesscontrol.accessControllerDAO" class="fr.paris.lutece.plugins.accesscontrol.business.AccessControllerDAO" />
     <bean id="accesscontrol.accessControlResourceDAO" class="fr.paris.lutece.plugins.accesscontrol.business.AccessControlResourceDAO" />
     <bean id="accesscontrol.commentAccessControllerConfigDAO" class="fr.paris.lutece.plugins.accesscontrol.business.config.CommentAccessControllerConfigDAO" />
+    <bean id="accesscontrol.tosAccessControllerConfigDAO" class="fr.paris.lutece.plugins.accesscontrol.business.config.TosAccessControllerConfigDAO" />
 
     <bean id="accesscontrol.commentAccessControllerType" class="fr.paris.lutece.plugins.accesscontrol.service.CommentAccessControllerType" />
+    <bean id="accesscontrol.tosAccessControllerType" class="fr.paris.lutece.plugins.accesscontrol.service.TosAccessControllerType" />
     
     <bean id="accesscontrol.accessControlService" class="fr.paris.lutece.plugins.accesscontrol.service.AccessControlService" />
     

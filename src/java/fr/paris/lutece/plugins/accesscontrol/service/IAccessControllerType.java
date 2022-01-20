@@ -101,7 +101,7 @@ public interface IAccessControllerType
      * @param request
      * @return null if OK, an error message otherwise
      */
-    default String validate( HttpServletRequest request )
+    default String validate( HttpServletRequest request, AccessController controller )
     {
         return null;
     }

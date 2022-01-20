@@ -183,7 +183,7 @@ public class AccessControlXPage extends MVCApplication
     public XPage doValidateController( HttpServletRequest request ) 
     {
         IAccessControllerType currentControllerType = SpringContextService.getBean( _currentController.getType( ) );
-        _accessControlResult.put( _currentController.getOrder( ), currentControllerType.validate( request ) );
+        _accessControlResult.put( _currentController.getOrder( ), currentControllerType.validate( request, _currentController ) );
         _nCurrentControllerOrder++;
         return redirectView( request, VIEW_CONTROLLER );
     }
