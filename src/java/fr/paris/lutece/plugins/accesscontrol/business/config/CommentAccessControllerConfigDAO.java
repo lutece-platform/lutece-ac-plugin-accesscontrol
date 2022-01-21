@@ -10,10 +10,10 @@ public class CommentAccessControllerConfigDAO implements IAccessControllerConfig
 {
     public static final String BEAN_NAME = "accesscontrol.commentAccessControllerConfigDAO";
     
-    private static final String SQL_QUERY_SELECT = "SELECT id_access_control, comment FROM accesscontrol_controller_comment_config WHERE id_access_control = ? ";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO accesscontrol_controller_comment_config (id_access_control, comment) VALUES (?,?) ";
-    private static final String SQL_QUERY_UPDATE = "UPDATE accesscontrol_controller_comment_config SET comment = ? WHERE id_access_control = ? ";
-    private static final String SQL_QUERY_DELETE = "DELETE FROM accesscontrol_controller_comment_config WHERE id_access_control = ? ";
+    private static final String SQL_QUERY_SELECT = "SELECT id_access_controller, comment FROM accesscontrol_controller_comment_config WHERE id_access_controller = ? ";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO accesscontrol_controller_comment_config (id_access_controller, comment) VALUES (?,?) ";
+    private static final String SQL_QUERY_UPDATE = "UPDATE accesscontrol_controller_comment_config SET comment = ? WHERE id_access_controller = ? ";
+    private static final String SQL_QUERY_DELETE = "DELETE FROM accesscontrol_controller_comment_config WHERE id_access_controller = ? ";
     
     @Override
     public void insert( CommentAccessControllerConfig config )

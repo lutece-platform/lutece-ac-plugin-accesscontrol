@@ -63,7 +63,6 @@ public class TosAccessControllerType implements IAccessControllerType
     private static final String TEMPLATE_CONFIG = "/admin/plugins/accesscontrol/config/tos_controller_config.html";
     private static final String TEMPLATE_CONTROLLER = "skin/plugins/accesscontrol/controller/tos_controller_template.html";
     private static final String MARK_CONFIG = "config";
-    
 
     @Override
     public String getBeanName( )

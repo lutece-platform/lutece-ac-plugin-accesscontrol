@@ -44,9 +44,9 @@ CREATE INDEX index_ac_accontroller_resource ON accesscontrol_resource_accesscont
 --
 DROP TABLE IF EXISTS accesscontrol_controller_comment_config;
 CREATE TABLE accesscontrol_controller_comment_config (
-	id_access_control int,
+	id_access_controller int,
 	comment long varchar,
-	PRIMARY KEY( id_access_control )
+	PRIMARY KEY( id_access_controller )
 );
 
 --
@@ -54,8 +54,21 @@ CREATE TABLE accesscontrol_controller_comment_config (
 --
 DROP TABLE IF EXISTS accesscontrol_controller_tos_config;
 CREATE TABLE accesscontrol_controller_tos_config (
-	id_access_control int,
+	id_access_controller int,
 	comment long varchar,
 	error_message varchar(100),
-	PRIMARY KEY( id_access_control )
+	PRIMARY KEY( id_access_controller )
+);
+
+--
+-- Structure for table accesscontrol_controller_age_config
+--
+DROP TABLE IF EXISTS accesscontrol_controller_age_config;
+CREATE TABLE accesscontrol_controller_age_config (
+	id_access_controller int,
+	comment long varchar,
+	age_min int,
+	age_max int,
+	error_message varchar(100),
+	PRIMARY KEY( id_access_controller )
 );

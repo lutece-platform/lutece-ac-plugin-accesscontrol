@@ -1,0 +1,21 @@
+<@row>
+	<@columns>
+		<@fieldSet legend='#i18n{accesscontrol.modify_controller.controller_comment_config.title}'>
+			<@input type='hidden' name="id_controller" value=config.idAccessController />
+			<@formGroup labelFor='comment' labelKey='#i18n{accesscontrol.modify_controller.controller_comment_config.title}' mandatory=true>
+				<@input type='textarea' name='comment' id='comment' rows=5 richtext=true>${config.comment!}</@input>
+			</@formGroup>
+			<@formGroup labelFor='ageMin' labelKey='#i18n{accesscontrol.modify_controller.controller_age_min_config.title}' helpKey='#i18n{accesscontrol.modify_controller.controller_age_min_config.help}'>
+				<@input type='number' name='ageMin' id='ageMin' value='${config.ageMin!}' min=0 />
+			</@formGroup>
+			<@formGroup labelFor='ageMax' labelKey='#i18n{accesscontrol.modify_controller.controller_age_max_config.title}' helpKey='#i18n{accesscontrol.modify_controller.controller_age_max_config.help}'>
+				<@input type='number' name='ageMax' id='ageMax' value='${config.ageMin!}' min=0 />
+			</@formGroup>
+			<@formGroup labelFor='error_message' labelKey='#i18n{accesscontrol.modify_controller.controller_error_config.title}' mandatory=true>
+				<@input type='text' name='error_message' id='error_message' value='${config.errorMessage!}' />
+			</@formGroup>
+		</@fieldSet>
+	</@columns>
+</@row>
+<#include "/admin/util/editor/editor.html" />
+<@initEditor />
