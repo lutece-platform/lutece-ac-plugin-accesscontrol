@@ -17,12 +17,12 @@ import org.apache.commons.lang3.math.NumberUtils;
 import fr.paris.lutece.plugins.accesscontrol.business.AccessControlHome;
 import fr.paris.lutece.plugins.accesscontrol.business.AccessController;
 import fr.paris.lutece.plugins.accesscontrol.business.AccessControllerHome;
-import fr.paris.lutece.plugins.accesscontrol.service.AccessControlService;
+import fr.paris.lutece.plugins.accesscontrol.service.AccessControlServiceProvider;
 import fr.paris.lutece.plugins.accesscontrol.service.IAccessControllerType;
 import fr.paris.lutece.plugins.accesscontrol.util.BoolCondition;
 import fr.paris.lutece.portal.business.accesscontrol.AccessControl;
 import fr.paris.lutece.portal.business.accesscontrol.AccessControlSessionData;
-import fr.paris.lutece.portal.service.accesscontrol.IAccessControlService;
+import fr.paris.lutece.portal.service.accesscontrol.IAccessControlServiceProvider;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.SiteMessage;
 import fr.paris.lutece.portal.service.message.SiteMessageException;
@@ -76,7 +76,7 @@ public class AccessControlXPage extends MVCApplication
     private int _idResource;
     private String _resourceType;
     
-    private IAccessControlService _service = SpringContextService.getBean( AccessControlService.BEAN_NAME );
+    private IAccessControlServiceProvider _service = SpringContextService.getBean( AccessControlServiceProvider.BEAN_NAME );
     
     private void init( HttpServletRequest request )
     {

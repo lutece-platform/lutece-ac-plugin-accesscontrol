@@ -51,7 +51,7 @@ import fr.paris.lutece.plugins.accesscontrol.web.AccessControlXPage;
 import fr.paris.lutece.portal.business.accesscontrol.AccessControl;
 import fr.paris.lutece.portal.business.accesscontrol.AccessControlFilter;
 import fr.paris.lutece.portal.business.accesscontrol.AccessControlSessionData;
-import fr.paris.lutece.portal.service.accesscontrol.IAccessControlService;
+import fr.paris.lutece.portal.service.accesscontrol.IAccessControlServiceProvider;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.workgroup.AdminWorkgroupService;
 import fr.paris.lutece.portal.util.mvc.utils.MVCUtils;
@@ -61,12 +61,12 @@ import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.url.UrlItem;
 
 /**
- * Implementation of {@link IAccessControlService}
+ * Implementation of {@link IAccessControlServiceProvider}
  *
  */
-public class AccessControlService implements IAccessControlService
+public class AccessControlServiceProvider implements IAccessControlServiceProvider
 {
-    public static final String BEAN_NAME = "accesscontrol.accessControlService";
+    public static final String BEAN_NAME = "accesscontrol.accessControlServiceProvider";
     
     private static final String URL_PORTAL = "Portal.jsp";
     

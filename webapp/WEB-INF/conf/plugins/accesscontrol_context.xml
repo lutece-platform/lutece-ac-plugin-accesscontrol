@@ -13,6 +13,6 @@
     <bean id="accesscontrol.commentAccessControllerType" class="fr.paris.lutece.plugins.accesscontrol.service.CommentAccessControllerType" />
     <bean id="accesscontrol.tosAccessControllerType" class="fr.paris.lutece.plugins.accesscontrol.service.TosAccessControllerType" />
     
-    <bean id="accesscontrol.accessControlService" class="fr.paris.lutece.plugins.accesscontrol.service.AccessControlService" />
+    <bean id="accesscontrol.accessControlServiceProvider" class="fr.paris.lutece.plugins.accesscontrol.service.AccessControlServiceProvider" />
     
 </beans>
