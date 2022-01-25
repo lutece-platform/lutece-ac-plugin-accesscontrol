@@ -47,12 +47,12 @@ import javax.servlet.http.HttpServletRequest;
 import fr.paris.lutece.plugins.accesscontrol.business.AccessControlHome;
 import fr.paris.lutece.plugins.accesscontrol.business.AccessController;
 import fr.paris.lutece.plugins.accesscontrol.business.AccessControllerHome;
-import fr.paris.lutece.plugins.accesscontrol.service.AccessControlServiceProvider;
+import fr.paris.lutece.plugins.accesscontrol.service.AccessControlService;
+import fr.paris.lutece.plugins.accesscontrol.service.IAccessControlService;
 import fr.paris.lutece.plugins.accesscontrol.service.IAccessControllerType;
 import fr.paris.lutece.plugins.accesscontrol.util.BoolCondition;
 import fr.paris.lutece.portal.business.accesscontrol.AccessControl;
 import fr.paris.lutece.portal.business.user.AdminUser;
-import fr.paris.lutece.portal.service.accesscontrol.IAccessControlServiceProvider;
 import fr.paris.lutece.portal.service.admin.AccessDeniedException;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
@@ -140,7 +140,7 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
     private static final String INFO_ACCESSCONTROL_UPDATED = "accesscontrol.info.accesscontrol.updated";
     private static final String INFO_ACCESSCONTROL_REMOVED = "accesscontrol.info.accesscontrol.removed";
 
-    private IAccessControlServiceProvider _accessControlService = SpringContextService.getBean( AccessControlServiceProvider.BEAN_NAME );
+    private IAccessControlService _accessControlService = SpringContextService.getBean( AccessControlService.BEAN_NAME );
 
     // Session variable to store working values
     private AccessControl _accesControl;

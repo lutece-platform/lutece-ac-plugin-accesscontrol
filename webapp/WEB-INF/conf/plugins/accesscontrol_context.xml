@@ -16,5 +16,5 @@
     <bean id="accesscontrol.ageAccessControllerType" class="fr.paris.lutece.plugins.accesscontrol.service.AgeAccessControllerType" />
     
     <bean id="accesscontrol.accessControlServiceProvider" class="fr.paris.lutece.plugins.accesscontrol.service.AccessControlServiceProvider" />
-    
+    <bean id="accesscontrol.accessControlService" class="fr.paris.lutece.plugins.accesscontrol.service.AccessControlService" />
 </beans>
