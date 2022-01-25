@@ -106,12 +106,14 @@
     -->
 
     <!-- Daemons -->
-    <daemon>
+    <daemons>
+        <daemon>
             <daemon-id>controllerUserCodeDataDaemon</daemon-id>
             <daemon-name>accesscontrol.controllerUserCodeDataDaemon.name</daemon-name>
             <daemon-description>accesscontrol.controllerUserCodeDataDaemon.description</daemon-description>
             <daemon-class>fr.paris.lutece.plugins.accesscontrol.service.daemon.ControllerUserCodeDataDaemon</daemon-class>
         </daemon>
+    </daemons>
     
    
     <!-- Other services -->

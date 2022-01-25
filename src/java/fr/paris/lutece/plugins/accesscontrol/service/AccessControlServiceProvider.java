@@ -44,13 +44,11 @@ import javax.servlet.http.HttpServletResponse;
 import fr.paris.lutece.api.user.User;
 import fr.paris.lutece.plugins.accesscontrol.business.AccessControlResource;
 import fr.paris.lutece.plugins.accesscontrol.business.AccessControlResourceHome;
-import fr.paris.lutece.plugins.accesscontrol.business.IAccessControlDAO;
 import fr.paris.lutece.plugins.accesscontrol.web.AccessControlXPage;
 import fr.paris.lutece.portal.business.accesscontrol.AccessControl;
 import fr.paris.lutece.portal.business.accesscontrol.AccessControlFilter;
 import fr.paris.lutece.portal.business.accesscontrol.AccessControlSessionData;
 import fr.paris.lutece.portal.service.accesscontrol.IAccessControlServiceProvider;
-import fr.paris.lutece.portal.service.workgroup.AdminWorkgroupService;
 import fr.paris.lutece.portal.util.mvc.utils.MVCUtils;
 import fr.paris.lutece.portal.web.LocalVariables;
 import fr.paris.lutece.portal.web.xpages.XPage;
@@ -68,28 +66,18 @@ public class AccessControlServiceProvider implements IAccessControlServiceProvid
     private static final String URL_PORTAL = "Portal.jsp";
     
     @Inject
-    private IAccessControlDAO _accessControlDAO;
+    private IAccessControlService _accessControlService;
 
     @Override
     public List<AccessControl> getListAccessControlsByFilter( AccessControlFilter filter )
     {
-        return _accessControlDAO.selectAccessControlByFilter( filter );
+        return _accessControlService.getListAccessControlsByFilter( filter );
     }
     
     @Override
     public ReferenceList getAccessControlsEnabled( User user, Locale locale )
     {
-        AccessControlFilter filter = new AccessControlFilter( );
-        filter.setIsEnabled( AccessControlFilter.FILTER_TRUE );
-        List<AccessControl> list = getListAccessControlsByFilter( filter );
-        
-        ReferenceList referenceList = new ReferenceList( );
-        referenceList.addItem( -1, "-" );
-        for ( AccessControl accessControl : AdminWorkgroupService.getAuthorizedCollection( list, user ) )
-        {
-            referenceList.addItem( accessControl.getId( ), accessControl.getName( ) );
-        }
-        return referenceList;
+        return _accessControlService.getAccessControlsEnabled( user, locale );
     }
     
     @Override

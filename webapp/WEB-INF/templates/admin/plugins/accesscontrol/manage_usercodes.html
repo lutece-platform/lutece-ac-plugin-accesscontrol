@@ -1,6 +1,26 @@
 <@row>
 	<@columns>
 		<@box style='primary'>
+			<@boxHeader titleLevel='h3' i18nTitleKey='accesscontrol.manage_usercode.pageTitle' boxTools=true skipHeader=true >
+				<@aButton title='#i18n{accesscontrol.manage_usercode.buttonImport}' buttonIcon='upload' size='sm' params='data-toggle="modal" data-target="#importCsv" ' hideTitle=['xs','sm'] />
+			</@boxHeader>
 		</@box>
 	</@columns>
 </@row>
+<@modal id='importCsv'>
+	<@modalHeader modalTitle='#i18n{accesscontrol.manage_usercode.buttonImport}' />
+	<@modalBody>
+		<@tform class='form' method='post' name='upload_workflow' action='jsp/admin/plugins/accesscontrol/ManageControllerUserCode.jsp' params='enctype="multipart/form-data"'>
+			<@formGroup labelKey='#i18n{accesscontrol.manage_usercode.labelAccessControl}' mandatory=true >
+				<@select name='access_control' items=access_control_list />
+			</@formGroup>
+			<@formGroup labelKey='#i18n{accesscontrol.manage_usercode.labelImportFile}' helpKey='#i18n{accesscontrol.manage_usercode.labelImportFile.help}' rows=2>
+				<@input type='file' name='csv_file'/>
+			</@formGroup>
+			<@formGroup>
+				<@button type='submit' name='action_doImport' buttonIcon='check' title='#i18n{portal.admin.message.buttonValidate}' />
+				<@button type='cancel' name='action_doCancelImport' buttonIcon='times' title='#i18n{portal.admin.message.buttonCancel}' cancel=true />
+			</@formGroup>
+		</@tform>
+	</@modalBody>
+</@modal>

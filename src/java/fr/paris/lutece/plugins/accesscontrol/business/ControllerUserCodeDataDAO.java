@@ -18,7 +18,7 @@ public class ControllerUserCodeDataDAO implements IControllerUserCodeDataDAO
     private static final String SQL_QUERY_INSERT = "INSERT INTO accesscontrol_controller_user_code_data ( userId, code, id_access_control, date_validity ) VALUES ( ?, ?, ?, ? )";
     private static final String SQL_QUERY_DELETE = "DELETE FROM accesscontrol_controller_user_code_data WHERE userId = ? AND id_access_control = ? ";
     private static final String SQL_QUERY_DELETE_BU_ACCESS_CONTROL = "DELETE FROM accesscontrol_controller_user_code_data WHERE id_access_control = ? ";
-    private static final String SQL_QUERY_SELECT_INVALID = SQL_QUERY_SELECT_ALL + " WHERE date_validity < ? ";
+    private static final String SQL_QUERY_SELECT_INVALID = SQL_QUERY_SELECT_ALL + " WHERE date_validity IS NOT NULL AND  date_validity < ? ";
 
     @Override
     public void insert( ControllerUserCodeData userCode, Plugin plugin )
