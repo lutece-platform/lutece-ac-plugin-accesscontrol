@@ -94,6 +94,7 @@ public final class AccessControlHome
     public static void remove( int nKey )
     {
         AccessControlResourceHome.removeByAccessControl( nKey );
+        ControllerUserCodeDataHome.removeByAccessControl( nKey );
         _dao.delete( nKey, _plugin );
     }
 

@@ -72,3 +72,12 @@ CREATE TABLE accesscontrol_controller_age_config (
 	error_message varchar(100),
 	PRIMARY KEY( id_access_controller )
 );
+
+DROP TABLE IF EXISTS accesscontrol_controller_user_code_data;
+CREATE TABLE accesscontrol_controller_user_code_data (
+	userId varchar(100),
+	id_access_control int,
+	code varchar(100),
+	date_validity date,
+	PRIMARY KEY( userId, id_access_control )
+);
