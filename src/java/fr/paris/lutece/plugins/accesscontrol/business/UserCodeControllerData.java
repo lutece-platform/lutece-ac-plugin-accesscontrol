@@ -2,7 +2,7 @@ package fr.paris.lutece.plugins.accesscontrol.business;
 
 import java.sql.Date;
 
-public class ControllerUserCodeData
+public class UserCodeControllerData
 {
     private String _strUser;
     private String _strCode;

@@ -19,44 +19,44 @@ public class ControllerUserCodeDataBusinessTest extends LuteceTestCase
 
     public void testCRUD( )
     {
-        ControllerUserCodeData data = new ControllerUserCodeData( );
+        UserCodeControllerData data = new UserCodeControllerData( );
         data.setUser( USER_1 );
         data.setCode( CODE_1 );
         data.setIdAccessControl( ID_ACCESS_CONTROL_1 );
         data.setValidityDate( DATE_VALID );
         
-        ControllerUserCodeDataHome.create( data );
+        UserCodeControllerDataHome.create( data );
         
-        ControllerUserCodeData loaded = ControllerUserCodeDataHome.findByPrimaryKey( USER_1 );
+        UserCodeControllerData loaded = UserCodeControllerDataHome.findByPrimaryKey( USER_1 );
         assertNotNull( loaded );
         assertEquals( data.getUser( ), loaded.getUser( ) );
         assertEquals( data.getCode( ), loaded.getCode( ) );
         
-        List<ControllerUserCodeData> invalidList = ControllerUserCodeDataHome.findAllInvalidDate( );
+        List<UserCodeControllerData> invalidList = UserCodeControllerDataHome.findAllInvalidDate( );
         assertEquals( 0, invalidList.size( ) );
         
-        assertTrue( ControllerUserCodeDataHome.checkUserCodeValid( USER_1, CODE_1, ID_ACCESS_CONTROL_1 ) );
-        assertFalse( ControllerUserCodeDataHome.checkUserCodeValid( USER_1, CODE_1, ID_ACCESS_CONTROL_2 ) );
-        assertFalse( ControllerUserCodeDataHome.checkUserCodeValid( USER_2, CODE_2, ID_ACCESS_CONTROL_1 ) );
+        assertTrue( UserCodeControllerDataHome.checkUserCodeValid( USER_1, CODE_1, ID_ACCESS_CONTROL_1 ) );
+        assertFalse( UserCodeControllerDataHome.checkUserCodeValid( USER_1, CODE_1, ID_ACCESS_CONTROL_2 ) );
+        assertFalse( UserCodeControllerDataHome.checkUserCodeValid( USER_2, CODE_2, ID_ACCESS_CONTROL_1 ) );
         
-        ControllerUserCodeDataHome.remove( USER_1, ID_ACCESS_CONTROL_1 );
-        loaded = ControllerUserCodeDataHome.findByPrimaryKey( USER_1 );
+        UserCodeControllerDataHome.remove( USER_1, ID_ACCESS_CONTROL_1 );
+        loaded = UserCodeControllerDataHome.findByPrimaryKey( USER_1 );
         assertNull( loaded );
         
-        data = new ControllerUserCodeData( );
+        data = new UserCodeControllerData( );
         data.setUser( USER_1 );
         data.setCode( CODE_1 );
         data.setIdAccessControl( ID_ACCESS_CONTROL_1 );
         data.setValidityDate( DATE_INVALID );
         
-        ControllerUserCodeDataHome.create( data );
-        assertFalse( ControllerUserCodeDataHome.checkUserCodeValid( USER_1, CODE_1, ID_ACCESS_CONTROL_1 ) );
+        UserCodeControllerDataHome.create( data );
+        assertFalse( UserCodeControllerDataHome.checkUserCodeValid( USER_1, CODE_1, ID_ACCESS_CONTROL_1 ) );
         
-        invalidList = ControllerUserCodeDataHome.findAllInvalidDate( );
+        invalidList = UserCodeControllerDataHome.findAllInvalidDate( );
         assertEquals( 1, invalidList.size( ) );
         
-        ControllerUserCodeDataHome.removeByAccessControl( ID_ACCESS_CONTROL_1 );
-        loaded = ControllerUserCodeDataHome.findByPrimaryKey( USER_1 );
+        UserCodeControllerDataHome.removeByAccessControl( ID_ACCESS_CONTROL_1 );
+        loaded = UserCodeControllerDataHome.findByPrimaryKey( USER_1 );
         assertNull( loaded );
     }
 }

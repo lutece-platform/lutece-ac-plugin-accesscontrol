@@ -8,9 +8,9 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
 
 /**
- * Implements {@link IControllerUserCodeDataDAO} 
+ * Implements {@link IUserCodeControllerDataDAO} 
  */
-public class ControllerUserCodeDataDAO implements IControllerUserCodeDataDAO
+public class UserCodeControllerDataDAO implements IUserCodeControllerDataDAO
 {
     private static final String SQL_QUERY_SELECT_ALL = "SELECT userId, code, id_access_control, date_validity FROM accesscontrol_controller_user_code_data ";
     private static final String SQL_QUERY_SELECT_BY_USER = SQL_QUERY_SELECT_ALL + "WHERE userId = ? ";
@@ -21,7 +21,7 @@ public class ControllerUserCodeDataDAO implements IControllerUserCodeDataDAO
     private static final String SQL_QUERY_SELECT_INVALID = SQL_QUERY_SELECT_ALL + " WHERE date_validity IS NOT NULL AND  date_validity < ? ";
 
     @Override
-    public void insert( ControllerUserCodeData userCode, Plugin plugin )
+    public void insert( UserCodeControllerData userCode, Plugin plugin )
     {
         try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin ) )
         {
@@ -60,9 +60,9 @@ public class ControllerUserCodeDataDAO implements IControllerUserCodeDataDAO
     }
     
     @Override
-    public ControllerUserCodeData load( String strUser, Plugin plugin )
+    public UserCodeControllerData load( String strUser, Plugin plugin )
     {
-        ControllerUserCodeData data = null;
+        UserCodeControllerData data = null;
         try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_BY_USER, plugin ) )
         {
             int nIndex = 0;
@@ -79,9 +79,9 @@ public class ControllerUserCodeDataDAO implements IControllerUserCodeDataDAO
     }
     
     @Override
-    public List<ControllerUserCodeData> loadAll( Plugin plugin )
+    public List<UserCodeControllerData> loadAll( Plugin plugin )
     {
-        List<ControllerUserCodeData> list = new ArrayList<>( );
+        List<UserCodeControllerData> list = new ArrayList<>( );
         try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_ALL, plugin ) )
         {
             daoUtil.executeQuery( );
@@ -96,7 +96,7 @@ public class ControllerUserCodeDataDAO implements IControllerUserCodeDataDAO
     @Override
     public boolean checkUserCode( String strUser, String strCode, int idAccessControl, Plugin plugin )
     {
-        ControllerUserCodeData data = null;
+        UserCodeControllerData data = null;
         try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_BY_USER_AND_CODE, plugin ) )
         {
             int nIndex = 0;
@@ -115,10 +115,10 @@ public class ControllerUserCodeDataDAO implements IControllerUserCodeDataDAO
         return data != null;
     }
     
-    private ControllerUserCodeData dataToObject( DAOUtil daoUtil )
+    private UserCodeControllerData dataToObject( DAOUtil daoUtil )
     {
         int nIndex = 0;
-        ControllerUserCodeData data = new ControllerUserCodeData( );
+        UserCodeControllerData data = new UserCodeControllerData( );
         data.setUser( daoUtil.getString( ++nIndex ) );
         data.setCode( daoUtil.getString( ++nIndex ) );
         data.setIdAccessControl( daoUtil.getInt( ++nIndex ) );
@@ -128,9 +128,9 @@ public class ControllerUserCodeDataDAO implements IControllerUserCodeDataDAO
     }
 
     @Override
-    public List<ControllerUserCodeData> loadDateInvalid( Plugin plugin )
+    public List<UserCodeControllerData> loadDateInvalid( Plugin plugin )
     {
-        List<ControllerUserCodeData> list = new ArrayList<>( );
+        List<UserCodeControllerData> list = new ArrayList<>( );
         try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_INVALID, plugin ) )
         {
             daoUtil.setDate( 1, new Date( System.currentTimeMillis( ) ) );

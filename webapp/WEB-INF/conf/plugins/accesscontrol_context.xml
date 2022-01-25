@@ -10,7 +10,7 @@
     <bean id="accesscontrol.commentAccessControllerConfigDAO" class="fr.paris.lutece.plugins.accesscontrol.business.config.CommentAccessControllerConfigDAO" />
     <bean id="accesscontrol.tosAccessControllerConfigDAO" class="fr.paris.lutece.plugins.accesscontrol.business.config.TosAccessControllerConfigDAO" />
     <bean id="accesscontrol.ageAccessControllerConfigDAO" class="fr.paris.lutece.plugins.accesscontrol.business.config.AgeAccessControllerConfigDAO" />
-    <bean id="accesscontrol.controllerUserCodeDataDAO" class="fr.paris.lutece.plugins.accesscontrol.business.ControllerUserCodeDataDAO" />
+    <bean id="accesscontrol.userCodeControllerDataDAO" class="fr.paris.lutece.plugins.accesscontrol.business.UserCodeControllerDataDAO" />
 
     <bean id="accesscontrol.commentAccessControllerType" class="fr.paris.lutece.plugins.accesscontrol.service.CommentAccessControllerType" />
     <bean id="accesscontrol.tosAccessControllerType" class="fr.paris.lutece.plugins.accesscontrol.service.TosAccessControllerType" />

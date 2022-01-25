@@ -11,8 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang3.math.NumberUtils;
 
-import fr.paris.lutece.plugins.accesscontrol.business.ControllerUserCodeData;
-import fr.paris.lutece.plugins.accesscontrol.business.ControllerUserCodeDataHome;
+import fr.paris.lutece.plugins.accesscontrol.business.UserCodeControllerData;
+import fr.paris.lutece.plugins.accesscontrol.business.UserCodeControllerDataHome;
 import fr.paris.lutece.plugins.accesscontrol.service.AccessControlService;
 import fr.paris.lutece.plugins.accesscontrol.service.IAccessControlService;
 import fr.paris.lutece.portal.business.user.AdminUser;
@@ -28,7 +28,7 @@ import fr.paris.lutece.portal.web.upload.MultipartHttpServletRequest;
  */
 @Controller( controllerJsp = "ManageControllerUserCode.jsp", controllerPath = "jsp/admin/plugins/accesscontrol/", right = "USERCODES_MANAGEMENT" )
 
-public class ControllerUserCodeJspBean extends AbstractManageAccessControlJspBean
+public class UserCodeControllerJspBean extends AbstractManageAccessControlJspBean
 {
 
     private static final long serialVersionUID = 5752966056141055327L;
@@ -95,14 +95,14 @@ public class ControllerUserCodeJspBean extends AbstractManageAccessControlJspBea
                     String strLine = scanner.nextLine( );
                     String [ ] strFields = strLine.split( ";" );
                     
-                    ControllerUserCodeData data = new ControllerUserCodeData( );
+                    UserCodeControllerData data = new UserCodeControllerData( );
                     data.setIdAccessControl( accessControlId );
                     data.setUser( strFields[0] );
                     data.setCode( strFields[1] );
                     data.setValidityDate( Date.valueOf( LocalDate.parse( strFields[2] ) ) );
                     
-                    ControllerUserCodeDataHome.remove( data.getUser( ), data.getIdAccessControl( ) );
-                    ControllerUserCodeDataHome.create( data );
+                    UserCodeControllerDataHome.remove( data.getUser( ), data.getIdAccessControl( ) );
+                    UserCodeControllerDataHome.create( data );
                 }
             }
             catch( IOException e )

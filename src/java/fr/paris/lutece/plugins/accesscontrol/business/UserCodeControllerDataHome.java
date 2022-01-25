@@ -6,16 +6,16 @@ import fr.paris.lutece.plugins.accesscontrol.util.AccessControlUtils;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
-public final class ControllerUserCodeDataHome
+public final class UserCodeControllerDataHome
 {
 
-    private static IControllerUserCodeDataDAO _dao = SpringContextService.getBean( "accesscontrol.controllerUserCodeDataDAO" );
+    private static IUserCodeControllerDataDAO _dao = SpringContextService.getBean( "accesscontrol.userCodeControllerDataDAO" );
     private static Plugin _plugin = AccessControlUtils.getPlugin( );
     
     /**
      * Private constructor - this class need not be instantiated
      */
-    private ControllerUserCodeDataHome( )
+    private UserCodeControllerDataHome( )
     {
     }
     
@@ -26,7 +26,7 @@ public final class ControllerUserCodeDataHome
      *            The instance of the ControllerUserCodeData which contains the informations to store
      * @return The instance of controllerUserCodeData which has been created with its primary key.
      */
-    public static ControllerUserCodeData create( ControllerUserCodeData controllerUserCodeData )
+    public static UserCodeControllerData create( UserCodeControllerData controllerUserCodeData )
     {
         _dao.insert( controllerUserCodeData, _plugin );
         return controllerUserCodeData;
@@ -61,7 +61,7 @@ public final class ControllerUserCodeDataHome
      *            The controllerUserCodeData primary key
      * @return an instance of ControllerUserCodeData
      */
-    public static ControllerUserCodeData findByPrimaryKey( String strUser )
+    public static UserCodeControllerData findByPrimaryKey( String strUser )
     {
         return _dao.load( strUser, _plugin );
     }
@@ -83,7 +83,7 @@ public final class ControllerUserCodeDataHome
      * 
      * @return an instance of ControllerUserCodeData
      */
-    public static List<ControllerUserCodeData> findAll( )
+    public static List<UserCodeControllerData> findAll( )
     {
         return _dao.loadAll( _plugin );
     }
@@ -93,7 +93,7 @@ public final class ControllerUserCodeDataHome
      * 
      * @return an instance of ControllerUserCodeData
      */
-    public static List<ControllerUserCodeData> findAllInvalidDate( )
+    public static List<UserCodeControllerData> findAllInvalidDate( )
     {
         return _dao.loadDateInvalid( _plugin );
     }

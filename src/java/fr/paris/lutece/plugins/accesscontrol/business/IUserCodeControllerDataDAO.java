@@ -7,7 +7,7 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 /**
  * IControllerUserCodeDataDAO Interface
  */
-public interface IControllerUserCodeDataDAO
+public interface IUserCodeControllerDataDAO
 {
 
     /**
@@ -18,7 +18,7 @@ public interface IControllerUserCodeDataDAO
      * @param plugin
      *            the Plugin
      */
-    void insert( ControllerUserCodeData userCode, Plugin plugin );
+    void insert( UserCodeControllerData userCode, Plugin plugin );
 
     /**
      * Delete a record from the table
@@ -51,7 +51,7 @@ public interface IControllerUserCodeDataDAO
      *            the Plugin
      * @return The instance of the ControllerUserCodeData
      */
-    ControllerUserCodeData load( String strUser, Plugin plugin );
+    UserCodeControllerData load( String strUser, Plugin plugin );
     
     /**
      * Load the data from the table
@@ -60,7 +60,7 @@ public interface IControllerUserCodeDataDAO
      *            the Plugin
      * @return A list of instance of the ControllerUserCodeData
      */
-    List<ControllerUserCodeData> loadAll( Plugin plugin );
+    List<UserCodeControllerData> loadAll( Plugin plugin );
     
     /**
      * Load the data from the table
@@ -69,7 +69,7 @@ public interface IControllerUserCodeDataDAO
      *            the Plugin
      * @return A list of instance of the ControllerUserCodeData
      */
-    List<ControllerUserCodeData> loadDateInvalid( Plugin plugin );
+    List<UserCodeControllerData> loadDateInvalid( Plugin plugin );
     
     /**
      * Checks if the pair user/code exists

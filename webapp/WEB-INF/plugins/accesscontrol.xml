@@ -108,10 +108,10 @@
     <!-- Daemons -->
     <daemons>
         <daemon>
-            <daemon-id>controllerUserCodeDataDaemon</daemon-id>
-            <daemon-name>accesscontrol.controllerUserCodeDataDaemon.name</daemon-name>
-            <daemon-description>accesscontrol.controllerUserCodeDataDaemon.description</daemon-description>
-            <daemon-class>fr.paris.lutece.plugins.accesscontrol.service.daemon.ControllerUserCodeDataDaemon</daemon-class>
+            <daemon-id>userControllerCodeDataDaemon</daemon-id>
+            <daemon-name>accesscontrol.userCodeControllerDataDaemon.name</daemon-name>
+            <daemon-description>accesscontrol.userCodeControllerDataDaemon.description</daemon-description>
+            <daemon-class>fr.paris.lutece.plugins.accesscontrol.service.daemon.UserCodeControllerDataDaemon</daemon-class>
         </daemon>
     </daemons>
     
