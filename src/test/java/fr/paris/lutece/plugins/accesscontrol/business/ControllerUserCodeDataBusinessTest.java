@@ -2,6 +2,7 @@ package fr.paris.lutece.plugins.accesscontrol.business;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.List;
 
 import fr.paris.lutece.test.LuteceTestCase;
 
@@ -31,11 +32,14 @@ public class ControllerUserCodeDataBusinessTest extends LuteceTestCase
         assertEquals( data.getUser( ), loaded.getUser( ) );
         assertEquals( data.getCode( ), loaded.getCode( ) );
         
+        List<ControllerUserCodeData> invalidList = ControllerUserCodeDataHome.findAllInvalidDate( );
+        assertEquals( 0, invalidList.size( ) );
+        
         assertTrue( ControllerUserCodeDataHome.checkUserCodeValid( USER_1, CODE_1, ID_ACCESS_CONTROL_1 ) );
         assertFalse( ControllerUserCodeDataHome.checkUserCodeValid( USER_1, CODE_1, ID_ACCESS_CONTROL_2 ) );
         assertFalse( ControllerUserCodeDataHome.checkUserCodeValid( USER_2, CODE_2, ID_ACCESS_CONTROL_1 ) );
         
-        ControllerUserCodeDataHome.remove( USER_1 );
+        ControllerUserCodeDataHome.remove( USER_1, ID_ACCESS_CONTROL_1 );
         loaded = ControllerUserCodeDataHome.findByPrimaryKey( USER_1 );
         assertNull( loaded );
         
@@ -47,6 +51,9 @@ public class ControllerUserCodeDataBusinessTest extends LuteceTestCase
         
         ControllerUserCodeDataHome.create( data );
         assertFalse( ControllerUserCodeDataHome.checkUserCodeValid( USER_1, CODE_1, ID_ACCESS_CONTROL_1 ) );
+        
+        invalidList = ControllerUserCodeDataHome.findAllInvalidDate( );
+        assertEquals( 1, invalidList.size( ) );
         
         ControllerUserCodeDataHome.removeByAccessControl( ID_ACCESS_CONTROL_1 );
         loaded = ControllerUserCodeDataHome.findByPrimaryKey( USER_1 );

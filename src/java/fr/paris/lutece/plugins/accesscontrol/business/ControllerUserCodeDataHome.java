@@ -38,9 +38,9 @@ public final class ControllerUserCodeDataHome
      * @param strUser
      *            The controllerUserCodeData user
      */
-    public static void remove( String strUser )
+    public static void remove( String strUser, int idAccessControl )
     {
-        _dao.delete( strUser, _plugin );
+        _dao.delete( strUser, idAccessControl, _plugin );
     }
     
     /**
@@ -86,5 +86,15 @@ public final class ControllerUserCodeDataHome
     public static List<ControllerUserCodeData> findAll( )
     {
         return _dao.loadAll( _plugin );
+    }
+    
+    /**
+     * Returns a list of instance of aontrollerUserCodeData
+     * 
+     * @return an instance of ControllerUserCodeData
+     */
+    public static List<ControllerUserCodeData> findAllInvalidDate( )
+    {
+        return _dao.loadDateInvalid( _plugin );
     }
 }

@@ -23,12 +23,12 @@ public interface IControllerUserCodeDataDAO
     /**
      * Delete a record from the table
      * 
-     * @param nKey
-     *            The identifier of the ControllerUserCodeData to delete
+     * @param strUser
+     * @param idAccessControl    
      * @param plugin
      *            the Plugin
      */
-    void delete( String strUser, Plugin plugin );
+    void delete( String strUser, int idAccessControl, Plugin plugin );
     
     /**
      * Delete a record from the table
@@ -61,6 +61,15 @@ public interface IControllerUserCodeDataDAO
      * @return A list of instance of the ControllerUserCodeData
      */
     List<ControllerUserCodeData> loadAll( Plugin plugin );
+    
+    /**
+     * Load the data from the table
+     * 
+     * @param plugin
+     *            the Plugin
+     * @return A list of instance of the ControllerUserCodeData
+     */
+    List<ControllerUserCodeData> loadDateInvalid( Plugin plugin );
     
     /**
      * Checks if the pair user/code exists

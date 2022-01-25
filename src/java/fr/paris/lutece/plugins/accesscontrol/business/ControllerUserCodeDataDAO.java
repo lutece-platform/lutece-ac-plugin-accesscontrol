@@ -16,9 +16,10 @@ public class ControllerUserCodeDataDAO implements IControllerUserCodeDataDAO
     private static final String SQL_QUERY_SELECT_BY_USER = SQL_QUERY_SELECT_ALL + "WHERE userId = ? ";
     private static final String SQL_QUERY_SELECT_BY_USER_AND_CODE = SQL_QUERY_SELECT_ALL + "WHERE userId = ? AND CODE = ? AND id_access_control = ? AND ( date_validity IS NULL OR date_validity > ? )";
     private static final String SQL_QUERY_INSERT = "INSERT INTO accesscontrol_controller_user_code_data ( userId, code, id_access_control, date_validity ) VALUES ( ?, ?, ?, ? )";
-    private static final String SQL_QUERY_DELETE = "DELETE FROM accesscontrol_controller_user_code_data WHERE userId = ? ";
+    private static final String SQL_QUERY_DELETE = "DELETE FROM accesscontrol_controller_user_code_data WHERE userId = ? AND id_access_control = ? ";
     private static final String SQL_QUERY_DELETE_BU_ACCESS_CONTROL = "DELETE FROM accesscontrol_controller_user_code_data WHERE id_access_control = ? ";
-    
+    private static final String SQL_QUERY_SELECT_INVALID = SQL_QUERY_SELECT_ALL + " WHERE date_validity < ? ";
+
     @Override
     public void insert( ControllerUserCodeData userCode, Plugin plugin )
     {
@@ -35,12 +36,13 @@ public class ControllerUserCodeDataDAO implements IControllerUserCodeDataDAO
     }
     
     @Override
-    public void delete( String strUser, Plugin plugin )
+    public void delete( String strUser, int idAccessControl, Plugin plugin )
     {
         try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin ) )
         {
             int nIndex = 0;
             daoUtil.setString( ++nIndex , strUser );
+            daoUtil.setInt( ++nIndex , idAccessControl );
             daoUtil.executeUpdate( );
         }
         
@@ -123,5 +125,21 @@ public class ControllerUserCodeDataDAO implements IControllerUserCodeDataDAO
         data.setValidityDate( daoUtil.getDate( ++nIndex ) );
         
         return data;
+    }
+
+    @Override
+    public List<ControllerUserCodeData> loadDateInvalid( Plugin plugin )
+    {
+        List<ControllerUserCodeData> list = new ArrayList<>( );
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_INVALID, plugin ) )
+        {
+            daoUtil.setDate( 1, new Date( System.currentTimeMillis( ) ) );
+            daoUtil.executeQuery( );
+            while ( daoUtil.next( ) )
+            {
+                list.add( dataToObject( daoUtil ) );
+            }
+        }
+        return list;
     }
 }
