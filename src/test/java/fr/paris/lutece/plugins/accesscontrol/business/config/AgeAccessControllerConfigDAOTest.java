@@ -46,6 +46,6 @@ public class AgeAccessControllerConfigDAOTest extends LuteceTestCase
         
         dao.delete( ID );
         loaded = dao.load( ID );
-        assertNotNull( loaded );
+        assertNull( loaded );
     }
 }
