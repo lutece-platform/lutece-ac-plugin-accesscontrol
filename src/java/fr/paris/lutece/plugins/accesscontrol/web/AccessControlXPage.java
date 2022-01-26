@@ -27,6 +27,7 @@ import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.SiteMessage;
 import fr.paris.lutece.portal.service.message.SiteMessageException;
 import fr.paris.lutece.portal.service.message.SiteMessageService;
+import fr.paris.lutece.portal.service.security.UserNotSignedException;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
@@ -180,7 +181,7 @@ public class AccessControlXPage extends MVCApplication
     }
     
     @Action( value = ACTION_VALIDATE_CONTROLLER )
-    public XPage doValidateController( HttpServletRequest request ) 
+    public XPage doValidateController( HttpServletRequest request ) throws UserNotSignedException 
     {
         IAccessControllerType currentControllerType = SpringContextService.getBean( _currentController.getType( ) );
         _accessControlResult.put( _currentController.getOrder( ), currentControllerType.validate( request, _currentController ) );

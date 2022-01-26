@@ -15,6 +15,7 @@ import fr.paris.lutece.plugins.accesscontrol.business.UserCodeControllerDataHome
 import fr.paris.lutece.plugins.accesscontrol.business.config.IAccessControllerConfigDAO;
 import fr.paris.lutece.plugins.accesscontrol.business.config.UserCodeAccessControllerConfig;
 import fr.paris.lutece.plugins.accesscontrol.business.config.UserCodeAccessControllerConfigDAO;
+import fr.paris.lutece.portal.service.security.UserNotSignedException;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 
 /**
@@ -81,7 +82,7 @@ public abstract class AbstractUserCodeAccessControllerType implements IAccessCon
     }
     
     @Override
-    public String validate( HttpServletRequest request, AccessController controller )
+    public String validate( HttpServletRequest request, AccessController controller ) throws UserNotSignedException
     {
         UserCodeAccessControllerConfig config = _dao.load( controller.getId( ) );
         
@@ -99,6 +100,6 @@ public abstract class AbstractUserCodeAccessControllerType implements IAccessCon
         return null;
     }
     
-    protected abstract String getUserId( HttpServletRequest request );
+    protected abstract String getUserId( HttpServletRequest request ) throws UserNotSignedException;
     protected abstract String getTemplateController( );
 }

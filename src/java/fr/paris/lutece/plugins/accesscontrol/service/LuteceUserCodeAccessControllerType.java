@@ -37,80 +37,45 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
-import fr.paris.lutece.plugins.accesscontrol.business.AccessController;
+import fr.paris.lutece.portal.service.i18n.I18nService;
+import fr.paris.lutece.portal.service.security.LuteceUser;
+import fr.paris.lutece.portal.service.security.SecurityService;
 import fr.paris.lutece.portal.service.security.UserNotSignedException;
 
-/**
- * Interface for access controllers
- */
-public interface IAccessControllerType
+public class LuteceUserCodeAccessControllerType extends AbstractUserCodeAccessControllerType
 {
+    private static final String BEAN_NAME = "accesscontrol.luteceUserCodeAccessControllerType";
+    private static final String TITLE_KEY = "accesscontrol.controller.luteceUserCodeAccessController.name";
+    
+    private static final String TEMPLATE_CONTROLLER = "skin/plugins/accesscontrol/controller/luteceuser_code_controller_template.html";
+    
 
-    /**
-     * Gets The bean name of the controllerType
-     * 
-     * @return
-     */
-    String getBeanName( );
-
-    /**
-     * Gets The display title of the controllerType
-     * 
-     * @param locale
-     * @return
-     */
-    String getTitle( Locale locale );
-
-    /**
-     * Indicates if the controllerType needs a config
-     * 
-     * @return
-     */
-    default boolean hasConfig( )
+    @Override
+    public String getBeanName( )
     {
-        return false;
+        return BEAN_NAME;
     }
 
-    /**
-     * Delete the config of the controller
-     */
-    default void deleteConfig( int idController )
+    @Override
+    public String getTitle( Locale locale )
     {
+        return I18nService.getLocalizedString( TITLE_KEY, locale );
     }
     
-    /**
-     * Get the html form for the config of the controller.
-     * @param idController
-     * @return
-     */
-    default String getControllerConfigForm( HttpServletRequest request, Locale locale, AccessController controller )
+    @Override
+    protected String getTemplateController( )
     {
-        return "";
+        return TEMPLATE_CONTROLLER;
     }
-    
-    /**
-     * Save the config of the controller.
-     * @param idController
-     * @return
-     */
-    default void saveControllerConfig( HttpServletRequest request, Locale locale, AccessController controller )
+    @Override
+    protected String getUserId( HttpServletRequest request ) throws UserNotSignedException
     {
+        LuteceUser user = SecurityService.getInstance( ).getRegisteredUser( request );
+        if ( user == null )
+        {
+            throw new UserNotSignedException( );
+        }
+        return user.getName( );
     }
-    
-    /**
-     * Validate the controller
-     * @param request
-     * @return null if OK, an error message otherwise
-     */
-    default String validate( HttpServletRequest request, AccessController controller ) throws UserNotSignedException
-    {
-        return null;
-    }
-    
-    /**
-     * Get the html form for the config of the controller.
-     * @param idController
-     * @return
-     */
-    String getControllerForm( HttpServletRequest request, Locale locale, AccessController controller );
 }
+    
