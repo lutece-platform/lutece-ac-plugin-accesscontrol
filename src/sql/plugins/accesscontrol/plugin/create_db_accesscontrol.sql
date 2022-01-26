@@ -81,3 +81,11 @@ CREATE TABLE accesscontrol_controller_user_code_data (
 	date_validity date,
 	PRIMARY KEY( userId, id_access_control )
 );
+
+DROP TABLE IF EXISTS accesscontrol_controller_user_code_config;
+CREATE TABLE accesscontrol_controller_user_code_config (
+	id_access_controller int,
+	comment long varchar,
+	error_message varchar(100),
+	PRIMARY KEY( id_access_controller )
+);
