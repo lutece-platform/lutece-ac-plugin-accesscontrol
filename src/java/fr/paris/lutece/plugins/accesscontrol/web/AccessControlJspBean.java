@@ -44,6 +44,7 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
+import fr.paris.lutece.plugins.accesscontrol.business.AccessControl;
 import fr.paris.lutece.plugins.accesscontrol.business.AccessControlHome;
 import fr.paris.lutece.plugins.accesscontrol.business.AccessController;
 import fr.paris.lutece.plugins.accesscontrol.business.AccessControllerHome;
@@ -51,7 +52,6 @@ import fr.paris.lutece.plugins.accesscontrol.service.AccessControlService;
 import fr.paris.lutece.plugins.accesscontrol.service.IAccessControlService;
 import fr.paris.lutece.plugins.accesscontrol.service.IAccessControllerType;
 import fr.paris.lutece.plugins.accesscontrol.util.BoolCondition;
-import fr.paris.lutece.portal.business.accesscontrol.AccessControl;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.admin.AccessDeniedException;
 import fr.paris.lutece.portal.service.message.AdminMessage;

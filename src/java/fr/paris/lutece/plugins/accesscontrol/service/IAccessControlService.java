@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Locale;
 
 import fr.paris.lutece.api.user.User;
-import fr.paris.lutece.portal.business.accesscontrol.AccessControl;
-import fr.paris.lutece.portal.business.accesscontrol.AccessControlFilter;
+import fr.paris.lutece.plugins.accesscontrol.business.AccessControl;
+import fr.paris.lutece.plugins.accesscontrol.business.AccessControlFilter;
 import fr.paris.lutece.util.ReferenceList;
 
 public interface IAccessControlService

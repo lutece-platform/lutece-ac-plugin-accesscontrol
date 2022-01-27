@@ -35,7 +35,6 @@ package fr.paris.lutece.plugins.accesscontrol.business;
 
 import java.sql.Date;
 
-import fr.paris.lutece.portal.business.accesscontrol.AccessControl;
 import fr.paris.lutece.test.LuteceTestCase;
 
 /**

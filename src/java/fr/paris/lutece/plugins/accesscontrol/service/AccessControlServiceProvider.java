@@ -34,7 +34,6 @@
 package fr.paris.lutece.plugins.accesscontrol.service;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Locale;
 
 import javax.inject.Inject;
@@ -45,8 +44,6 @@ import fr.paris.lutece.api.user.User;
 import fr.paris.lutece.plugins.accesscontrol.business.AccessControlResource;
 import fr.paris.lutece.plugins.accesscontrol.business.AccessControlResourceHome;
 import fr.paris.lutece.plugins.accesscontrol.web.AccessControlXPage;
-import fr.paris.lutece.portal.business.accesscontrol.AccessControl;
-import fr.paris.lutece.portal.business.accesscontrol.AccessControlFilter;
 import fr.paris.lutece.portal.business.accesscontrol.AccessControlSessionData;
 import fr.paris.lutece.portal.service.accesscontrol.IAccessControlServiceProvider;
 import fr.paris.lutece.portal.util.mvc.utils.MVCUtils;
@@ -67,12 +64,6 @@ public class AccessControlServiceProvider implements IAccessControlServiceProvid
     
     @Inject
     private IAccessControlService _accessControlService;
-
-    @Override
-    public List<AccessControl> getListAccessControlsByFilter( AccessControlFilter filter )
-    {
-        return _accessControlService.getListAccessControlsByFilter( filter );
-    }
     
     @Override
     public ReferenceList getAccessControlsEnabled( User user, Locale locale )
