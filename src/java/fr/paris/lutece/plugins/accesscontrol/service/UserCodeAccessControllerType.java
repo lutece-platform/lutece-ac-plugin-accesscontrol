@@ -41,7 +41,7 @@ import fr.paris.lutece.portal.service.i18n.I18nService;
 
 public class UserCodeAccessControllerType extends AbstractUserCodeAccessControllerType
 {
-    private static final String BEAN_NAME = "accesscontrol.userCodeAccessControllerType";
+    public static final String BEAN_NAME = "accesscontrol.userCodeAccessControllerType";
     private static final String TITLE_KEY = "accesscontrol.controller.userCodeAccessController.name";
 
     private static final String PARAMETER_USER_ID = "userId";

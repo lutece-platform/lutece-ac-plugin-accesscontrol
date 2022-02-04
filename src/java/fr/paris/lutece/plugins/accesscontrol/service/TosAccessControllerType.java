@@ -54,7 +54,7 @@ public class TosAccessControllerType implements IAccessControllerType
     @Named( TosAccessControllerConfigDAO.BEAN_NAME )
     private IAccessControllerConfigDAO<TosAccessControllerConfig> _dao;
 
-    private static final String BEAN_NAME = "accesscontrol.tosAccessControllerType";
+    public static final String BEAN_NAME = "accesscontrol.tosAccessControllerType";
     private static final String TITLE_KEY = "accesscontrol.controller.tosAccessController.name";
 
     private static final String PARAMETER_COMMENT = "comment";

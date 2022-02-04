@@ -44,7 +44,7 @@ import fr.paris.lutece.portal.service.security.UserNotSignedException;
 
 public class LuteceUserCodeAccessControllerType extends AbstractUserCodeAccessControllerType
 {
-    private static final String BEAN_NAME = "accesscontrol.luteceUserCodeAccessControllerType";
+    public static final String BEAN_NAME = "accesscontrol.luteceUserCodeAccessControllerType";
     private static final String TITLE_KEY = "accesscontrol.controller.luteceUserCodeAccessController.name";
 
     private static final String TEMPLATE_CONTROLLER = "skin/plugins/accesscontrol/controller/luteceuser_code_controller_template.html";

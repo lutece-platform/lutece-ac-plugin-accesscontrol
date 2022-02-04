@@ -54,7 +54,7 @@ public class CommentAccessControllerType implements IAccessControllerType
     @Named( CommentAccessControllerConfigDAO.BEAN_NAME )
     private IAccessControllerConfigDAO<CommentAccessControllerConfig> _dao;
 
-    private static final String BEAN_NAME = "accesscontrol.commentAccessControllerType";
+    public static final String BEAN_NAME = "accesscontrol.commentAccessControllerType";
     private static final String TITLE_KEY = "accesscontrol.controller.commentAccessController.name";
 
     private static final String PARAMETER_COMMENT = "comment";

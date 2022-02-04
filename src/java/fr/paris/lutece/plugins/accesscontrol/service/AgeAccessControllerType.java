@@ -58,7 +58,7 @@ public class AgeAccessControllerType implements IAccessControllerType
     @Named( AgeAccessControllerConfigDAO.BEAN_NAME )
     private IAccessControllerConfigDAO<AgeAccessControllerConfig> _dao;
 
-    private static final String BEAN_NAME = "accesscontrol.ageAccessControllerType";
+    public static final String BEAN_NAME = "accesscontrol.ageAccessControllerType";
     private static final String TITLE_KEY = "accesscontrol.controller.ageAccessController.name";
 
     private static final String TEMPLATE_CONFIG = "/admin/plugins/accesscontrol/config/age_controller_config.html";
