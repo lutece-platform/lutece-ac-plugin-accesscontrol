@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2021, City of Paris
+ * Copyright (c) 2002-2022, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -77,9 +77,10 @@ public interface IAccessControllerType
     default void deleteConfig( int idController )
     {
     }
-    
+
     /**
      * Get the html form for the config of the controller.
+     * 
      * @param idController
      * @return
      */
@@ -87,18 +88,20 @@ public interface IAccessControllerType
     {
         return "";
     }
-    
+
     /**
      * Save the config of the controller.
+     * 
      * @param idController
      * @return
      */
     default void saveControllerConfig( HttpServletRequest request, Locale locale, AccessController controller )
     {
     }
-    
+
     /**
      * Validate the controller
+     * 
      * @param request
      * @return null if OK, an error message otherwise
      */
@@ -106,9 +109,10 @@ public interface IAccessControllerType
     {
         return null;
     }
-    
+
     /**
      * Get the html form for the config of the controller.
+     * 
      * @param idController
      * @return
      */

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2021, City of Paris
+ * Copyright (c) 2002-2022, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -46,9 +46,8 @@ public class LuteceUserCodeAccessControllerType extends AbstractUserCodeAccessCo
 {
     private static final String BEAN_NAME = "accesscontrol.luteceUserCodeAccessControllerType";
     private static final String TITLE_KEY = "accesscontrol.controller.luteceUserCodeAccessController.name";
-    
+
     private static final String TEMPLATE_CONTROLLER = "skin/plugins/accesscontrol/controller/luteceuser_code_controller_template.html";
-    
 
     @Override
     public String getBeanName( )
@@ -61,12 +60,13 @@ public class LuteceUserCodeAccessControllerType extends AbstractUserCodeAccessCo
     {
         return I18nService.getLocalizedString( TITLE_KEY, locale );
     }
-    
+
     @Override
     protected String getTemplateController( )
     {
         return TEMPLATE_CONTROLLER;
     }
+
     @Override
     protected String getUserId( HttpServletRequest request ) throws UserNotSignedException
     {
@@ -78,4 +78,3 @@ public class LuteceUserCodeAccessControllerType extends AbstractUserCodeAccessCo
         return user.getName( );
     }
 }
-    

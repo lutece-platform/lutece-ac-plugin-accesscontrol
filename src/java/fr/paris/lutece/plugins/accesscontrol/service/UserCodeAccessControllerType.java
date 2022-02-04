@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2021, City of Paris
+ * Copyright (c) 2002-2022, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -43,10 +43,9 @@ public class UserCodeAccessControllerType extends AbstractUserCodeAccessControll
 {
     private static final String BEAN_NAME = "accesscontrol.userCodeAccessControllerType";
     private static final String TITLE_KEY = "accesscontrol.controller.userCodeAccessController.name";
-    
+
     private static final String PARAMETER_USER_ID = "userId";
     private static final String TEMPLATE_CONTROLLER = "skin/plugins/accesscontrol/controller/user_code_controller_template.html";
-    
 
     @Override
     public String getBeanName( )
@@ -59,16 +58,16 @@ public class UserCodeAccessControllerType extends AbstractUserCodeAccessControll
     {
         return I18nService.getLocalizedString( TITLE_KEY, locale );
     }
-    
+
     @Override
     protected String getTemplateController( )
     {
         return TEMPLATE_CONTROLLER;
     }
+
     @Override
     protected String getUserId( HttpServletRequest request )
     {
         return request.getParameter( PARAMETER_USER_ID );
     }
 }
-    

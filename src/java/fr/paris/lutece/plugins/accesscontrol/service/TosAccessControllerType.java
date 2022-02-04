@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2021, City of Paris
+ * Copyright (c) 2002-2022, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -53,10 +53,10 @@ public class TosAccessControllerType implements IAccessControllerType
     @Inject
     @Named( TosAccessControllerConfigDAO.BEAN_NAME )
     private IAccessControllerConfigDAO<TosAccessControllerConfig> _dao;
-    
+
     private static final String BEAN_NAME = "accesscontrol.tosAccessControllerType";
     private static final String TITLE_KEY = "accesscontrol.controller.tosAccessController.name";
-    
+
     private static final String PARAMETER_COMMENT = "comment";
     private static final String PARAMETER_CHECK = "check";
     private static final String PARAMETER_ERROR_MESSAGE = "error_message";
@@ -75,19 +75,19 @@ public class TosAccessControllerType implements IAccessControllerType
     {
         return I18nService.getLocalizedString( TITLE_KEY, locale );
     }
-    
+
     @Override
     public boolean hasConfig( )
     {
         return true;
     }
-    
+
     @Override
     public void deleteConfig( int idController )
     {
         _dao.delete( idController );
     }
-    
+
     @Override
     public String getControllerConfigForm( HttpServletRequest request, Locale locale, AccessController controller )
     {
@@ -98,13 +98,13 @@ public class TosAccessControllerType implements IAccessControllerType
             config.setIdAccessController( controller.getId( ) );
             _dao.insert( config );
         }
-        
+
         Map<String, Object> model = new HashMap<>( );
         model.put( MARK_CONFIG, config );
-        
+
         return AppTemplateService.getTemplate( TEMPLATE_CONFIG, locale, model ).getHtml( );
     }
-    
+
     @Override
     public void saveControllerConfig( HttpServletRequest request, Locale locale, AccessController controller )
     {
@@ -113,17 +113,17 @@ public class TosAccessControllerType implements IAccessControllerType
         config.setErrorMessage( request.getParameter( PARAMETER_ERROR_MESSAGE ) );
         _dao.store( config );
     }
-    
+
     @Override
     public String getControllerForm( HttpServletRequest request, Locale locale, AccessController controller )
     {
         TosAccessControllerConfig config = _dao.load( controller.getId( ) );
         Map<String, Object> model = new HashMap<>( );
         model.put( MARK_CONFIG, config );
-        
+
         return AppTemplateService.getTemplate( TEMPLATE_CONTROLLER, locale, model ).getHtml( );
     }
-    
+
     @Override
     public String validate( HttpServletRequest request, AccessController controller )
     {

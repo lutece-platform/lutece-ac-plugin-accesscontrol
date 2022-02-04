@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2021, City of Paris
+ * Copyright (c) 2002-2022, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -185,9 +185,10 @@ public class AccessController implements Serializable
     {
         return _title;
     }
-    
+
     /**
      * checks if this controller has a config
+     * 
      * @return
      */
     public boolean isConfig( )

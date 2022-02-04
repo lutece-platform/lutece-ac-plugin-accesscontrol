@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2021, City of Paris
+ * Copyright (c) 2002-2022, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -31,7 +31,6 @@
  *
  * License 1.0
  */
-
 package fr.paris.lutece.plugins.accesscontrol.business;
 
 import java.sql.Statement;
@@ -61,7 +60,7 @@ public final class AccessControlDAO implements IAccessControlDAO
     private static final String SQL_ORDER_BY_DATE_CREATION = " ORDER BY creation_date DESC ";
     private static final String CONSTANT_WHERE = " WHERE ";
     private static final String CONSTANT_AND = " AND ";
-    
+
     /**
      * {@inheritDoc }
      */
@@ -137,7 +136,7 @@ public final class AccessControlDAO implements IAccessControlDAO
             daoUtil.setBoolean( nIndex++, accessControl.isEnabled( ) );
             daoUtil.setString( nIndex++, accessControl.getWorkgroup( ) );
             daoUtil.setString( nIndex++, accessControl.getReturnUrl( ) );
-            
+
             daoUtil.setInt( nIndex, accessControl.getId( ) );
 
             daoUtil.executeUpdate( );
@@ -201,7 +200,7 @@ public final class AccessControlDAO implements IAccessControlDAO
         }
         return accessControlList;
     }
-    
+
     @Override
     public List<AccessControl> selectAccessControlByFilter( AccessControlFilter filter )
     {
@@ -252,7 +251,7 @@ public final class AccessControlDAO implements IAccessControlDAO
 
         return listAccessControl;
     }
-    
+
     /**
      * Builds a query with filters placed in parameters
      * 
@@ -293,7 +292,7 @@ public final class AccessControlDAO implements IAccessControlDAO
 
         return strBuilder.toString( );
     }
-    
+
     private AccessControl dataToObject( DAOUtil daoUtil )
     {
         int nIndex = 0;
@@ -305,7 +304,7 @@ public final class AccessControlDAO implements IAccessControlDAO
         accessControl.setEnabled( daoUtil.getBoolean( ++nIndex ) );
         accessControl.setWorkgroup( daoUtil.getString( ++nIndex ) );
         accessControl.setReturnUrl( daoUtil.getString( ++nIndex ) );
-        
+
         return accessControl;
     }
 }

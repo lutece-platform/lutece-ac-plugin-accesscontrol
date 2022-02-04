@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2021, City of Paris
+ * Copyright (c) 2002-2022, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -31,7 +31,6 @@
  *
  * License 1.0
  */
-
 package fr.paris.lutece.plugins.accesscontrol.business;
 
 import java.util.List;
@@ -114,7 +113,7 @@ public interface IAccessControlDAO
      * @return The referenceList which contains the data of all the accessControl objects
      */
     ReferenceList selectAccessControlsReferenceList( Plugin plugin );
-    
+
     /**
      * select AccessControl by Filter
      * 

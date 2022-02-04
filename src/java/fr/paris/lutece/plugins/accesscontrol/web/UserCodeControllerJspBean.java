@@ -1,3 +1,36 @@
+/*
+ * Copyright (c) 2002-2022, City of Paris
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ *  1. Redistributions of source code must retain the above copyright notice
+ *     and the following disclaimer.
+ *
+ *  2. Redistributions in binary form must reproduce the above copyright notice
+ *     and the following disclaimer in the documentation and/or other materials
+ *     provided with the distribution.
+ *
+ *  3. Neither the name of 'Mairie de Paris' nor 'Lutece' nor the names of its
+ *     contributors may be used to endorse or promote products derived from
+ *     this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * License 1.0
+ */
 package fr.paris.lutece.plugins.accesscontrol.web;
 
 import java.io.IOException;
@@ -34,28 +67,28 @@ public class UserCodeControllerJspBean extends AbstractManageAccessControlJspBea
     private static final long serialVersionUID = 5752966056141055327L;
 
     public static final String RIGHT_MANAGE_USER_CODES = "USERCODES_MANAGEMENT";
-    
+
     // Messages
     private static final String PROPERTY_PAGE_TITLE_MANAGE_ACCESSCONTROLS = "accesscontrol.manage_usercodes.pageTitle";
-    
+
     // View
     private static final String VIEW_MANAGE_USER_CODE = "manageUserCodeView";
-    
+
     // Actions
     private static final String ACTION_CANCEL_IMPORT = "cancelImport";
     private static final String ACTION_DO_IMPORT = "doImport";
-    
+
     // Marks
     private static final String MARK_ACCESS_CONTROL_LIST = "access_control_list";
-    
+
     private static final String PARAMETER_ACCESS_CONTROL = "access_control";
     private static final String PARAMETER_FILE = "csv_file";
-    
+
     // Templates
     private static final String TEMPLATE_MANAGE_USER_CODE = "/admin/plugins/accesscontrol/manage_usercodes.html";
-    
+
     private IAccessControlService _accessControlService = SpringContextService.getBean( AccessControlService.BEAN_NAME );
-    
+
     /**
      * Build the Manage View
      * 
@@ -67,19 +100,19 @@ public class UserCodeControllerJspBean extends AbstractManageAccessControlJspBea
     public String getManageUserCode( HttpServletRequest request )
     {
         AdminUser adminUser = getUser( );
-        
+
         Map<String, Object> model = getModel( );
-        model.put( MARK_ACCESS_CONTROL_LIST, _accessControlService.getAccessControlsEnabled( adminUser, getLocale() ) );
-        
+        model.put( MARK_ACCESS_CONTROL_LIST, _accessControlService.getAccessControlsEnabled( adminUser, getLocale( ) ) );
+
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_ACCESSCONTROLS, TEMPLATE_MANAGE_USER_CODE, model );
     }
-    
+
     @Action( ACTION_CANCEL_IMPORT )
     public String doCancelImport( HttpServletRequest request )
     {
         return redirectView( request, VIEW_MANAGE_USER_CODE );
     }
-    
+
     @Action( ACTION_DO_IMPORT )
     public String doImport( HttpServletRequest request )
     {
@@ -94,13 +127,13 @@ public class UserCodeControllerJspBean extends AbstractManageAccessControlJspBea
                 {
                     String strLine = scanner.nextLine( );
                     String [ ] strFields = strLine.split( ";" );
-                    
+
                     UserCodeControllerData data = new UserCodeControllerData( );
                     data.setIdAccessControl( accessControlId );
-                    data.setUser( strFields[0] );
-                    data.setCode( strFields[1] );
-                    data.setValidityDate( Date.valueOf( LocalDate.parse( strFields[2] ) ) );
-                    
+                    data.setUser( strFields [0] );
+                    data.setCode( strFields [1] );
+                    data.setValidityDate( Date.valueOf( LocalDate.parse( strFields [2] ) ) );
+
                     UserCodeControllerDataHome.remove( data.getUser( ), data.getIdAccessControl( ) );
                     UserCodeControllerDataHome.create( data );
                 }
@@ -110,7 +143,7 @@ public class UserCodeControllerJspBean extends AbstractManageAccessControlJspBea
                 AppLogService.error( "Error reading file" );
             }
         }
-                
+
         return redirectView( request, VIEW_MANAGE_USER_CODE );
     }
 }

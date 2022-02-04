@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2021, City of Paris
+ * Copyright (c) 2002-2022, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -59,24 +59,24 @@ import fr.paris.lutece.util.url.UrlItem;
 public class AccessControlServiceProvider implements IAccessControlServiceProvider
 {
     public static final String BEAN_NAME = "accesscontrol.accessControlServiceProvider";
-    
+
     private static final String URL_PORTAL = "Portal.jsp";
-    
+
     @Inject
     private IAccessControlService _accessControlService;
-    
+
     @Override
     public ReferenceList getAccessControlsEnabled( User user, Locale locale )
     {
         return _accessControlService.getAccessControlsEnabled( user, locale );
     }
-    
+
     @Override
     public int findAccessControlForResource( int idResource, String resourceType )
     {
         return AccessControlResourceHome.findByResource( idResource, resourceType );
     }
-    
+
     @Override
     public void createOrUpdateAccessControlResource( int idResource, String resourceType, int idAccessControl )
     {
@@ -90,7 +90,7 @@ public class AccessControlServiceProvider implements IAccessControlServiceProvid
             AccessControlResourceHome.create( accessControlResource );
         }
     }
-    
+
     @Override
     public XPage redirectToAccessControlXPage( HttpServletRequest request, int idResource, String resourceType, int idAccessControl )
     {
@@ -101,11 +101,11 @@ public class AccessControlServiceProvider implements IAccessControlServiceProvid
         url.addParameter( AccessControlXPage.PARAMETER_ID_ACCESS_CONTROL, idAccessControl );
         url.addParameter( AccessControlXPage.PARAMETER_RESOURCE_ID, idResource );
         url.addParameter( AccessControlXPage.PARAMETER_RESOURCE_TYPE, resourceType );
-        
+
         AccessControlSessionData sessionData = new AccessControlSessionData( );
         sessionData.setReturnQueryString( request.getQueryString( ) );
         request.getSession( ).setAttribute( AccessControlSessionData.getSessionKey( idResource, resourceType ), sessionData );
-        
+
         String strTarget = url.getUrl( );
         HttpServletResponse response = LocalVariables.getResponse( );
         try
@@ -130,11 +130,11 @@ public class AccessControlServiceProvider implements IAccessControlServiceProvid
         }
         return (AccessControlSessionData) objSessionData;
     }
-    
+
     @Override
     public void deleteSessionDataForResource( HttpServletRequest request, int idResource, String resourceType )
     {
         request.getSession( ).removeAttribute( AccessControlSessionData.getSessionKey( idResource, resourceType ) );
-        
+
     }
 }

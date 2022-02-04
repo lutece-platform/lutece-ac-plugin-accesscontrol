@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2021, City of Paris
+ * Copyright (c) 2002-2022, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -53,15 +53,14 @@ public class CommentAccessControllerType implements IAccessControllerType
     @Inject
     @Named( CommentAccessControllerConfigDAO.BEAN_NAME )
     private IAccessControllerConfigDAO<CommentAccessControllerConfig> _dao;
-    
+
     private static final String BEAN_NAME = "accesscontrol.commentAccessControllerType";
     private static final String TITLE_KEY = "accesscontrol.controller.commentAccessController.name";
-    
+
     private static final String PARAMETER_COMMENT = "comment";
     private static final String TEMPLATE_CONFIG = "/admin/plugins/accesscontrol/config/comment_controller_config.html";
     private static final String TEMPLATE_CONTROLLER = "skin/plugins/accesscontrol/controller/comment_controller_template.html";
     private static final String MARK_CONFIG = "config";
-    
 
     @Override
     public String getBeanName( )
@@ -74,19 +73,19 @@ public class CommentAccessControllerType implements IAccessControllerType
     {
         return I18nService.getLocalizedString( TITLE_KEY, locale );
     }
-    
+
     @Override
     public boolean hasConfig( )
     {
         return true;
     }
-    
+
     @Override
     public void deleteConfig( int idController )
     {
         _dao.delete( idController );
     }
-    
+
     @Override
     public String getControllerConfigForm( HttpServletRequest request, Locale locale, AccessController controller )
     {
@@ -97,13 +96,13 @@ public class CommentAccessControllerType implements IAccessControllerType
             config.setIdAccessController( controller.getId( ) );
             _dao.insert( config );
         }
-        
+
         Map<String, Object> model = new HashMap<>( );
         model.put( MARK_CONFIG, config );
-        
+
         return AppTemplateService.getTemplate( TEMPLATE_CONFIG, locale, model ).getHtml( );
     }
-    
+
     @Override
     public void saveControllerConfig( HttpServletRequest request, Locale locale, AccessController controller )
     {
@@ -111,14 +110,14 @@ public class CommentAccessControllerType implements IAccessControllerType
         config.setComment( request.getParameter( PARAMETER_COMMENT ) );
         _dao.store( config );
     }
-    
+
     @Override
     public String getControllerForm( HttpServletRequest request, Locale locale, AccessController controller )
     {
         CommentAccessControllerConfig config = _dao.load( controller.getId( ) );
         Map<String, Object> model = new HashMap<>( );
         model.put( MARK_CONFIG, config );
-        
+
         return AppTemplateService.getTemplate( TEMPLATE_CONTROLLER, locale, model ).getHtml( );
     }
 }
