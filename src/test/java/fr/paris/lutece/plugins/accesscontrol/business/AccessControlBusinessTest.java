@@ -34,6 +34,7 @@
 package fr.paris.lutece.plugins.accesscontrol.business;
 
 import java.sql.Date;
+import java.util.List;
 
 import fr.paris.lutece.test.LuteceTestCase;
 
@@ -74,6 +75,11 @@ public class AccessControlBusinessTest extends LuteceTestCase
         assertEquals( accessControlStored.getCreationDate( ).toString( ), accessControl.getCreationDate( ).toString( ) );
         assertEquals( accessControlStored.isEnabled( ), accessControl.isEnabled( ) );
         assertEquals( accessControlStored.getWorkgroup( ), accessControl.getWorkgroup( ) );
+
+        AccessControlFilter filter = new AccessControlFilter( );
+        filter.setIsEnabled( AccessControlFilter.FILTER_TRUE );
+        List<AccessControl> resultList = AccessControlHome.getAccessControllersListByFilter( filter );
+        assertEquals( 1, resultList.size( ) );
 
         // Update test
         accessControl.setName( NAME2 );
