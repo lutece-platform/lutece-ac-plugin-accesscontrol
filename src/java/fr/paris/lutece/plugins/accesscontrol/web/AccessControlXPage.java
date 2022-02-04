@@ -119,6 +119,10 @@ public class AccessControlXPage extends MVCApplication
         Locale locale = getLocale( request );
         
         _currentController = _controllerList.stream( ).filter( c -> c.getOrder( ) == _nCurrentControllerOrder ).findFirst( ).orElse( null );
+        if ( _currentController == null )
+        {
+            return validateAccessControlAndRedirect( request );
+        }
         IAccessControllerType currentControllerType = SpringContextService.getBean( _currentController.getType( ) );
         
         Map<String, Object> model = getModel( );
