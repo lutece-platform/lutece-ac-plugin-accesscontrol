@@ -43,6 +43,7 @@ import fr.paris.lutece.plugins.accesscontrol.business.AccessControl;
 import fr.paris.lutece.plugins.accesscontrol.service.rbac.AccessControlRbacAction;
 import fr.paris.lutece.plugins.accesscontrol.service.rbac.AccessControlResourceIdService;
 import fr.paris.lutece.portal.business.rbac.RBAC;
+import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
@@ -101,11 +102,11 @@ public abstract class AbstractManageAccessControlJspBean extends MVCAdminJspBean
         // PAGINATOR
         LocalizedPaginator<AccessControl> paginator = new LocalizedPaginator<>( list, _nItemsPerPage, strUrl, PARAMETER_PAGE_INDEX, _strCurrentPageIndex, getLocale( ) );
 
-        List<AccessControlRbacAction> listFormActions = SpringContextService.getBeansOfType( AccessControlRbacAction.class );
-        
+        List<AccessControlRbacAction> listActions = SpringContextService.getBeansOfType( AccessControlRbacAction.class );
+        listActions = I18nService.localizeCollection( listActions, getLocale( ) );
         for ( AccessControl template : paginator.getPageItems( ) )
         {
-            List<AccessControlRbacAction> listAuthorizedFormActions = (List<AccessControlRbacAction>) RBACService.getAuthorizedActionsCollection( listFormActions, template, (User) getUser( ) );
+            List<AccessControlRbacAction> listAuthorizedFormActions = (List<AccessControlRbacAction>) RBACService.getAuthorizedActionsCollection( listActions, template, (User) getUser( ) );
             template.setActionList( listAuthorizedFormActions );
 
         }
