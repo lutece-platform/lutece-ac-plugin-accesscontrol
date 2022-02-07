@@ -21,4 +21,32 @@
     
     <bean id="accesscontrol.accessControlServiceProvider" class="fr.paris.lutece.plugins.accesscontrol.service.AccessControlServiceProvider" />
     <bean id="accesscontrol.accessControlService" class="fr.paris.lutece.plugins.accesscontrol.service.AccessControlService" />
+    
+    <!-- RbacActions -->
+    <bean id="accesscontrol.rbacActionModify" class="fr.paris.lutece.plugins.accesscontrol.service.rbac.AccessControlRbacAction">
+    	<property name="url" value="jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp?view=modifyAccessControl" />
+        <property name="nameKey" value="accesscontrol.action.modify.name" />
+        <property name="iconUrl" value="cog" />
+        <property name="permission" value="MODIFY" />
+    </bean>
+    <bean id="accesscontrol.rbacActionDelete" class="fr.paris.lutece.plugins.accesscontrol.service.rbac.AccessControlRbacAction">
+        <property name="url" value="jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp?action=confirmRemoveAccessControl" />
+        <property name="nameKey" value="accesscontrol.action.delete.name" />
+        <property name="iconUrl" value="trash" />
+        <property name="permission" value="DELETE" />
+    </bean>
+    <bean id="accesscontrol.rbacActionEnable" class="fr.paris.lutece.plugins.accesscontrol.service.rbac.AccessControlRbacAction">
+        <property name="url" value="jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp?action=enableAccessControl" />
+        <property name="nameKey" value="accesscontrol.action.enable.name" />
+        <property name="iconUrl" value="play" />
+        <property name="permission" value="ENABLE" />
+        <property name="enabled" value="false" />
+    </bean>
+    <bean id="accesscontrol.rbacActionDisable" class="fr.paris.lutece.plugins.accesscontrol.service.rbac.AccessControlRbacAction">
+        <property name="url" value="jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp?action=disableAccessControl" />
+        <property name="nameKey" value="accesscontrol.action.disable.name" />
+        <property name="iconUrl" value="stop" />
+        <property name="permission" value="ENABLE" />
+        <property name="enabled" value="true" />
+    </bean>
 </beans>

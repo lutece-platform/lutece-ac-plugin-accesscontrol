@@ -33,15 +33,23 @@
  */
 package fr.paris.lutece.plugins.accesscontrol.web;
 
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import fr.paris.lutece.api.user.User;
+import fr.paris.lutece.plugins.accesscontrol.business.AccessControl;
+import fr.paris.lutece.plugins.accesscontrol.service.rbac.AccessControlRbacAction;
+import fr.paris.lutece.plugins.accesscontrol.service.rbac.AccessControlResourceIdService;
+import fr.paris.lutece.portal.business.rbac.RBAC;
+import fr.paris.lutece.portal.service.rbac.RBACService;
+import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.util.mvc.admin.MVCAdminJspBean;
 import fr.paris.lutece.portal.web.util.LocalizedPaginator;
 import fr.paris.lutece.util.html.AbstractPaginator;
 import fr.paris.lutece.util.url.UrlItem;
-
-import java.util.List;
-import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * ManageAccessControl JSP Bean abstract class for JSP Bean
@@ -62,7 +70,8 @@ public abstract class AbstractManageAccessControlJspBean extends MVCAdminJspBean
     // Markers
     private static final String MARK_PAGINATOR = "paginator";
     private static final String MARK_NB_ITEMS_PER_PAGE = "nb_items_per_page";
-
+    private static final String MARK_PERMISSION_CREATE_AC = "permission_create_ac";
+    
     // Variables
     private String _strCurrentPageIndex;
     private int _nItemsPerPage;
@@ -80,7 +89,7 @@ public abstract class AbstractManageAccessControlJspBean extends MVCAdminJspBean
      *            The JSP
      * @return The model
      */
-    protected <T> Map<String, Object> getPaginatedListModel( HttpServletRequest request, String strBookmark, List<T> list, String strManageJsp )
+    protected Map<String, Object> getPaginatedListModel( HttpServletRequest request, String strBookmark, List<AccessControl> list, String strManageJsp )
     {
         int nDefaultItemsPerPage = AppPropertiesService.getPropertyInt( PROPERTY_DEFAULT_LIST_ITEM_PER_PAGE, 50 );
         _strCurrentPageIndex = AbstractPaginator.getPageIndex( request, AbstractPaginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
@@ -90,14 +99,23 @@ public abstract class AbstractManageAccessControlJspBean extends MVCAdminJspBean
         String strUrl = url.getUrl( );
 
         // PAGINATOR
-        LocalizedPaginator<T> paginator = new LocalizedPaginator<>( list, _nItemsPerPage, strUrl, PARAMETER_PAGE_INDEX, _strCurrentPageIndex, getLocale( ) );
+        LocalizedPaginator<AccessControl> paginator = new LocalizedPaginator<>( list, _nItemsPerPage, strUrl, PARAMETER_PAGE_INDEX, _strCurrentPageIndex, getLocale( ) );
 
+        List<AccessControlRbacAction> listFormActions = SpringContextService.getBeansOfType( AccessControlRbacAction.class );
+        
+        for ( AccessControl template : paginator.getPageItems( ) )
+        {
+            List<AccessControlRbacAction> listAuthorizedFormActions = (List<AccessControlRbacAction>) RBACService.getAuthorizedActionsCollection( listFormActions, template, (User) getUser( ) );
+            template.setActionList( listAuthorizedFormActions );
+
+        }
+        
         Map<String, Object> model = getModel( );
-
         model.put( MARK_NB_ITEMS_PER_PAGE, String.valueOf( _nItemsPerPage ) );
         model.put( MARK_PAGINATOR, paginator );
         model.put( strBookmark, paginator.getPageItems( ) );
-
+        model.put( MARK_PERMISSION_CREATE_AC, RBACService.isAuthorized( AccessControl.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID, AccessControlResourceIdService.PERMISSION_CREATE, (User) getUser( ) ) );
+        
         return model;
     }
 }

@@ -2,9 +2,11 @@
 	<@columns>
 		<@box style='primary'>
 			<@boxHeader title='#i18n{accesscontrol.manage_accesscontrol.title}' boxTools=true>
-				<@tform class='form-inline pull-right' name='manage_accesscontrol' action='jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp'>
-					<@button type='submit' name='view_createAccessControl' buttonIcon='plus' title='#i18n{accesscontrol.manage_accesscontrols.buttonAdd}' />
-				</@tform>
+				<#if permission_create_ac>
+					<@tform class='form-inline pull-right' name='manage_accesscontrol' action='jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp'>
+						<@button type='submit' name='view_createAccessControl' buttonIcon='plus' title='#i18n{accesscontrol.manage_accesscontrols.buttonAdd}' />
+					</@tform>
+				</#if>
 			</@boxHeader>
 			<@boxBody>    
 			    <@messages infos=infos />
@@ -22,13 +24,29 @@
 				            <@td>${accesscontrol.name}</@td>
 				            <@td>${accesscontrol.description}</@td>
 				        	<@td>
-								<@aButton href='jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp?view=modifyAccessControl&id=${accesscontrol.id}' title='#i18n{portal.util.labelModify}' hideTitle=['all'] buttonIcon='pencil' size='sm' />
-								<@aButton href='jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp?action=confirmRemoveAccessControl&id=${accesscontrol.id}' title='#i18n{portal.util.labelDelete}' buttonIcon='trash' hideTitle=['all'] color='danger' size='sm'  />
-								<#if accesscontrol.enabled>
-									<@aButton href='jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp?action=disableAccessControl&id=${accesscontrol.id}' hideTitle=['all'] buttonIcon='stop' color='danger' title='#i18n{accesscontrol.manage_accesscontrol.title_disable}' size='sm' />
-								<#else>
-									<@aButton href='jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp?action=enableAccessControl&id=${accesscontrol.id}' hideTitle=['all'] buttonIcon='play' color='success' title='#i18n{accesscontrol.manage_accesscontrol.title_enable}' size='sm' />
-								</#if>
+								<#if accesscontrol.actionList?exists>
+                            		 <#list accesscontrol.actionList as action>
+                            		 	<#assign color='' />
+                                        <#assign perm=action.permission?lower_case />
+                                        <#assign params='' />
+                                        <#if action.permission=='DELETE'>
+                                            <#assign color = 'danger' />
+                                            <#assign perm='' />
+										<#else>
+											<#assign color = 'primary' />
+                                        </#if>
+                                        <#if action.permission=='ENABLE'>
+                                        	<#if action.enabled == accesscontrol.enabled>
+                                        		<#if accesscontrol.enabled>
+	                                        		<#assign color = 'danger' />
+	                                        	</#if>
+                                        		<@aButton href='${action.url}&id=${accesscontrol.id}' title='${action.name}' hideTitle=['all'] color='${color}' class='${perm}' buttonIcon=action.iconUrl params=params size='sm' />
+                                        	</#if>
+                                        <#else>
+                                        	<@aButton href='${action.url}&id=${accesscontrol.id}' title='${action.name}' hideTitle=['all'] color='${color}' class='${perm}' buttonIcon=action.iconUrl params=params size='sm' />
+                                        </#if>
+                            		 </#list>
+                            	</#if>
 					        </@td>
 				        </@tr>
 				    </#list>

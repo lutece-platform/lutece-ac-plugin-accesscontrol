@@ -35,15 +35,22 @@ package fr.paris.lutece.plugins.accesscontrol.business;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
+import fr.paris.lutece.plugins.accesscontrol.service.rbac.AccessControlRbacAction;
+import fr.paris.lutece.portal.service.rbac.RBACResource;
 import fr.paris.lutece.portal.service.workgroup.AdminWorkgroupResource;
 
 /**
  * This is the business class for the object AccessControl
  */
-public class AccessControl implements Serializable, AdminWorkgroupResource
+public class AccessControl implements Serializable, AdminWorkgroupResource, RBACResource
 {
     private static final long serialVersionUID = 1L;
+    
+    public static final String RESOURCE_TYPE = "ACCESCONTROL_ACCESCONTROL";
 
     // Variables declarations
     private int _nId;
@@ -54,7 +61,21 @@ public class AccessControl implements Serializable, AdminWorkgroupResource
     private boolean _bIsEnabled;
     private String _strWorkgroupKey;
     private String _strReturnUrl;
+    
+    private List<AccessControlRbacAction> _actionList;
 
+    @Override
+    public String getResourceTypeCode( )
+    {
+        return RESOURCE_TYPE;
+    }
+
+    @Override
+    public String getResourceId( )
+    {
+        return StringUtils.EMPTY + _nId;
+    }
+    
     /**
      * Returns the Id
      * 
@@ -195,5 +216,21 @@ public class AccessControl implements Serializable, AdminWorkgroupResource
     public void setReturnUrl( String strReturnUrl )
     {
         _strReturnUrl = strReturnUrl;
+    }
+
+    /**
+     * @return the actionList
+     */
+    public List<AccessControlRbacAction> getActionList( )
+    {
+        return _actionList;
+    }
+
+    /**
+     * @param actionList the actionList to set
+     */
+    public void setActionList( List<AccessControlRbacAction> actionList )
+    {
+        _actionList = actionList;
     }
 }
