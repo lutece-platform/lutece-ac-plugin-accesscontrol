@@ -49,9 +49,9 @@
         <jiraComponentId>16483</jiraComponentId>
     </properties>
     <scm>
-        <connection>scm:git:https://github.com/lutece-platform/lutece-wf-plugin-accesscontrol.git</connection>
-        <developerConnection>scm:git:https://github.com/lutece-platform/lutece-wf-plugin-accesscontrol.git</developerConnection>
-        <url>https://github.com/lutece-platform/lutece-wf-plugin-accesscontrol.git</url>
+        <connection>scm:git:https://github.com/lutece-platform/lutece-ac-plugin-accesscontrol.git</connection>
+        <developerConnection>scm:git:https://github.com/lutece-platform/lutece-ac-plugin-accesscontrol.git</developerConnection>
+        <url>https://github.com/lutece-platform/lutece-ac-plugin-accesscontrol.git</url>
         <tag>HEAD</tag>
     </scm>
 </project>
