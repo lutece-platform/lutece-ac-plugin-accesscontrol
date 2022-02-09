@@ -68,6 +68,15 @@ public class AccessControlService implements IAccessControlService
         if ( accessController != null )
         {
             IAccessControllerType controller = SpringContextService.getBean( accessController.getType( ) );
+            if ( controller instanceof IPersistentAccessControllerType )
+            {
+                IPersistentDataHandler dataHandler = ( (IPersistentAccessControllerType) controller ).getIPersistentDataHandler( accessController.getId( ) );
+                if ( dataHandler != null )
+                {
+                    dataHandler.doDeleteConfig( idControlType );
+                }
+            }
+
             if ( controller.hasConfig( ) )
             {
                 controller.deleteConfig( idControlType );

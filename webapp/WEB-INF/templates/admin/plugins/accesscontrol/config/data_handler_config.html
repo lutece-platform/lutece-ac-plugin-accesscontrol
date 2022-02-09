@@ -1,0 +1,9 @@
+<#if data_handler_list?? && data_handler_list?has_content>
+    <@formGroup labelFor='data_handler' labelKey='#i18n{accesscontrol.modify_controller.data_hanlder_config.title}'>
+    	<@select name='data_handler' id='data_handler' items=data_handler_list default_value='${config.dataHandler!}'/>
+		<@button type='submit' buttonIcon='check' name='apply' value='select_code' />
+    </@formGroup>
+    <#if data_handler_config??>
+   		${data_handler_config}
+    </#if>
+</#if>

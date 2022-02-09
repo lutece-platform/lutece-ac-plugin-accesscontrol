@@ -43,6 +43,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import fr.paris.lutece.plugins.accesscontrol.business.AccessController;
@@ -50,9 +51,10 @@ import fr.paris.lutece.plugins.accesscontrol.business.config.AgeAccessController
 import fr.paris.lutece.plugins.accesscontrol.business.config.AgeAccessControllerConfigDAO;
 import fr.paris.lutece.plugins.accesscontrol.business.config.IAccessControllerConfigDAO;
 import fr.paris.lutece.portal.service.i18n.I18nService;
+import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 
-public class AgeAccessControllerType implements IAccessControllerType
+public class AgeAccessControllerType extends AbstractPersistentAccessControllerType implements IAccessControllerType
 {
     @Inject
     @Named( AgeAccessControllerConfigDAO.BEAN_NAME )
@@ -66,12 +68,12 @@ public class AgeAccessControllerType implements IAccessControllerType
 
     private static final String MARK_CONFIG = "config";
 
-    private static final String PARAMETER_DATE = "birth_date";
+    protected static final String PARAMETER_DATE = "birth_date";
     private static final String PARAMETER_COMMENT = "comment";
     private static final String PARAMETER_ERROR_MESSAGE = "error_message";
     private static final String PARAMETER_AGE_MIN = "ageMin";
     private static final String PARAMETER_AGE_MAX = "ageMax";
-
+    
     @Override
     public String getBeanName( )
     {
@@ -109,6 +111,7 @@ public class AgeAccessControllerType implements IAccessControllerType
 
         Map<String, Object> model = new HashMap<>( );
         model.put( MARK_CONFIG, config );
+        addPersistentDataToModel( locale, config, model );
 
         return AppTemplateService.getTemplate( TEMPLATE_CONFIG, locale, model ).getHtml( );
     }
@@ -131,6 +134,8 @@ public class AgeAccessControllerType implements IAccessControllerType
         config.setErrorMessage( request.getParameter( PARAMETER_ERROR_MESSAGE ) );
         config.setAgeMin( NumberUtils.toInt( request.getParameter( PARAMETER_AGE_MIN ), 0 ) );
         config.setAgeMax( NumberUtils.toInt( request.getParameter( PARAMETER_AGE_MAX ), 0 ) );
+        
+        saveDataHandlerConfig( request, config );
         _dao.store( config );
     }
 
@@ -159,5 +164,16 @@ public class AgeAccessControllerType implements IAccessControllerType
         }
 
         return null;
+    }
+    
+    @Override
+    public IPersistentDataHandler getIPersistentDataHandler( int idConfig )
+    {
+        AgeAccessControllerConfig config = _dao.load( idConfig );
+        if ( StringUtils.isEmpty( config.getDataHandler( ) ) )
+        {
+            return null;
+        }
+        return SpringContextService.getBean( config.getDataHandler( ) );
     }
 }

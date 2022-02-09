@@ -78,4 +78,5 @@ public interface IAccessControlService
      * @return the AccessControl list
      */
     List<AccessControl> getListAccessControlsByFilter( AccessControlFilter filter );
+    
 }

@@ -14,6 +14,7 @@
 			<@formGroup labelFor='error_message' labelKey='#i18n{accesscontrol.modify_controller.controller_error_config.title}' mandatory=true>
 				<@input type='text' name='error_message' id='error_message' value='${config.errorMessage!}' />
 			</@formGroup>
+			<#include "./data_handler_config.html">
 		</@fieldSet>
 	</@columns>
 </@row>

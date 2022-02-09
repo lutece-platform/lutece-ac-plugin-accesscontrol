@@ -89,6 +89,7 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
     private static final String PARAMETER_BOOL_CONDITON = "boolCond";
     private static final String PARAMETER_CONTROLLER_TYPE = "controller_type";
     private static final String PARAMETER_CANCEL = "cancel";
+    private static final String PARAMETER_ACTION = "apply";
 
     // Properties for page titles
     private static final String PROPERTY_PAGE_TITLE_MANAGE_ACCESSCONTROLS = "accesscontrol.manage_accesscontrols.pageTitle";
@@ -118,6 +119,7 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
     private static final String VIEW_MANAGE_ACCESSCONTROLS = "manageAccessControls";
     private static final String VIEW_CREATE_ACCESSCONTROL = "createAccessControl";
     private static final String VIEW_MODIFY_ACCESSCONTROL = "modifyAccessControl";
+    private static final String VIEW_MODIFY_CONFIG_CONTROLLER = "modifyConfigController";
 
     // Actions
     private static final String ACTION_CREATE_ACCESSCONTROL = "createAccessControl";
@@ -131,7 +133,6 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
     private static final String ACTION_CHANGE_CONDITON = "changeCondition";
     private static final String ACTION_CHANGE_ORDER = "changeOrder";
     private static final String ACTION_REMOVE_ACCESSCONTROLLER = "removeAccessController";
-    private static final String ACTION_MODIFY_CONFIG_CONTROLLER = "modifyConfigController";
     private static final String ACTION_MODIFY_CONTROLLER = "modifyController";
 
     // Infos
@@ -262,7 +263,7 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
      *            The Http request
      * @return the html code to confirm
      */
-    @Action( ACTION_MODIFY_CONFIG_CONTROLLER )
+    @View( VIEW_MODIFY_CONFIG_CONTROLLER )
     public String getModifyConfigController( HttpServletRequest request ) throws AccessDeniedException
     {
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_CONTROLLER ) );
@@ -317,6 +318,11 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
             }
 
             controllerType.saveControllerConfig( request, getLocale( ), controller );
+            String action = request.getParameter( PARAMETER_ACTION );
+            if ( action != null )
+            {
+                return redirect( request, VIEW_MODIFY_CONFIG_CONTROLLER, PARAMETER_ID_CONTROLLER, nId );
+            }
         }
         return redirect( request, VIEW_MODIFY_ACCESSCONTROL, PARAMETER_ID_ACCESSCONTROL, controller.getIdAccesscontrol( ) );
     }
@@ -359,7 +365,7 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
         AccessController controllerToDelete = AccessControllerHome.findByPrimaryKey( nId );
         int idAccessControl = controllerToDelete.getIdAccesscontrol( );
 
-        AccessControllerHome.remove( nId );
+        _accessControlService.deleteAccessController( nId );
         List<AccessController> controllerList = AccessControllerHome.getAccessControllersListByAccessControlId( idAccessControl );
         int newOrder = 1;
         for ( AccessController controller : controllerList )
