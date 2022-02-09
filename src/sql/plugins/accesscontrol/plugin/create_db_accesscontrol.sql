@@ -70,6 +70,7 @@ CREATE TABLE accesscontrol_controller_age_config (
 	age_min int,
 	age_max int,
 	error_message varchar(100),
+	data_handler varchar(255),
 	PRIMARY KEY( id_access_controller )
 );
 

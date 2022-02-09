@@ -47,6 +47,7 @@ public abstract class AbstractControllerConfig implements IAccessControllerConfi
     private int _nIdAccessController;
     private String _strComment;
     private String _strErrorMessage;
+    private String _dataHandler;
 
     /**
      * @return the strErrorMessage
@@ -93,4 +94,21 @@ public abstract class AbstractControllerConfig implements IAccessControllerConfi
     {
         _strComment = strComment;
     }
+
+    /**
+     * @return the dataHandler
+     */
+    public String getDataHandler( )
+    {
+        return _dataHandler;
+    }
+
+    /**
+     * @param dataHandler the dataHandler to set
+     */
+    public void setDataHandler( String dataHandler )
+    {
+        _dataHandler = dataHandler;
+    }
+    
 }

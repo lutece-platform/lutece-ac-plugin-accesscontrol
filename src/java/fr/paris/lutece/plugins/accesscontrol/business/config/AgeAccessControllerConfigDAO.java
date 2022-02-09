@@ -43,9 +43,9 @@ public class AgeAccessControllerConfigDAO implements IAccessControllerConfigDAO<
 {
     public static final String BEAN_NAME = "accesscontrol.ageAccessControllerConfigDAO";
 
-    private static final String SQL_QUERY_SELECT = "SELECT id_access_controller, comment, error_message, age_min, age_max FROM accesscontrol_controller_age_config WHERE id_access_controller = ? ";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO accesscontrol_controller_age_config (id_access_controller, comment, error_message, age_min, age_max ) VALUES (?,?,?,?,?) ";
-    private static final String SQL_QUERY_UPDATE = "UPDATE accesscontrol_controller_age_config SET comment = ?, error_message = ?, age_min = ?, age_max = ? WHERE id_access_controller = ? ";
+    private static final String SQL_QUERY_SELECT = "SELECT id_access_controller, comment, error_message, age_min, age_max, data_handler FROM accesscontrol_controller_age_config WHERE id_access_controller = ? ";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO accesscontrol_controller_age_config (id_access_controller, comment, error_message, age_min, age_max, data_handler ) VALUES (?,?,?,?,?,?) ";
+    private static final String SQL_QUERY_UPDATE = "UPDATE accesscontrol_controller_age_config SET comment = ?, error_message = ?, age_min = ?, age_max = ?, data_handler = ? WHERE id_access_controller = ? ";
     private static final String SQL_QUERY_DELETE = "DELETE FROM accesscontrol_controller_age_config WHERE id_access_controller = ? ";
 
     @Override
@@ -59,6 +59,8 @@ public class AgeAccessControllerConfigDAO implements IAccessControllerConfigDAO<
             daoUtil.setString( ++nIndex, config.getErrorMessage( ) );
             daoUtil.setInt( ++nIndex, config.getAgeMin( ) );
             daoUtil.setInt( ++nIndex, config.getAgeMax( ) );
+            daoUtil.setString( ++nIndex, config.getDataHandler( ) );
+            
             daoUtil.executeUpdate( );
         }
     }
@@ -73,6 +75,7 @@ public class AgeAccessControllerConfigDAO implements IAccessControllerConfigDAO<
             daoUtil.setString( ++nIndex, config.getErrorMessage( ) );
             daoUtil.setInt( ++nIndex, config.getAgeMin( ) );
             daoUtil.setInt( ++nIndex, config.getAgeMax( ) );
+            daoUtil.setString( ++nIndex, config.getDataHandler( ) );
 
             daoUtil.setInt( ++nIndex, config.getIdAccessController( ) );
             daoUtil.executeUpdate( );
@@ -98,6 +101,7 @@ public class AgeAccessControllerConfigDAO implements IAccessControllerConfigDAO<
                 config.setErrorMessage( daoUtil.getString( ++nIndex ) );
                 config.setAgeMin( daoUtil.getInt( ++nIndex ) );
                 config.setAgeMax( daoUtil.getInt( ++nIndex ) );
+                config.setDataHandler( daoUtil.getString( ++nIndex ) );
             }
         }
         return config;
