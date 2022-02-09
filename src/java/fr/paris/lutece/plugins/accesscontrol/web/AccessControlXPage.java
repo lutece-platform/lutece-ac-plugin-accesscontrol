@@ -53,6 +53,7 @@ import fr.paris.lutece.plugins.accesscontrol.business.AccessController;
 import fr.paris.lutece.plugins.accesscontrol.business.AccessControllerHome;
 import fr.paris.lutece.plugins.accesscontrol.service.AccessControlServiceProvider;
 import fr.paris.lutece.plugins.accesscontrol.service.IAccessControllerType;
+import fr.paris.lutece.plugins.accesscontrol.service.IPersistentAccessControllerType;
 import fr.paris.lutece.plugins.accesscontrol.util.BoolCondition;
 import fr.paris.lutece.portal.business.accesscontrol.AccessControlSessionData;
 import fr.paris.lutece.portal.service.accesscontrol.IAccessControlServiceProvider;
@@ -225,7 +226,14 @@ public class AccessControlXPage extends MVCApplication
     public XPage doValidateController( HttpServletRequest request ) throws UserNotSignedException
     {
         IAccessControllerType currentControllerType = SpringContextService.getBean( _currentController.getType( ) );
-        _accessControlResult.put( _currentController.getOrder( ), currentControllerType.validate( request, _currentController ) );
+        String validationResult = currentControllerType.validate( request, _currentController );
+
+        if ( currentControllerType instanceof IPersistentAccessControllerType && validationResult == null )
+        {
+            AccessControlSessionData sessionData = _service.getSessionDataForResource( request, _idResource, _resourceType );
+            ( (IPersistentAccessControllerType) currentControllerType ).persistData( sessionData, request, getLocale( request ), _currentController.getId( ) );
+        }
+        _accessControlResult.put( _currentController.getOrder( ), validationResult );
         _nCurrentControllerOrder++;
         return redirectView( request, VIEW_CONTROLLER );
     }

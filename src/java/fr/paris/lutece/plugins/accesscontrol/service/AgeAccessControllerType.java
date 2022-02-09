@@ -50,6 +50,7 @@ import fr.paris.lutece.plugins.accesscontrol.business.AccessController;
 import fr.paris.lutece.plugins.accesscontrol.business.config.AgeAccessControllerConfig;
 import fr.paris.lutece.plugins.accesscontrol.business.config.AgeAccessControllerConfigDAO;
 import fr.paris.lutece.plugins.accesscontrol.business.config.IAccessControllerConfigDAO;
+import fr.paris.lutece.portal.business.accesscontrol.AccessControlSessionData;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
@@ -164,6 +165,13 @@ public class AgeAccessControllerType extends AbstractPersistentAccessControllerT
         }
 
         return null;
+    }
+    
+    @Override
+    public void persistData( AccessControlSessionData sessionData, HttpServletRequest request, Locale locale, int idController )
+    {
+        String strDate = request.getParameter( PARAMETER_DATE );
+        sessionData.addPersistentParam( idController, strDate );
     }
     
     @Override
