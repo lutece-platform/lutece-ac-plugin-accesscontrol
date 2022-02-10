@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.accesscontrol.service;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.HashMap;
@@ -43,7 +44,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import fr.paris.lutece.plugins.accesscontrol.business.AccessController;
@@ -52,10 +52,9 @@ import fr.paris.lutece.plugins.accesscontrol.business.config.AgeAccessController
 import fr.paris.lutece.plugins.accesscontrol.business.config.IAccessControllerConfigDAO;
 import fr.paris.lutece.portal.business.accesscontrol.AccessControlSessionData;
 import fr.paris.lutece.portal.service.i18n.I18nService;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 
-public class AgeAccessControllerType extends AbstractPersistentAccessControllerType implements IAccessControllerType
+public class AgeAccessControllerType extends AbstractPersistentAccessControllerType<AgeAccessControllerConfig> implements IAccessControllerType
 {
     @Inject
     @Named( AgeAccessControllerConfigDAO.BEAN_NAME )
@@ -168,20 +167,16 @@ public class AgeAccessControllerType extends AbstractPersistentAccessControllerT
     }
     
     @Override
-    public void persistData( AccessControlSessionData sessionData, HttpServletRequest request, Locale locale, int idController )
+    public void persistDataToSession( AccessControlSessionData sessionData, HttpServletRequest request, Locale locale, int idController )
     {
         String strDate = request.getParameter( PARAMETER_DATE );
-        sessionData.addPersistentParam( idController, strDate );
+        LocalDate date = LocalDate.parse( strDate );
+        sessionData.addPersistentParam( idController, String.valueOf( Date.valueOf( date ).getTime( ) ) );
     }
     
     @Override
-    public IPersistentDataHandler getIPersistentDataHandler( int idConfig )
+    protected AgeAccessControllerConfig loadConfig( int idConfig )
     {
-        AgeAccessControllerConfig config = _dao.load( idConfig );
-        if ( StringUtils.isEmpty( config.getDataHandler( ) ) )
-        {
-            return null;
-        }
-        return SpringContextService.getBean( config.getDataHandler( ) );
+        return _dao.load( idConfig );
     }
 }

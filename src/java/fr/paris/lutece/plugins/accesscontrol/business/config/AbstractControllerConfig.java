@@ -33,6 +33,11 @@
  */
 package fr.paris.lutece.plugins.accesscontrol.business.config;
 
+import org.apache.commons.lang3.StringUtils;
+
+import fr.paris.lutece.plugins.accesscontrol.service.IPersistentDataHandler;
+import fr.paris.lutece.portal.service.spring.SpringContextService;
+
 /**
  * Abstract implementation of {@link IAccessControllerConfig}. <br />
  * Attributes:<br />
@@ -111,4 +116,15 @@ public abstract class AbstractControllerConfig implements IAccessControllerConfi
         _dataHandler = dataHandler;
     }
     
+    /**
+     * @return the {@link IPersistentDataHandler}
+     */
+    public IPersistentDataHandler getPersistentDataHandler( )
+    {
+        if ( StringUtils.isEmpty( _dataHandler ) )
+        {
+            return null;
+        }
+        return SpringContextService.getBean( _dataHandler );
+    }
 }

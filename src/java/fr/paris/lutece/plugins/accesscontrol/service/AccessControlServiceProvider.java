@@ -102,9 +102,9 @@ public class AccessControlServiceProvider implements IAccessControlServiceProvid
         url.addParameter( AccessControlXPage.PARAMETER_RESOURCE_ID, idResource );
         url.addParameter( AccessControlXPage.PARAMETER_RESOURCE_TYPE, resourceType );
 
-        AccessControlSessionData sessionData = new AccessControlSessionData( );
+        AccessControlSessionData sessionData = new AccessControlSessionData( idResource, resourceType );
         sessionData.setReturnQueryString( request.getQueryString( ) );
-        request.getSession( ).setAttribute( AccessControlSessionData.getSessionKey( idResource, resourceType ), sessionData );
+        request.getSession( ).setAttribute( sessionData.getSessionKey( ), sessionData );
 
         String strTarget = url.getUrl( );
         HttpServletResponse response = LocalVariables.getResponse( );
@@ -136,5 +136,11 @@ public class AccessControlServiceProvider implements IAccessControlServiceProvid
     {
         request.getSession( ).removeAttribute( AccessControlSessionData.getSessionKey( idResource, resourceType ) );
 
+    }
+    
+    @Override
+    public void applyPersistentData( AccessControlSessionData sessionData, Object destination )
+    {
+        _accessControlService.applyPersistentData( sessionData, destination );
     }
 }

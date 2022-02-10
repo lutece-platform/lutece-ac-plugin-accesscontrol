@@ -4,6 +4,7 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
+import fr.paris.lutece.plugins.accesscontrol.business.AccessController;
 import fr.paris.lutece.portal.business.accesscontrol.AccessControlSessionData;
 
 /**
@@ -19,7 +20,19 @@ public interface IPersistentAccessControllerType
      * @param locale
      * @param controller
      */
-    void persistData( AccessControlSessionData sessionData, HttpServletRequest request, Locale locale, int idController );
+    void persistDataToSession( AccessControlSessionData sessionData, HttpServletRequest request, Locale locale, int idController );
     
-    IPersistentDataHandler getIPersistentDataHandler( int configId );
+    /**
+     * Apply the session data to the destination object
+     * @param controller
+     * @param sessionData
+     * @param destination
+     */
+    void applyPersistentData( AccessController controller, AccessControlSessionData sessionData, Object destination ); 
+    
+    /**
+     * Delete the config of the dataHandler
+     * @param idConfig
+     */
+    void doDeleteDataHandlerConfig( int idConfig );
 }

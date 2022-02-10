@@ -200,7 +200,7 @@ public class AccessControlXPage extends MVCApplication
         {
             AccessControlSessionData sessionData = _service.getSessionDataForResource( request, _idResource, _resourceType );
             sessionData.setAccessControlResult( true );
-            request.getSession( ).setAttribute( AccessControlSessionData.getSessionKey( _idResource, _resourceType ), sessionData );
+            request.getSession( ).setAttribute( sessionData.getSessionKey( ), sessionData );
 
             return redirect( request, URL_PORTAL + "?" + sessionData.getReturnQueryString( ) );
         }
@@ -231,7 +231,7 @@ public class AccessControlXPage extends MVCApplication
         if ( currentControllerType instanceof IPersistentAccessControllerType && validationResult == null )
         {
             AccessControlSessionData sessionData = _service.getSessionDataForResource( request, _idResource, _resourceType );
-            ( (IPersistentAccessControllerType) currentControllerType ).persistData( sessionData, request, getLocale( request ), _currentController.getId( ) );
+            ( (IPersistentAccessControllerType) currentControllerType ).persistDataToSession( sessionData, request, getLocale( request ), _currentController.getId( ) );
         }
         _accessControlResult.put( _currentController.getOrder( ), validationResult );
         _nCurrentControllerOrder++;

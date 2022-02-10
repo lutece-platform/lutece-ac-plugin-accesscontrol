@@ -39,6 +39,7 @@ import java.util.Locale;
 import fr.paris.lutece.api.user.User;
 import fr.paris.lutece.plugins.accesscontrol.business.AccessControl;
 import fr.paris.lutece.plugins.accesscontrol.business.AccessControlFilter;
+import fr.paris.lutece.portal.business.accesscontrol.AccessControlSessionData;
 import fr.paris.lutece.util.ReferenceList;
 
 public interface IAccessControlService
@@ -79,4 +80,10 @@ public interface IAccessControlService
      */
     List<AccessControl> getListAccessControlsByFilter( AccessControlFilter filter );
     
+    /**
+     * Apply the session data to the destination object
+     * @param sessionData
+     * @param destination
+     */
+    void applyPersistentData( AccessControlSessionData sessionData, Object destination );
 }

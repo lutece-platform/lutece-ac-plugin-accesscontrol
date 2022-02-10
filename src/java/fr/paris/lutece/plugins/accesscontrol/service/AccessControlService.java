@@ -33,8 +33,10 @@
  */
 package fr.paris.lutece.plugins.accesscontrol.service;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import fr.paris.lutece.api.user.User;
 import fr.paris.lutece.plugins.accesscontrol.business.AccessControl;
@@ -42,6 +44,7 @@ import fr.paris.lutece.plugins.accesscontrol.business.AccessControlFilter;
 import fr.paris.lutece.plugins.accesscontrol.business.AccessControlHome;
 import fr.paris.lutece.plugins.accesscontrol.business.AccessController;
 import fr.paris.lutece.plugins.accesscontrol.business.AccessControllerHome;
+import fr.paris.lutece.portal.business.accesscontrol.AccessControlSessionData;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.workgroup.AdminWorkgroupService;
 import fr.paris.lutece.util.ReferenceList;
@@ -70,11 +73,7 @@ public class AccessControlService implements IAccessControlService
             IAccessControllerType controller = SpringContextService.getBean( accessController.getType( ) );
             if ( controller instanceof IPersistentAccessControllerType )
             {
-                IPersistentDataHandler dataHandler = ( (IPersistentAccessControllerType) controller ).getIPersistentDataHandler( accessController.getId( ) );
-                if ( dataHandler != null )
-                {
-                    dataHandler.doDeleteConfig( idControlType );
-                }
+                ( (IPersistentAccessControllerType) controller ).doDeleteDataHandlerConfig( accessController.getId( ) );
             }
 
             if ( controller.hasConfig( ) )
@@ -105,5 +104,21 @@ public class AccessControlService implements IAccessControlService
             referenceList.addItem( accessControl.getId( ), accessControl.getName( ) );
         }
         return referenceList;
+    }
+
+    @Override
+    public void applyPersistentData( AccessControlSessionData sessionData, Object destination )
+    {
+        Map<Integer, Serializable> persistentData = sessionData.getPersistentData( );
+        for ( Integer id : persistentData.keySet( ) )
+        {
+            AccessController controller = AccessControllerHome.findByPrimaryKey( id );
+            IAccessControllerType controllerType = SpringContextService.getBean( controller.getType( ) );
+            if ( controllerType instanceof IPersistentAccessControllerType )
+            {
+                IPersistentAccessControllerType persistentControllerType = (IPersistentAccessControllerType) controllerType;
+                persistentControllerType.applyPersistentData( controller, sessionData, destination );
+            }
+        }
     }
 }
