@@ -7,6 +7,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.collections4.CollectionUtils;
+
 import fr.paris.lutece.plugins.accesscontrol.business.AccessController;
 import fr.paris.lutece.plugins.accesscontrol.business.config.AbstractControllerConfig;
 import fr.paris.lutece.portal.business.accesscontrol.AccessControlSessionData;
@@ -35,7 +37,10 @@ public abstract class AbstractPersistentAccessControllerType<C extends AbstractC
         {
             model.put( MARK_DATA_HANDLER_CONFIG_TEMPLATE, dataHandler.getDataHandlerConfigForm( locale, config.getIdAccessController( ) ) );
         }
-        model.put( MARK_PERSISTENT_DATA_HANDLER_LIST, list );
+        if ( CollectionUtils.isNotEmpty( list ) && list.size( ) > 1 )
+        {
+            model.put( MARK_PERSISTENT_DATA_HANDLER_LIST, list );
+        }
     }
     
     @Override

@@ -9,7 +9,7 @@
 				<@input type='number' name='ageMin' id='ageMin' value='${config.ageMin!}' min=0 />
 			</@formGroup>
 			<@formGroup labelFor='ageMax' labelKey='#i18n{accesscontrol.modify_controller.controller_age_max_config.title}' helpKey='#i18n{accesscontrol.modify_controller.controller_age_max_config.help}'>
-				<@input type='number' name='ageMax' id='ageMax' value='${config.ageMin!}' min=0 />
+				<@input type='number' name='ageMax' id='ageMax' value='${config.ageMax!}' min=0 />
 			</@formGroup>
 			<@formGroup labelFor='error_message' labelKey='#i18n{accesscontrol.modify_controller.controller_error_config.title}' mandatory=true>
 				<@input type='text' name='error_message' id='error_message' value='${config.errorMessage!}' />
