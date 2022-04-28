@@ -109,13 +109,14 @@ public abstract class AbstractControllerConfig implements IAccessControllerConfi
     }
 
     /**
-     * @param dataHandler the dataHandler to set
+     * @param dataHandler
+     *            the dataHandler to set
      */
     public void setDataHandler( String dataHandler )
     {
         _dataHandler = dataHandler;
     }
-    
+
     /**
      * @return the {@link IPersistentDataHandler}
      */

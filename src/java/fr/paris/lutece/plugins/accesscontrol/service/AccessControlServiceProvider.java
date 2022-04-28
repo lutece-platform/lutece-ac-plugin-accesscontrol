@@ -137,7 +137,7 @@ public class AccessControlServiceProvider implements IAccessControlServiceProvid
         request.getSession( ).removeAttribute( AccessControlSessionData.getSessionKey( idResource, resourceType ) );
 
     }
-    
+
     @Override
     public void applyPersistentData( AccessControlSessionData sessionData, Object destination )
     {

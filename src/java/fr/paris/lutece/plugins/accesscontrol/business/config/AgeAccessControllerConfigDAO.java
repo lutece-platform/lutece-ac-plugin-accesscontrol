@@ -60,7 +60,7 @@ public class AgeAccessControllerConfigDAO implements IAccessControllerConfigDAO<
             daoUtil.setInt( ++nIndex, config.getAgeMin( ) );
             daoUtil.setInt( ++nIndex, config.getAgeMax( ) );
             daoUtil.setString( ++nIndex, config.getDataHandler( ) );
-            
+
             daoUtil.executeUpdate( );
         }
     }

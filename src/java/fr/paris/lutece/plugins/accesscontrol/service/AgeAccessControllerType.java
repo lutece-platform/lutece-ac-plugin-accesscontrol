@@ -73,7 +73,7 @@ public class AgeAccessControllerType extends AbstractPersistentAccessControllerT
     private static final String PARAMETER_ERROR_MESSAGE = "error_message";
     private static final String PARAMETER_AGE_MIN = "ageMin";
     private static final String PARAMETER_AGE_MAX = "ageMax";
-    
+
     @Override
     public String getBeanName( )
     {
@@ -134,7 +134,7 @@ public class AgeAccessControllerType extends AbstractPersistentAccessControllerT
         config.setErrorMessage( request.getParameter( PARAMETER_ERROR_MESSAGE ) );
         config.setAgeMin( NumberUtils.toInt( request.getParameter( PARAMETER_AGE_MIN ), 0 ) );
         config.setAgeMax( NumberUtils.toInt( request.getParameter( PARAMETER_AGE_MAX ), 0 ) );
-        
+
         saveDataHandlerConfig( request, config );
         _dao.store( config );
     }
@@ -165,7 +165,7 @@ public class AgeAccessControllerType extends AbstractPersistentAccessControllerT
 
         return null;
     }
-    
+
     @Override
     public void persistDataToSession( AccessControlSessionData sessionData, HttpServletRequest request, Locale locale, int idController )
     {
@@ -173,7 +173,7 @@ public class AgeAccessControllerType extends AbstractPersistentAccessControllerT
         LocalDate date = LocalDate.parse( strDate );
         sessionData.addPersistentParam( idController, String.valueOf( Date.valueOf( date ).getTime( ) ) );
     }
-    
+
     @Override
     protected AgeAccessControllerConfig loadConfig( int idConfig )
     {

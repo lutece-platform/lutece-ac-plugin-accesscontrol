@@ -72,7 +72,7 @@ public abstract class AbstractManageAccessControlJspBean extends MVCAdminJspBean
     private static final String MARK_PAGINATOR = "paginator";
     private static final String MARK_NB_ITEMS_PER_PAGE = "nb_items_per_page";
     private static final String MARK_PERMISSION_CREATE_AC = "permission_create_ac";
-    
+
     // Variables
     private String _strCurrentPageIndex;
     private int _nItemsPerPage;
@@ -100,23 +100,26 @@ public abstract class AbstractManageAccessControlJspBean extends MVCAdminJspBean
         String strUrl = url.getUrl( );
 
         // PAGINATOR
-        LocalizedPaginator<AccessControl> paginator = new LocalizedPaginator<>( list, _nItemsPerPage, strUrl, PARAMETER_PAGE_INDEX, _strCurrentPageIndex, getLocale( ) );
+        LocalizedPaginator<AccessControl> paginator = new LocalizedPaginator<>( list, _nItemsPerPage, strUrl, PARAMETER_PAGE_INDEX, _strCurrentPageIndex,
+                getLocale( ) );
 
         List<AccessControlRbacAction> listActions = SpringContextService.getBeansOfType( AccessControlRbacAction.class );
         listActions = I18nService.localizeCollection( listActions, getLocale( ) );
         for ( AccessControl template : paginator.getPageItems( ) )
         {
-            List<AccessControlRbacAction> listAuthorizedFormActions = (List<AccessControlRbacAction>) RBACService.getAuthorizedActionsCollection( listActions, template, (User) getUser( ) );
+            List<AccessControlRbacAction> listAuthorizedFormActions = (List<AccessControlRbacAction>) RBACService.getAuthorizedActionsCollection( listActions,
+                    template, (User) getUser( ) );
             template.setActionList( listAuthorizedFormActions );
 
         }
-        
+
         Map<String, Object> model = getModel( );
         model.put( MARK_NB_ITEMS_PER_PAGE, String.valueOf( _nItemsPerPage ) );
         model.put( MARK_PAGINATOR, paginator );
         model.put( strBookmark, paginator.getPageItems( ) );
-        model.put( MARK_PERMISSION_CREATE_AC, RBACService.isAuthorized( AccessControl.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID, AccessControlResourceIdService.PERMISSION_CREATE, (User) getUser( ) ) );
-        
+        model.put( MARK_PERMISSION_CREATE_AC, RBACService.isAuthorized( AccessControl.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
+                AccessControlResourceIdService.PERMISSION_CREATE, (User) getUser( ) ) );
+
         return model;
     }
 }

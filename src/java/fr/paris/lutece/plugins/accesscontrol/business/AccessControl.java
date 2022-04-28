@@ -49,7 +49,7 @@ import fr.paris.lutece.portal.service.workgroup.AdminWorkgroupResource;
 public class AccessControl implements Serializable, AdminWorkgroupResource, RBACResource
 {
     private static final long serialVersionUID = 1L;
-    
+
     public static final String RESOURCE_TYPE = "ACCESCONTROL_ACCESCONTROL";
 
     // Variables declarations
@@ -61,7 +61,7 @@ public class AccessControl implements Serializable, AdminWorkgroupResource, RBAC
     private boolean _bIsEnabled;
     private String _strWorkgroupKey;
     private String _strReturnUrl;
-    
+
     private List<AccessControlRbacAction> _actionList;
 
     @Override
@@ -75,7 +75,7 @@ public class AccessControl implements Serializable, AdminWorkgroupResource, RBAC
     {
         return StringUtils.EMPTY + _nId;
     }
-    
+
     /**
      * Returns the Id
      * 
@@ -227,7 +227,8 @@ public class AccessControl implements Serializable, AdminWorkgroupResource, RBAC
     }
 
     /**
-     * @param actionList the actionList to set
+     * @param actionList
+     *            the actionList to set
      */
     public void setActionList( List<AccessControlRbacAction> actionList )
     {
