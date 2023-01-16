@@ -196,7 +196,7 @@ public class AccessControlXPage extends MVCApplication
             }
         }
 
-        if ( result )
+        if ( result && _accessControlResult.size() == _controllerList.size() )
         {
             AccessControlSessionData sessionData = _service.getSessionDataForResource( request, _idResource, _resourceType );
             sessionData.setAccessControlResult( true );
