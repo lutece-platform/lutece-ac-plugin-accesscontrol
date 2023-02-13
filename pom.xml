@@ -11,7 +11,7 @@
     <groupId>fr.paris.lutece.plugins</groupId>
     <artifactId>plugin-accesscontrol</artifactId>
     <packaging>lutece-plugin</packaging>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.1</version>
     <name>Lutece Access Control Plugin</name>
 
     <repositories>
@@ -52,6 +52,6 @@
         <connection>scm:git:https://github.com/lutece-platform/lutece-ac-plugin-accesscontrol.git</connection>
         <developerConnection>scm:git:https://github.com/lutece-platform/lutece-ac-plugin-accesscontrol.git</developerConnection>
         <url>https://github.com/lutece-platform/lutece-ac-plugin-accesscontrol.git</url>
-        <tag>HEAD</tag>
+        <tag>plugin-accesscontrol-1.0.1</tag>
     </scm>
 </project>
