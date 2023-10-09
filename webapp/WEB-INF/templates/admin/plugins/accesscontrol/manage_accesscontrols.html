@@ -1,58 +1,53 @@
-<@row>
-	<@columns>
-		<@box style='primary'>
-			<@boxHeader title='#i18n{accesscontrol.manage_accesscontrol.title}' boxTools=true>
-				<#if permission_create_ac>
-					<@tform class='form-inline pull-right' name='manage_accesscontrol' action='jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp'>
-						<@button type='submit' name='view_createAccessControl' buttonIcon='plus' title='#i18n{accesscontrol.manage_accesscontrols.buttonAdd}' />
-					</@tform>
-				</#if>
-			</@boxHeader>
-			<@boxBody>    
-			    <@messages infos=infos />
-			    <@paginationAdmin paginator=paginator combo=1 />
-			    <div class="clearfix"></div>
-			    <@table>
-			        <@tr>
-			            <@th>#i18n{accesscontrol.manage_accesscontrols.columnName}</@th>
-			            <@th>#i18n{accesscontrol.manage_accesscontrols.columnDescription}</@th>
-			            <@th>#i18n{portal.util.labelActions}</@th>
-			        </@tr>
-			        <@tableHeadBodySeparator />
-			        <#list accesscontrol_list as accesscontrol >
-				        <@tr>
-				            <@td>${accesscontrol.name}</@td>
-				            <@td>${accesscontrol.description}</@td>
-				        	<@td>
-								<#if accesscontrol.actionList?exists>
-                            		 <#list accesscontrol.actionList as action>
-                            		 	<#assign color='' />
-                                        <#assign perm=action.permission?lower_case />
-                                        <#assign params='' />
-                                        <#if action.permission=='DELETE'>
-                                            <#assign color = 'danger' />
-                                            <#assign perm='' />
-										<#else>
-											<#assign color = 'primary' />
-                                        </#if>
-                                        <#if action.permission=='ENABLE'>
-                                        	<#if action.enabled == accesscontrol.enabled>
-                                        		<#if accesscontrol.enabled>
-	                                        		<#assign color = 'danger' />
-	                                        	</#if>
-                                        		<@aButton href='${action.url}&id=${accesscontrol.id}' title='${action.name}' hideTitle=['all'] color='${color}' class='${perm}' buttonIcon=action.iconUrl params=params size='sm' />
-                                        	</#if>
-                                        <#else>
-                                        	<@aButton href='${action.url}&id=${accesscontrol.id}' title='${action.name}' hideTitle=['all'] color='${color}' class='${perm}' buttonIcon=action.iconUrl params=params size='sm' />
-                                        </#if>
-                            		 </#list>
-                            	</#if>
-					        </@td>
-				        </@tr>
-				    </#list>
-			    </@table>
-			    <@paginationAdmin paginator=paginator />
-		  </@boxBody>
-		</@box>
-	</@columns>
-</@row>
+<@pageContainer>
+    <@pageColumn>
+		<@pageHeader title='#i18n{accesscontrol.manage_accesscontrols.title}'>
+			<#if permission_create_ac>
+				<@tform class='form-inline pull-right' name='manage_accesscontrol' action='jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp'>
+					<@button type='submit' name='view_createAccessControl' buttonIcon='plus' title='#i18n{accesscontrol.manage_accesscontrols.buttonAdd}' hideTitle=['xs','sm'] />
+				</@tform>
+			</#if>
+		</@pageHeader>
+		<@messages infos=infos />
+		<@paginationAdmin paginator=paginator combo=1 />
+		<@table>
+			<@tr>
+				<@th>#i18n{accesscontrol.manage_accesscontrols.columnName}</@th>
+				<@th>#i18n{accesscontrol.manage_accesscontrols.columnDescription}</@th>
+				<@th>#i18n{portal.util.labelActions}</@th>
+			</@tr>
+			<@tableHeadBodySeparator />
+			<#list accesscontrol_list as accesscontrol >
+				<@tr>
+					<@td>${accesscontrol.name}</@td>
+					<@td>${accesscontrol.description}</@td>
+					<@td>
+						<#if accesscontrol.actionList?exists>
+							 <#list accesscontrol.actionList as action>
+								<#assign color='' />
+								<#assign perm=action.permission?lower_case />
+								<#assign params='' />
+								<#if action.permission=='DELETE'>
+									<#assign color = 'danger' />
+									<#assign perm='' />
+								<#else>
+									<#assign color = 'primary' />
+								</#if>
+								<#if action.permission=='ENABLE'>
+									<#if action.enabled == accesscontrol.enabled>
+										<#if accesscontrol.enabled>
+											<#assign color = 'danger' />
+										</#if>
+										<@aButton href='${action.url}&id=${accesscontrol.id}' title='${action.name}' hideTitle=['all'] color='${color}' class='${perm}' buttonIcon=action.iconUrl params=params size='sm' />
+									</#if>
+								<#else>
+									<@aButton href='${action.url}&id=${accesscontrol.id}' title='${action.name}' hideTitle=['all'] color='${color}' class='${perm}' buttonIcon=action.iconUrl params=params size='sm' />
+								</#if>
+							 </#list>
+						</#if>
+					</@td>
+				</@tr>
+			</#list>
+		</@table>
+		<@paginationAdmin paginator=paginator />
+	</@pageColumn>
+</@pageContainer>

@@ -1,92 +1,103 @@
-<@row>
-	<@columns sm=12 lg=3>
-		<@box style='primary'>
-			<@boxHeader titleLevel='h3' i18nTitleKey='accesscontrol.modify_accesscontrol.title' />
-			<@boxBody>
-				<@tform action='jsp/admin/plugins/accesscontrol/ModifyAccessControls.jsp'>
-					<@messages errors=errors />
-					<@input type="hidden" id="id" name="id" value="${accesscontrol.id}"/>
-					<@input type="hidden" value="${token}" name="token" />
-					<@formGroup labelFor='name' labelKey='#i18n{accesscontrol.manage_accesscontrols.columnName}' mandatory=true>
-		          		<@input type='text' id='name' name='name'  maxlength=255 value='${accesscontrol.name!\'\'}' tabIndex='0' />
-					</@formGroup>
-					<@formGroup labelFor='description' labelKey='#i18n{accesscontrol.manage_accesscontrols.columnDescription}' mandatory=true>
-		          		<@input type='text' id='description' name='description'  value='${accesscontrol.description!\'\'}' tabIndex='1' />
-					</@formGroup>
-					<@formGroup labelFor='workgroup_key' labelKey='#i18n{accesscontrol.modify_accesscontrol.labelWorkgroupKey}' mandatory=true>
-			          	<@select name='workgroup' items=user_workgroup_list default_value='${accesscontrol.workgroup}' />
-					</@formGroup>
-					<@formGroup labelFor='returnUrl' labelKey='#i18n{accesscontrol.manage_accesscontrols.labelReturnUrl}'>
-			          	<@input type='text' id='returnUrl' name='returnUrl'  value='${accesscontrol.returnUrl!}' />
-					</@formGroup>
-					<@formGroup rows=2>
-						<@button type='submit' name='cancel' buttonIcon='times-circle' title='#i18n{portal.util.labelCancel}' cancel=true />
-						<@button type='submit' name='save' buttonIcon='check' title='#i18n{portal.util.labelModify}' />
-					</@formGroup>
-				</@tform>
-			</@boxBody>
-		</@box>
-	</@columns>
-	<@columns sm=12 lg=9>
-		<@box style='primary'>
-			<@boxHeader titleLevel='h3' i18nTitleKey='accesscontrol.modify_accesscontrol.controller.title' />
-			<@boxBody>
-				<@tform type='inline' action='jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp?action=createController&id=${accesscontrol.id}' align='right'>
-					<@select name='controller_type' items=controller_type_list sort=true size='sm' />
-					<@button type='submit' buttonIcon='plus' title='#i18n{accesscontrol.modify_accesscontrol.add_controller}' size='sm' />
-				</@tform>
-				<@table striped=true condensed=true responsive=false hover=false>
-					<@tr>
-						<@th>#i18n{accesscontrol.modify_accesscontrol.labelCondition}</@th>
-						<@th>#i18n{accesscontrol.modify_accesscontrol.labelTitle}</@th>
-						<@th>#i18n{accesscontrol.modify_accesscontrol.labelOrder}</@th>
-						<@th>#i18n{accesscontrol.modify_accesscontrol.labelActions}</@th>
-					</@tr>
-					<#assign first=true>
-					<#list controller_list as controller>
-						<@tr>
-							<@td>
-								<#if !first>
-									<@tform type='inline' action='jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp?action=changeCondition'>
-										<@input type='hidden' name='id' value=accesscontrol.id />
-										<@input type='hidden' name='id_controller' value=controller.id />
-										<@inputGroup>
-											<@select name='boolCond' default_value=controller.boolCond items=condition_list />
-											<@button type='submit' buttonIcon='check' color='default' hideTitle=['all'] size='sm'/>
-										</@inputGroup>
-									</@tform>	
-								</#if>
-							</@td>
-							<@td>${controller.title}</@td>
-							<@td>
-								<@tform type='inline' action='jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp?action=changeOrder'>
-									<@input type='hidden' name='id' value=accesscontrol.id />
-									<@input type='hidden' name='id_controller' value=controller.id />
-									<@inputGroup>
-										<@select name='new_order'>
-											<#list 1..controller_list?size as i>
-												<#if controller.order==i>
-													<option selected="selected" value="${i}" >${i}</option>
-												<#else>
-													<option value="${i}" >${i}</option>
-												</#if>
-											</#list>
-										</@select>
-										<@button type='submit' buttonIcon='check' color='default' hideTitle=['all'] size='sm'/>
-									</@inputGroup>
-								</@tform>
-							</@td>
-							<@td>
-								<#if controller.config>
-									<@aButton href='jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp?view=modifyConfigController&id_controller=${controller.id}' title='#i18n{accesscontrol.modify_accesscontrol.controller.labelModifyConfig}' buttonIcon='edit' hideTitle=['all'] size='sm'  />
-								</#if>
-								<@aButton href='jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp?action=confirmRemoveAccessController&id_controller=${controller.id}' title='#i18n{portal.util.labelDelete}' buttonIcon='trash' hideTitle=['all'] color='danger' size='sm'  />
-							</@td>
-							<#assign first=false>
-						</@tr>
-					</#list>
-				</@table>
-			</@boxBody>
-		</@box>
-	</@columns>
-</@row>
+<@pageContainer>
+    <@pageColumn>
+		<@pageHeader title='#i18n{accesscontrol.modify_accesscontrol.title}' />
+		<@row>
+			<@columns sm=12 lg=3>
+				<@box>
+					<@boxHeader titleLevel='h3' i18nTitleKey='accesscontrol.modify_accesscontrol.title' />
+					<@boxBody>
+						<@tform action='jsp/admin/plugins/accesscontrol/ModifyAccessControls.jsp'>
+							<@messages errors=errors />
+							<@input type="hidden" id="id" name="id" value="${accesscontrol.id}"/>
+							<@input type="hidden" value="${token}" name="token" />
+							<@formGroup labelFor='name' labelKey='#i18n{accesscontrol.manage_accesscontrols.columnName}' mandatory=true>
+								<@input type='text' id='name' name='name'  maxlength=255 value='${accesscontrol.name!\'\'}' tabIndex='0' />
+							</@formGroup>
+							<@formGroup labelFor='description' labelKey='#i18n{accesscontrol.manage_accesscontrols.columnDescription}' mandatory=true>
+								<@input type='text' id='description' name='description'  value='${accesscontrol.description!\'\'}' tabIndex='1' />
+							</@formGroup>
+							<@formGroup labelFor='workgroup_key' labelKey='#i18n{accesscontrol.modify_accesscontrol.labelWorkgroupKey}' mandatory=true>
+								<@select name='workgroup' items=user_workgroup_list default_value='${accesscontrol.workgroup}' />
+							</@formGroup>
+							<@formGroup labelFor='returnUrl' labelKey='#i18n{accesscontrol.manage_accesscontrols.labelReturnUrl}'>
+								<@input type='text' id='returnUrl' name='returnUrl'  value='${accesscontrol.returnUrl!}' />
+							</@formGroup>
+							<@formGroup rows=2>
+								<@button type='submit' name='save' buttonIcon='device-floppy' title='#i18n{portal.util.labelModify}' />
+								<@button type='submit' name='cancel' buttonIcon='x' title='#i18n{portal.util.labelCancel}' cancel=true />
+							</@formGroup>
+						</@tform>
+					</@boxBody>
+				</@box>
+			</@columns>
+			<@columns sm=12 lg=9>
+				<@box>
+					<@boxHeader titleLevel='h3' i18nTitleKey='accesscontrol.modify_accesscontrol.controller.title' />
+					<@boxBody>
+						<@tform type='inline' action='jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp?action=createController&id=${accesscontrol.id}'>
+							<@formGroup labelFor='controller_type' labelKey='#i18n{accesscontrol.modify_accesscontrol.add_controller}' hideLabel=['all']>
+								<@inputGroup>
+									<@select name='controller_type' items=controller_type_list sort=true size='sm' />
+									<@inputGroupItem type='btn'>
+										<@button type='submit' buttonIcon='plus' title='#i18n{accesscontrol.modify_accesscontrol.add_controller}' hideTitle=['all'] size='sm' />
+									</@inputGroupItem>
+								</@inputGroup>
+							</@formGroup>
+						</@tform>
+						<@table striped=true condensed=true responsive=false hover=false>
+							<@tr>
+								<@th>#i18n{accesscontrol.modify_accesscontrol.labelCondition}</@th>
+								<@th>#i18n{accesscontrol.modify_accesscontrol.labelTitle}</@th>
+								<@th>#i18n{accesscontrol.modify_accesscontrol.labelOrder}</@th>
+								<@th>#i18n{accesscontrol.modify_accesscontrol.labelActions}</@th>
+							</@tr>
+							<#assign first=true>
+							<#list controller_list as controller>
+								<@tr>
+									<@td>
+										<#if !first>
+											<@tform type='inline' action='jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp?action=changeCondition'>
+												<@input type='hidden' name='id' value=accesscontrol.id />
+												<@input type='hidden' name='id_controller' value=controller.id />
+												<@inputGroup>
+													<@select name='boolCond' default_value=controller.boolCond items=condition_list />
+													<@button type='submit' buttonIcon='check' color='default' hideTitle=['all'] size='sm'/>
+												</@inputGroup>
+											</@tform>	
+										</#if>
+									</@td>
+									<@td>${controller.title}</@td>
+									<@td>
+										<@tform type='inline' action='jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp?action=changeOrder'>
+											<@input type='hidden' name='id' value=accesscontrol.id />
+											<@input type='hidden' name='id_controller' value=controller.id />
+											<@inputGroup>
+												<@select name='new_order'>
+													<#list 1..controller_list?size as i>
+														<#if controller.order==i>
+															<option selected="selected" value="${i}" >${i}</option>
+														<#else>
+															<option value="${i}" >${i}</option>
+														</#if>
+													</#list>
+												</@select>
+												<@button type='submit' buttonIcon='check' color='default' hideTitle=['all'] size='sm'/>
+											</@inputGroup>
+										</@tform>
+									</@td>
+									<@td>
+										<#if controller.config>
+											<@aButton href='jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp?view=modifyConfigController&id_controller=${controller.id}' title='#i18n{accesscontrol.modify_accesscontrol.controller.labelModifyConfig}' buttonIcon='edit' hideTitle=['all'] size='sm'  />
+										</#if>
+										<@aButton href='jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp?action=confirmRemoveAccessController&id_controller=${controller.id}' title='#i18n{portal.util.labelDelete}' buttonIcon='trash' hideTitle=['all'] color='danger' size='sm'  />
+									</@td>
+									<#assign first=false>
+								</@tr>
+							</#list>
+						</@table>
+					</@boxBody>
+				</@box>
+			</@columns>
+		</@row>
+	</@pageColumn>
+</@pageContainer>

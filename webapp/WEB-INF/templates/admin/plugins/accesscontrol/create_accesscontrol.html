@@ -1,24 +1,24 @@
-<@box>
-	<@boxHeader title='#i18n{accesscontrol.create_accesscontrol.title}' />
-	<@boxBody>
-    <@tform name='create_accesscontrol' action='jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp'>
-        <@messages errors=errors />
-        <@input type="hidden" id="id" name="id"/>
-        <@input type="hidden" value="${token}" name="token" />
+<@pageContainer>
+    <@pageColumn>
+		<@pageHeader title='#i18n{accesscontrol.create_accesscontrol.title}' />
+		<@tform name='create_accesscontrol' action='jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp' id='create_accesscontrol_page' boxed=true>
+			<@messages errors=errors />
+			<@input type='hidden' id='id' name='id'/>
+			<@input type='hidden' value='${token}' name='token' />
 
-		<@formGroup labelFor='name' labelKey='#i18n{accesscontrol.manage_accesscontrols.columnName}' mandatory=true>
-          	<@input type='text' id='name' name='name'  maxlength=255 value='${accesscontrol.name!\'\'}' tabIndex='0' />
-		</@formGroup>
-		<@formGroup labelFor='description' labelKey='#i18n{accesscontrol.manage_accesscontrols.columnDescription}' mandatory=true>
-          	<@input type='text' id='description' name='description'  value='${accesscontrol.description!\'\'}' tabIndex='1' />
-		</@formGroup>
-		<@formGroup labelFor='workgroup_key' labelKey='#i18n{accesscontrol.modify_accesscontrol.labelWorkgroupKey}' mandatory=true>
-          	<@select name='workgroup' items=user_workgroup_list default_value=workgroup_key_default_value />
-		</@formGroup>
-		<@formGroup labelFor='returnUrl' labelKey='#i18n{accesscontrol.manage_accesscontrols.labelReturnUrl}'>
-          	<@input type='text' id='returnUrl' name='returnUrl'  value='${accesscontrol.returnUrl!\'\'}' tabIndex='1' />
-		</@formGroup>
-		<@actionButtons button1Name="action_createAccessControl" button2Name="view_manageAccessControl"/>
-    </@tform>
-	</@boxBody>
-</@box>
+			<@formGroup labelFor='name' labelKey='#i18n{accesscontrol.manage_accesscontrols.columnName}' mandatory=true>
+				<@input type='text' id='name' name='name'  maxlength=255 value='${accesscontrol.name!\'\'}' />
+			</@formGroup>
+			<@formGroup labelFor='description' labelKey='#i18n{accesscontrol.manage_accesscontrols.columnDescription}' mandatory=true>
+				<@input type='text' id='description' name='description'  value='${accesscontrol.description!\'\'}' />
+			</@formGroup>
+			<@formGroup labelFor='workgroup_key' labelKey='#i18n{accesscontrol.modify_accesscontrol.labelWorkgroupKey}' mandatory=true>
+				<@select name='workgroup' items=user_workgroup_list default_value=workgroup_key_default_value />
+			</@formGroup>
+			<@formGroup labelFor='returnUrl' labelKey='#i18n{accesscontrol.manage_accesscontrols.labelReturnUrl}'>
+				<@input type='text' id='returnUrl' name='returnUrl'  value='${accesscontrol.returnUrl!\'\'}' />
+			</@formGroup>
+			<@actionButtons button1Name='action_createAccessControl' button2Name='view_manageAccessControl'/>
+		</@tform>
+	</@pageColumn>
+</@pageContainer>
