@@ -1,6 +1,6 @@
 <@pageContainer>
     <@pageColumn>
-		<@pageHeader title='#i18n{accesscontrol.manage_usercode.pageTitle}'>
+		<@pageHeader title='#i18n{accesscontrol.manage_usercodes.pageTitle}'>
 			<@aButton title='#i18n{accesscontrol.manage_usercode.buttonImport}' buttonIcon='upload' size='sm' params='data-toggle="modal" data-target="#importCsv"' hideTitle=['xs','sm'] />
 		</@pageHeader>
 	</@pageColumn>
@@ -10,7 +10,7 @@
 	<@modalHeader modalTitle='#i18n{accesscontrol.manage_usercode.buttonImport}' />
 	<@modalBody>
 		<@tform class='form' method='post' name='upload_workflow' action='jsp/admin/plugins/accesscontrol/ManageControllerUserCode.jsp' params='enctype="multipart/form-data"'>
-			<@formGroup labelKey='#i18n{accesscontrol.manage_usercode.labelAccessControl}' mandatory=true >
+			<@formGroup labelKey='#i18n{accesscontrol.manage_usercode.labelAccessControl}' mandatory=true rows=2>
 				<@select name='access_control' items=access_control_list />
 			</@formGroup>
 			<@formGroup labelKey='#i18n{accesscontrol.manage_usercode.labelImportFile}' helpKey='#i18n{accesscontrol.manage_usercode.labelImportFile.help}' rows=2>
