@@ -6,7 +6,7 @@ CREATE TABLE accesscontrol_accesscontrol (
 	id_access_control int AUTO_INCREMENT,
 	name varchar(255) default '',
 	description long varchar,
-	creation_date date DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	is_enabled SMALLINT DEFAULT 0 NOT NULL,
 	workgroup_key varchar(255) default '',
 	return_url varchar(255),
