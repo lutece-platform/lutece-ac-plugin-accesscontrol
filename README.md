@@ -3,22 +3,19 @@
 [![Line of code](https://dev.lutece.paris.fr/sonar/api/project_badges/measure?project=fr.paris.lutece.plugins%3Aplugin-accesscontrol&metric=ncloc)](https://dev.lutece.paris.fr/sonar/dashboard?id=fr.paris.lutece.plugins%3Aplugin-accesscontrol)
 [![Coverage](https://dev.lutece.paris.fr/sonar/api/project_badges/measure?project=fr.paris.lutece.plugins%3Aplugin-accesscontrol&metric=coverage)](https://dev.lutece.paris.fr/sonar/dashboard?id=fr.paris.lutece.plugins%3Aplugin-accesscontrol)
 
-# Plugin accesscontrol
+# Plugin AccessControl
 
 ## Introduction
 
-The **Access Control plugin** manages access to resources within a **Lutece** application by defining access rules and strategies.  
-It provides an administration interface that allows users to configure access rules and apply them to various system resources.
+The **Access Control plugin** manages access to resources within a **Lutece** application by defining access rules and strategies. It provides an administration interface that allows users to configure access rules and apply them to various system resources.
 
 ## Usage
 
 Once the plugin is installed and activated, the Lutece administration panel offers an interface to:
 
-1. **Create access rules** (e.g., restrict access by user role).
-2. **Assign these rules to specific resources** (pages, actions, APIs).
-3. **View and modify existing access controls**.
-
-
+*  **Create access rules** (e.g., restrict access by user role).
+*  **Assign these rules to specific resources** (pages, actions, APIs).
+*  **View and modify existing access controls** .
 
 [Maven documentation and reports](https://dev.lutece.paris.fr/plugins/plugin-accesscontrol/)
 
