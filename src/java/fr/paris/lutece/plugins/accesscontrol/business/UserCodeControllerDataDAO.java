@@ -39,10 +39,14 @@ import java.util.List;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Named;
 
 /**
  * Implements {@link IUserCodeControllerDataDAO}
  */
+@ApplicationScoped
+@Named( "accesscontrol.userCodeControllerDataDAO" )
 public class UserCodeControllerDataDAO implements IUserCodeControllerDataDAO
 {
     private static final String SQL_QUERY_SELECT_ALL = "SELECT userId, code, id_access_control, date_validity FROM accesscontrol_controller_user_code_data ";

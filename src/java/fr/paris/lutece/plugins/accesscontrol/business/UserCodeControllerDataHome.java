@@ -37,12 +37,12 @@ import java.util.List;
 
 import fr.paris.lutece.plugins.accesscontrol.util.AccessControlUtils;
 import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
+import jakarta.enterprise.inject.spi.CDI;
 
 public final class UserCodeControllerDataHome
 {
 
-    private static IUserCodeControllerDataDAO _dao = SpringContextService.getBean( "accesscontrol.userCodeControllerDataDAO" );
+    private static IUserCodeControllerDataDAO _dao = CDI.current( ).select( IUserCodeControllerDataDAO.class ).get( );
     private static Plugin _plugin = AccessControlUtils.getPlugin( );
 
     /**

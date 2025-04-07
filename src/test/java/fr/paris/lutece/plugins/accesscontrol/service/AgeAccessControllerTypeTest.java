@@ -35,20 +35,23 @@ package fr.paris.lutece.plugins.accesscontrol.service;
 
 import java.time.LocalDate;
 
-import org.springframework.mock.web.MockHttpServletRequest;
+import org.junit.jupiter.api.Test;
 
 import fr.paris.lutece.plugins.accesscontrol.business.AccessController;
 import fr.paris.lutece.plugins.accesscontrol.business.config.AgeAccessControllerConfig;
 import fr.paris.lutece.plugins.accesscontrol.business.config.AgeAccessControllerConfigDAO;
 import fr.paris.lutece.plugins.accesscontrol.business.config.IAccessControllerConfigDAO;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.test.LuteceTestCase;
+import fr.paris.lutece.test.mocks.MockHttpServletRequest;
+import jakarta.enterprise.inject.literal.NamedLiteral;
+import jakarta.enterprise.inject.spi.CDI;
 
 public class AgeAccessControllerTypeTest extends LuteceTestCase
 {
     private static final String ERROR_MSG = "Error Message";
     private IAccessControllerConfigDAO<AgeAccessControllerConfig> _dao = new AgeAccessControllerConfigDAO( );
 
+    @Test
     public void testValidate( )
     {
         AgeAccessControllerConfig config = new AgeAccessControllerConfig( );
@@ -60,7 +63,9 @@ public class AgeAccessControllerTypeTest extends LuteceTestCase
         AccessController accessController = new AccessController( );
         accessController.setId( config.getIdAccessController( ) );
 
-        AgeAccessControllerType controller = SpringContextService.getBean( AgeAccessControllerType.BEAN_NAME );
+        AgeAccessControllerType controller = CDI.current( ).select( AgeAccessControllerType.class )
+                                                           .select( NamedLiteral.of( AgeAccessControllerType.BEAN_NAME ) )
+                                                           .get( );
 
         LocalDate dateOK = LocalDate.now( ).minusYears( 15 );
         MockHttpServletRequest requestOK = new MockHttpServletRequest( );

@@ -48,7 +48,29 @@ public class AccessControlRbacAction implements RBACAction, Localizable
     private String _strPermission;
     private boolean _bEnabled;
     private Locale _locale;
-
+    
+    /**
+     * Default constructor
+     * 
+     */
+    public AccessControlRbacAction( )
+    {
+    	
+    }
+    
+    /**
+     * Constructor
+     * 
+     */
+    public AccessControlRbacAction( String url, String nameKey, String iconUrl, String permission, boolean enabled )
+    {
+    	_strUrl = url;
+		_strNameKey = nameKey;
+		_strIconUrl = iconUrl;
+		_strPermission = permission;
+		_bEnabled = enabled;
+    }
+    
     /**
      * Returns the Url
      *

@@ -37,6 +37,8 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.junit.jupiter.api.Test;
+
 import fr.paris.lutece.test.LuteceTestCase;
 
 public class ControllerUserCodeDataBusinessTest extends LuteceTestCase
@@ -50,6 +52,7 @@ public class ControllerUserCodeDataBusinessTest extends LuteceTestCase
     private static final int ID_ACCESS_CONTROL_1 = 1;
     private static final int ID_ACCESS_CONTROL_2 = 2;
 
+    @Test
     public void testCRUD( )
     {
         UserCodeControllerData data = new UserCodeControllerData( );

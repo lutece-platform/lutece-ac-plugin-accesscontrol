@@ -36,7 +36,7 @@ package fr.paris.lutece.plugins.accesscontrol.service;
 import java.io.Serializable;
 import java.util.Locale;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import fr.paris.lutece.plugins.accesscontrol.business.AccessController;
 import fr.paris.lutece.portal.business.accesscontrol.AccessControlSessionData;

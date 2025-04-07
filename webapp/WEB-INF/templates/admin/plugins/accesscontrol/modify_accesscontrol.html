@@ -6,10 +6,9 @@
 				<@box>
 					<@boxHeader titleLevel='h3' i18nTitleKey='accesscontrol.modify_accesscontrol.title' />
 					<@boxBody>
-						<@tform action='jsp/admin/plugins/accesscontrol/ModifyAccessControls.jsp'>
+						<@tform action='jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp'>
 							<@messages errors=errors />
 							<@input type="hidden" id="id" name="id" value="${accesscontrol.id}"/>
-							<@input type="hidden" value="${token}" name="token" />
 							<@formGroup labelFor='name' labelKey='#i18n{accesscontrol.manage_accesscontrols.columnName}' mandatory=true rows=2>
 								<@input type='text' id='name' name='name'  maxlength=255 value='${accesscontrol.name!\'\'}' tabIndex='0' />
 							</@formGroup>
@@ -23,8 +22,8 @@
 								<@input type='text' id='returnUrl' name='returnUrl'  value='${accesscontrol.returnUrl!}' />
 							</@formGroup>
 							<@formGroup rows=2>
-								<@button type='submit' name='save' buttonIcon='device-floppy' title='#i18n{portal.util.labelModify}' />
-								<@button type='submit' name='cancel' buttonIcon='x' title='#i18n{portal.util.labelCancel}' cancel=true />
+								<@button type='submit' name='action_modifyAccessControl' buttonIcon='device-floppy' title='#i18n{portal.util.labelModify}' />
+								<@button type='submit' name='view_manageAccessControl' buttonIcon='x' title='#i18n{portal.util.labelCancel}' cancel=true />
 							</@formGroup>
 						</@tform>
 					</@boxBody>

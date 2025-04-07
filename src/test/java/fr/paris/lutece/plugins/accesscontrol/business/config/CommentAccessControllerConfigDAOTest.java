@@ -33,8 +33,10 @@
  */
 package fr.paris.lutece.plugins.accesscontrol.business.config;
 
-import fr.paris.lutece.portal.service.spring.SpringContextService;
+import org.junit.jupiter.api.Test;
+
 import fr.paris.lutece.test.LuteceTestCase;
+import jakarta.enterprise.inject.spi.CDI;
 
 public class CommentAccessControllerConfigDAOTest extends LuteceTestCase
 {
@@ -42,10 +44,11 @@ public class CommentAccessControllerConfigDAOTest extends LuteceTestCase
     private static final String COMMENT_1 = "comment1";
     private static final String COMMENT_2 = "comment2";
 
+    @Test
     public void testDao( )
     {
-        IAccessControllerConfigDAO<CommentAccessControllerConfig> dao = SpringContextService.getBean( CommentAccessControllerConfigDAO.BEAN_NAME );
-
+    	IAccessControllerConfigDAO<CommentAccessControllerConfig> dao = CDI.current( ).select( CommentAccessControllerConfigDAO.class ).get( );
+    	
         CommentAccessControllerConfig config = new CommentAccessControllerConfig( );
         config.setIdAccessController( ID );
         config.setComment( COMMENT_1 );

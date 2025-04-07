@@ -35,10 +35,14 @@ package fr.paris.lutece.plugins.accesscontrol.service;
 
 import java.util.Locale;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Named;
+import jakarta.servlet.http.HttpServletRequest;
 
 import fr.paris.lutece.portal.service.i18n.I18nService;
 
+@ApplicationScoped
+@Named( UserCodeAccessControllerType.BEAN_NAME )
 public class UserCodeAccessControllerType extends AbstractUserCodeAccessControllerType
 {
     public static final String BEAN_NAME = "accesscontrol.userCodeAccessControllerType";

@@ -35,8 +35,8 @@ package fr.paris.lutece.plugins.accesscontrol.business;
 
 import fr.paris.lutece.plugins.accesscontrol.util.AccessControlUtils;
 import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.util.ReferenceList;
+import jakarta.enterprise.inject.spi.CDI;
 
 import java.util.List;
 
@@ -46,7 +46,7 @@ import java.util.List;
 public final class AccessControllerHome
 {
     // Static variable pointed at the DAO instance
-    private static IAccessControllerDAO _dao = SpringContextService.getBean( "accesscontrol.accessControllerDAO" );
+    private static IAccessControllerDAO _dao = CDI.current( ).select( IAccessControllerDAO.class ).get (); 
     private static Plugin _plugin = AccessControlUtils.getPlugin( );
 
     /**

@@ -1,12 +1,12 @@
 <@pageContainer>
     <@pageColumn>
 		<@pageHeader title='#i18n{accesscontrol.modify_controller.page_title}' />
-		<@tform action='jsp/admin/plugins/accesscontrol/ModifyAccessController.jsp' id='edit_controller_page' boxed=true>
+		<@tform action='jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp' id='edit_controller_page' boxed=true>
 			<@fieldSet>
 				${controller_config!}
 				<@formGroup>
-					<@button type='submit' name='save' buttonIcon='device-floppy' title='#i18n{portal.util.labelValidate}' />
-					<@button type='submit' name='cancel' buttonIcon='x' title='#i18n{portal.util.labelCancel}' cancel=true />
+					<@button type='submit' name='action_modifyConfigController' buttonIcon='device-floppy' title='#i18n{portal.util.labelValidate}' />
+					<@button type='submit' name='action_modifyConfigController' buttonIcon='x' title='#i18n{portal.util.labelCancel}' cancel=true />
 				</@formGroup>
 			</@fieldSet>
 		</@tform>

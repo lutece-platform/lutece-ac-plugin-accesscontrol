@@ -36,9 +36,11 @@ package fr.paris.lutece.plugins.accesscontrol.service;
 import java.io.IOException;
 import java.util.Locale;
 
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import fr.paris.lutece.api.user.User;
 import fr.paris.lutece.plugins.accesscontrol.business.AccessControlResource;
@@ -56,6 +58,8 @@ import fr.paris.lutece.util.url.UrlItem;
  * Implementation of {@link IAccessControlServiceProvider}
  *
  */
+@ApplicationScoped
+@Named( AccessControlServiceProvider.BEAN_NAME )
 public class AccessControlServiceProvider implements IAccessControlServiceProvider
 {
     public static final String BEAN_NAME = "accesscontrol.accessControlServiceProvider";

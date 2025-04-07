@@ -40,9 +40,13 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.enterprise.context.SessionScoped;
+import jakarta.enterprise.inject.literal.NamedLiteral;
+import jakarta.enterprise.inject.spi.CDI;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.servlet.http.HttpServletRequest;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -51,7 +55,6 @@ import fr.paris.lutece.plugins.accesscontrol.business.AccessControl;
 import fr.paris.lutece.plugins.accesscontrol.business.AccessControlHome;
 import fr.paris.lutece.plugins.accesscontrol.business.AccessController;
 import fr.paris.lutece.plugins.accesscontrol.business.AccessControllerHome;
-import fr.paris.lutece.plugins.accesscontrol.service.AccessControlServiceProvider;
 import fr.paris.lutece.plugins.accesscontrol.service.IAccessControllerType;
 import fr.paris.lutece.plugins.accesscontrol.service.IPersistentAccessControllerType;
 import fr.paris.lutece.plugins.accesscontrol.util.BoolCondition;
@@ -62,7 +65,6 @@ import fr.paris.lutece.portal.service.message.SiteMessage;
 import fr.paris.lutece.portal.service.message.SiteMessageException;
 import fr.paris.lutece.portal.service.message.SiteMessageService;
 import fr.paris.lutece.portal.service.security.UserNotSignedException;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.portal.util.mvc.xpage.MVCApplication;
@@ -70,6 +72,8 @@ import fr.paris.lutece.portal.util.mvc.xpage.annotations.Controller;
 import fr.paris.lutece.portal.web.xpages.XPage;
 import fr.paris.lutece.util.url.UrlItem;
 
+@SessionScoped
+@Named( "accesscontrol.xpage.accesscontrol" )
 @Controller( xpageName = AccessControlXPage.XPAGE_NAME, pageTitleI18nKey = AccessControlXPage.MESSAGE_PAGE_TITLE, pagePathI18nKey = AccessControlXPage.MESSAGE_PATH )
 public class AccessControlXPage extends MVCApplication
 {
@@ -111,7 +115,8 @@ public class AccessControlXPage extends MVCApplication
     private int _idResource;
     private String _resourceType;
 
-    private IAccessControlServiceProvider _service = SpringContextService.getBean( AccessControlServiceProvider.BEAN_NAME );
+    @Inject
+    private IAccessControlServiceProvider _service;
 
     private void init( HttpServletRequest request )
     {
@@ -140,7 +145,7 @@ public class AccessControlXPage extends MVCApplication
             init( request );
         }
 
-        if ( CollectionUtils.isEmpty( _controllerList ) )
+        if ( _controllerList.isEmpty( ) )
         {
             return null;
         }
@@ -157,7 +162,7 @@ public class AccessControlXPage extends MVCApplication
         {
             return validateAccessControlAndRedirect( request );
         }
-        IAccessControllerType currentControllerType = SpringContextService.getBean( _currentController.getType( ) );
+        IAccessControllerType currentControllerType = CDI.current( ).select( IAccessControllerType.class ).select( NamedLiteral.of( _currentController.getType( ) ) ).get( );
 
         Map<String, Object> model = getModel( );
         model.put( MARK_CONTROLLER_HTML, currentControllerType.getControllerForm( request, locale, _currentController ) );
@@ -222,10 +227,10 @@ public class AccessControlXPage extends MVCApplication
         return null;
     }
 
-    @Action( value = ACTION_VALIDATE_CONTROLLER )
+    @Action( value = ACTION_VALIDATE_CONTROLLER, securityTokenDisabled = true )
     public XPage doValidateController( HttpServletRequest request ) throws UserNotSignedException
     {
-        IAccessControllerType currentControllerType = SpringContextService.getBean( _currentController.getType( ) );
+        IAccessControllerType currentControllerType = CDI.current( ).select( IAccessControllerType.class ).select( NamedLiteral.of( _currentController.getType( ) ) ).get( );
         String validationResult = currentControllerType.validate( request, _currentController );
 
         if ( currentControllerType instanceof IPersistentAccessControllerType && validationResult == null )
@@ -239,7 +244,7 @@ public class AccessControlXPage extends MVCApplication
         return redirectView( request, VIEW_CONTROLLER );
     }
 
-    @Action( value = ACTION_RETURN_CONTROLLER )
+    @Action( value = ACTION_RETURN_CONTROLLER, securityTokenDisabled = true )
     public XPage doReturnController( HttpServletRequest request )
     {
         _nCurrentControllerOrder--;

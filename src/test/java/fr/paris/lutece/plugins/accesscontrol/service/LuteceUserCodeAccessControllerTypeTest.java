@@ -38,9 +38,8 @@ import java.time.LocalDate;
 import java.util.Collection;
 
 import javax.security.auth.login.LoginException;
-import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.mock.web.MockHttpServletRequest;
+import org.junit.jupiter.api.Test;
 
 import fr.paris.lutece.plugins.accesscontrol.business.AccessController;
 import fr.paris.lutece.plugins.accesscontrol.business.AccessControllerHome;
@@ -54,8 +53,11 @@ import fr.paris.lutece.portal.service.security.LuteceAuthentication;
 import fr.paris.lutece.portal.service.security.LuteceUser;
 import fr.paris.lutece.portal.service.security.SecurityService;
 import fr.paris.lutece.portal.service.security.UserNotSignedException;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.test.LuteceTestCase;
+import fr.paris.lutece.test.mocks.MockHttpServletRequest;
+import jakarta.enterprise.inject.literal.NamedLiteral;
+import jakarta.enterprise.inject.spi.CDI;
+import jakarta.servlet.http.HttpServletRequest;
 
 public class LuteceUserCodeAccessControllerTypeTest extends LuteceTestCase
 {
@@ -67,6 +69,7 @@ public class LuteceUserCodeAccessControllerTypeTest extends LuteceTestCase
 
     private IAccessControllerConfigDAO<UserCodeAccessControllerConfig> _dao = new UserCodeAccessControllerConfigDAO( );
 
+    @Test
     public void testValidate( ) throws UserNotSignedException
     {
         AccessController accessController = new AccessController( );
@@ -86,7 +89,9 @@ public class LuteceUserCodeAccessControllerTypeTest extends LuteceTestCase
 
         UserCodeControllerDataHome.create( data );
 
-        LuteceUserCodeAccessControllerType controller = SpringContextService.getBean( LuteceUserCodeAccessControllerType.BEAN_NAME );
+        LuteceUserCodeAccessControllerType controller = CDI.current( ).select( LuteceUserCodeAccessControllerType.class )
+                                                                      .select( NamedLiteral.of( LuteceUserCodeAccessControllerType.BEAN_NAME ) )
+                                                                      .get( );
 
         LuteceUser user = getLuteceUser( );
         MockHttpServletRequest requestKO = new MockHttpServletRequest( );

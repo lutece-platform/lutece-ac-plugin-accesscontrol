@@ -33,20 +33,23 @@
  */
 package fr.paris.lutece.plugins.accesscontrol.service;
 
-import org.springframework.mock.web.MockHttpServletRequest;
+import org.junit.jupiter.api.Test;
 
 import fr.paris.lutece.plugins.accesscontrol.business.AccessController;
 import fr.paris.lutece.plugins.accesscontrol.business.config.IAccessControllerConfigDAO;
 import fr.paris.lutece.plugins.accesscontrol.business.config.TosAccessControllerConfig;
 import fr.paris.lutece.plugins.accesscontrol.business.config.TosAccessControllerConfigDAO;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.test.LuteceTestCase;
+import fr.paris.lutece.test.mocks.MockHttpServletRequest;
+import jakarta.enterprise.inject.literal.NamedLiteral;
+import jakarta.enterprise.inject.spi.CDI;
 
 public class TosAccessControllerTypeTest extends LuteceTestCase
 {
     private static final String ERROR_MSG = "Error Message";
     private IAccessControllerConfigDAO<TosAccessControllerConfig> _dao = new TosAccessControllerConfigDAO( );
 
+    @Test
     public void testValidate( )
     {
         TosAccessControllerConfig config = new TosAccessControllerConfig( );
@@ -56,7 +59,9 @@ public class TosAccessControllerTypeTest extends LuteceTestCase
         AccessController accessController = new AccessController( );
         accessController.setId( config.getIdAccessController( ) );
 
-        TosAccessControllerType controller = SpringContextService.getBean( TosAccessControllerType.BEAN_NAME );
+        TosAccessControllerType controller = CDI.current( ).select( TosAccessControllerType.class )
+                                                           .select( NamedLiteral.of( TosAccessControllerType.BEAN_NAME ) )
+                                                           .get( );
 
         MockHttpServletRequest requestKO = new MockHttpServletRequest( );
         MockHttpServletRequest requestOK = new MockHttpServletRequest( );

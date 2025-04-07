@@ -41,11 +41,13 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.sql.DAOUtil;
+import jakarta.enterprise.context.ApplicationScoped;
 
 /**
  * This class provides Data Access methods for AccessControl objects
  */
-public final class AccessControlDAO implements IAccessControlDAO
+@ApplicationScoped
+public class AccessControlDAO implements IAccessControlDAO
 {
     // Constants
     private static final String SQL_QUERY_SELECTALL = "SELECT id_access_control, name, description, creation_date, is_enabled, workgroup_key, return_url FROM accesscontrol_accesscontrol ";

@@ -37,7 +37,8 @@ import java.io.Serializable;
 import java.util.Locale;
 
 import fr.paris.lutece.plugins.accesscontrol.service.IAccessControllerType;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
+import jakarta.enterprise.inject.literal.NamedLiteral;
+import jakarta.enterprise.inject.spi.CDI;
 
 /**
  * This is the business class for the object AccessController
@@ -169,7 +170,8 @@ public class AccessController implements Serializable
     public void setTitle( Locale locale )
     {
         _title = "";
-        IAccessControllerType controller = SpringContextService.getBean( _strType );
+        IAccessControllerType controller = CDI.current( ).select( IAccessControllerType.class ).select( NamedLiteral.of( _strType ) ).get( );
+
         if ( controller != null )
         {
             _title = controller.getTitle( locale );
@@ -193,7 +195,7 @@ public class AccessController implements Serializable
      */
     public boolean isConfig( )
     {
-        IAccessControllerType controller = SpringContextService.getBean( _strType );
+        IAccessControllerType controller = CDI.current( ).select( IAccessControllerType.class ).select( NamedLiteral.of( _strType ) ).get( );      
         return controller != null && controller.hasConfig( );
     }
 }

@@ -36,7 +36,8 @@ package fr.paris.lutece.plugins.accesscontrol.business.config;
 import org.apache.commons.lang3.StringUtils;
 
 import fr.paris.lutece.plugins.accesscontrol.service.IPersistentDataHandler;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
+import jakarta.enterprise.inject.literal.NamedLiteral;
+import jakarta.enterprise.inject.spi.CDI;
 
 /**
  * Abstract implementation of {@link IAccessControllerConfig}. <br />
@@ -125,7 +126,7 @@ public abstract class AbstractControllerConfig implements IAccessControllerConfi
         if ( StringUtils.isEmpty( _dataHandler ) )
         {
             return null;
-        }
-        return SpringContextService.getBean( _dataHandler );
+        }        
+        return CDI.current( ).select( IPersistentDataHandler.class ).select( NamedLiteral.of( _dataHandler ) ).get( );
     }
 }

@@ -45,19 +45,29 @@ import fr.paris.lutece.plugins.accesscontrol.business.AccessControlHome;
 import fr.paris.lutece.plugins.accesscontrol.business.AccessController;
 import fr.paris.lutece.plugins.accesscontrol.business.AccessControllerHome;
 import fr.paris.lutece.portal.business.accesscontrol.AccessControlSessionData;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.workgroup.AdminWorkgroupService;
 import fr.paris.lutece.util.ReferenceList;
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.literal.NamedLiteral;
+import jakarta.enterprise.inject.spi.CDI;
 
+@ApplicationScoped
 public class AccessControlService implements IAccessControlService
 {
-    public static final String BEAN_NAME = "accesscontrol.accessControlService";
+    private List<IAccessControllerType> _accessControllerTypeList;
 
+    @PostConstruct
+    private void initAccessControlService( )
+    {
+    	_accessControllerTypeList = CDI.current( ).select( IAccessControllerType.class ).stream( ).toList( );
+    }
+    
     @Override
     public ReferenceList createAccessControllerReferenceList( Locale locale )
     {
         ReferenceList list = new ReferenceList( );
-        for ( IAccessControllerType controller : SpringContextService.getBeansOfType( IAccessControllerType.class ) )
+        for ( IAccessControllerType controller : _accessControllerTypeList )
         {
             list.addItem( controller.getBeanName( ), controller.getTitle( locale ) );
         }
@@ -70,7 +80,7 @@ public class AccessControlService implements IAccessControlService
         AccessController accessController = AccessControllerHome.findByPrimaryKey( idControlType );
         if ( accessController != null )
         {
-            IAccessControllerType controller = SpringContextService.getBean( accessController.getType( ) );
+            IAccessControllerType controller = CDI.current( ).select( IAccessControllerType.class ).select( NamedLiteral.of( accessController.getType( ) ) ).get( );
             if ( controller instanceof IPersistentAccessControllerType )
             {
                 ( (IPersistentAccessControllerType) controller ).doDeleteDataHandlerConfig( accessController.getId( ) );
@@ -113,7 +123,7 @@ public class AccessControlService implements IAccessControlService
         for ( Integer id : persistentData.keySet( ) )
         {
             AccessController controller = AccessControllerHome.findByPrimaryKey( id );
-            IAccessControllerType controllerType = SpringContextService.getBean( controller.getType( ) );
+            IAccessControllerType controllerType = CDI.current( ).select( IAccessControllerType.class ).select( NamedLiteral.of( controller.getType( ) ) ).get( );
             if ( controllerType instanceof IPersistentAccessControllerType )
             {
                 IPersistentAccessControllerType persistentControllerType = (IPersistentAccessControllerType) controllerType;

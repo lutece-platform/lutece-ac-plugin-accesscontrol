@@ -36,7 +36,7 @@ package fr.paris.lutece.plugins.accesscontrol.service;
 import java.sql.Date;
 import java.time.LocalDate;
 
-import org.springframework.mock.web.MockHttpServletRequest;
+import org.junit.jupiter.api.Test;
 
 import fr.paris.lutece.plugins.accesscontrol.business.AccessController;
 import fr.paris.lutece.plugins.accesscontrol.business.AccessControllerHome;
@@ -46,8 +46,10 @@ import fr.paris.lutece.plugins.accesscontrol.business.config.IAccessControllerCo
 import fr.paris.lutece.plugins.accesscontrol.business.config.UserCodeAccessControllerConfig;
 import fr.paris.lutece.plugins.accesscontrol.business.config.UserCodeAccessControllerConfigDAO;
 import fr.paris.lutece.portal.service.security.UserNotSignedException;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.test.LuteceTestCase;
+import fr.paris.lutece.test.mocks.MockHttpServletRequest;
+import jakarta.enterprise.inject.literal.NamedLiteral;
+import jakarta.enterprise.inject.spi.CDI;
 
 public class UserCodeAccessControllerTypeTest extends LuteceTestCase
 {
@@ -59,6 +61,7 @@ public class UserCodeAccessControllerTypeTest extends LuteceTestCase
 
     private IAccessControllerConfigDAO<UserCodeAccessControllerConfig> _dao = new UserCodeAccessControllerConfigDAO( );
 
+    @Test
     public void testValidate( ) throws UserNotSignedException
     {
         AccessController accessController = new AccessController( );
@@ -78,7 +81,9 @@ public class UserCodeAccessControllerTypeTest extends LuteceTestCase
 
         UserCodeControllerDataHome.create( data );
 
-        UserCodeAccessControllerType controller = SpringContextService.getBean( UserCodeAccessControllerType.BEAN_NAME );
+        UserCodeAccessControllerType controller = CDI.current( ).select( UserCodeAccessControllerType.class )
+                                                                .select( NamedLiteral.of( UserCodeAccessControllerType.BEAN_NAME ) )
+                                                                .get( );
 
         MockHttpServletRequest requestKO = new MockHttpServletRequest( );
         requestKO.addParameter( "code", CODE_KO );

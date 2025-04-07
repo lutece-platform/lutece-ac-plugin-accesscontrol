@@ -1,9 +1,8 @@
-<jsp:useBean id="manageaccesscontrolAccessControl" scope="session" class="fr.paris.lutece.plugins.accesscontrol.web.AccessControlJspBean" />
-<% String strContent = manageaccesscontrolAccessControl.processController ( request , response ); %>
+${ pageContext.setAttribute( 'strContent', accessControlJspBean.processController( pageContext.request, pageContext.response ) ) }
 
 <%@ page errorPage="../../ErrorPage.jsp" %>
 <jsp:include page="../../AdminHeader.jsp" />
 
-<%= strContent %>
+${ pageContext.getAttribute( 'strContent' ) }
 
 <%@ include file="../../AdminFooter.jsp" %>

@@ -34,7 +34,7 @@
 package fr.paris.lutece.plugins.accesscontrol.business.config;
 
 /**
- * Config for CommentAccessControllerType
+ * Config for TosAccessControllerType
  */
 public class TosAccessControllerConfig extends AbstractControllerConfig
 {

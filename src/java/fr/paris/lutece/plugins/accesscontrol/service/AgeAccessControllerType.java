@@ -40,24 +40,26 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import fr.paris.lutece.plugins.accesscontrol.business.AccessController;
 import fr.paris.lutece.plugins.accesscontrol.business.config.AgeAccessControllerConfig;
-import fr.paris.lutece.plugins.accesscontrol.business.config.AgeAccessControllerConfigDAO;
 import fr.paris.lutece.plugins.accesscontrol.business.config.IAccessControllerConfigDAO;
 import fr.paris.lutece.portal.business.accesscontrol.AccessControlSessionData;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 
+@ApplicationScoped
+@Named( AgeAccessControllerType.BEAN_NAME )
 public class AgeAccessControllerType extends AbstractPersistentAccessControllerType<AgeAccessControllerConfig> implements IAccessControllerType
 {
     @Inject
-    @Named( AgeAccessControllerConfigDAO.BEAN_NAME )
     private IAccessControllerConfigDAO<AgeAccessControllerConfig> _dao;
 
     public static final String BEAN_NAME = "accesscontrol.ageAccessControllerType";
@@ -144,7 +146,7 @@ public class AgeAccessControllerType extends AbstractPersistentAccessControllerT
     {
         AgeAccessControllerConfig config = _dao.load( controller.getId( ) );
         String strDate = request.getParameter( PARAMETER_DATE );
-        if ( strDate == null )
+        if ( StringUtils.isBlank( strDate ) )
         {
             return config.getErrorMessage( );
         }

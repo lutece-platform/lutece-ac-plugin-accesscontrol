@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.accesscontrol.business;
 
+import org.junit.jupiter.api.Test;
+
 import fr.paris.lutece.test.LuteceTestCase;
 
 public class AccessControlResourceBusinessTest extends LuteceTestCase
@@ -44,6 +46,7 @@ public class AccessControlResourceBusinessTest extends LuteceTestCase
     /**
      * test AccessControlResource
      */
+    @Test
     public void testBusiness( )
     {
         AccessControlResource accessControlResource = new AccessControlResource( );
