@@ -34,6 +34,7 @@
 package fr.paris.lutece.plugins.accesscontrol.service;
 
 import java.util.HashMap;
+
 import java.util.Locale;
 import java.util.Map;
 
@@ -45,8 +46,11 @@ import fr.paris.lutece.plugins.accesscontrol.business.AccessController;
 import fr.paris.lutece.plugins.accesscontrol.business.config.CommentAccessControllerConfig;
 import fr.paris.lutece.plugins.accesscontrol.business.config.CommentAccessControllerConfigDAO;
 import fr.paris.lutece.plugins.accesscontrol.business.config.IAccessControllerConfigDAO;
+import fr.paris.lutece.portal.service.editor.RichTextContentService;
+import fr.paris.lutece.portal.service.editor.RichTextParsingException;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
+import fr.paris.lutece.portal.service.util.AppLogService;
 
 public class CommentAccessControllerType implements IAccessControllerType
 {
@@ -115,6 +119,16 @@ public class CommentAccessControllerType implements IAccessControllerType
     public String getControllerForm( HttpServletRequest request, Locale locale, AccessController controller )
     {
         CommentAccessControllerConfig config = _dao.load( controller.getId( ) );
+        
+        try
+    	{
+    		config.setComment( RichTextContentService.getContent( ( config.getComment( ) ) ) );
+    	}
+    	catch( RichTextParsingException e )
+    	{
+    		AppLogService.error( e.getMessage( ), e );
+    	}
+        
         Map<String, Object> model = new HashMap<>( );
         model.put( MARK_CONFIG, config );
 

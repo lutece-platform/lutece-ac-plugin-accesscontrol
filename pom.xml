@@ -4,7 +4,7 @@
     <parent>
         <artifactId>lutece-global-pom</artifactId>
         <groupId>fr.paris.lutece.tools</groupId>
-        <version>6.1.0</version>
+        <version>7.0.0</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -36,9 +36,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>fr.paris.lutece</groupId>
+         <groupId>fr.paris.lutece</groupId>
             <artifactId>lutece-core</artifactId>
-            <version>[7.0.10,)</version>
+            <version>[7.1.2-SNAPSHOT,)</version>
             <type>lutece-core</type>
         </dependency>
     </dependencies>

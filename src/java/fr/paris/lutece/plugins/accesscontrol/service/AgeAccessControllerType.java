@@ -51,8 +51,11 @@ import fr.paris.lutece.plugins.accesscontrol.business.config.AgeAccessController
 import fr.paris.lutece.plugins.accesscontrol.business.config.AgeAccessControllerConfigDAO;
 import fr.paris.lutece.plugins.accesscontrol.business.config.IAccessControllerConfigDAO;
 import fr.paris.lutece.portal.business.accesscontrol.AccessControlSessionData;
+import fr.paris.lutece.portal.service.editor.RichTextContentService;
+import fr.paris.lutece.portal.service.editor.RichTextParsingException;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
+import fr.paris.lutece.portal.service.util.AppLogService;
 
 public class AgeAccessControllerType extends AbstractPersistentAccessControllerType<AgeAccessControllerConfig> implements IAccessControllerType
 {
@@ -120,6 +123,16 @@ public class AgeAccessControllerType extends AbstractPersistentAccessControllerT
     public String getControllerForm( HttpServletRequest request, Locale locale, AccessController controller )
     {
         AgeAccessControllerConfig config = _dao.load( controller.getId( ) );
+        
+    	try
+    	{
+    		config.setComment( RichTextContentService.getContent( ( config.getComment( ) ) ) );
+    	}
+    	catch( RichTextParsingException e )
+    	{
+    		AppLogService.error( e.getMessage( ), e );
+    	}
+        
         Map<String, Object> model = new HashMap<>( );
         model.put( MARK_CONFIG, config );
 

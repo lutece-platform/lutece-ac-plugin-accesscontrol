@@ -48,8 +48,11 @@ import fr.paris.lutece.plugins.accesscontrol.business.UserCodeControllerDataHome
 import fr.paris.lutece.plugins.accesscontrol.business.config.IAccessControllerConfigDAO;
 import fr.paris.lutece.plugins.accesscontrol.business.config.UserCodeAccessControllerConfig;
 import fr.paris.lutece.plugins.accesscontrol.business.config.UserCodeAccessControllerConfigDAO;
+import fr.paris.lutece.portal.service.editor.RichTextContentService;
+import fr.paris.lutece.portal.service.editor.RichTextParsingException;
 import fr.paris.lutece.portal.service.security.UserNotSignedException;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
+import fr.paris.lutece.portal.service.util.AppLogService;
 
 /**
  * Abstract {@link IAccessControllerType} for UserCodeAccessControllerType & LuteceUserCodeAccessControllerType
@@ -108,6 +111,16 @@ public abstract class AbstractUserCodeAccessControllerType implements IAccessCon
     public String getControllerForm( HttpServletRequest request, Locale locale, AccessController controller )
     {
         UserCodeAccessControllerConfig config = _dao.load( controller.getId( ) );
+
+        try
+        {
+            config.setComment( RichTextContentService.getContent( ( config.getComment( ) ) ) );
+        }
+        catch( RichTextParsingException e )
+        {
+            AppLogService.error( e.getMessage( ), e );
+        }
+
         Map<String, Object> model = new HashMap<>( );
         model.put( MARK_CONFIG, config );
 
