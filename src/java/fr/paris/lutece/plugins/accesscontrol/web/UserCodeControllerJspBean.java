@@ -39,7 +39,7 @@ import java.time.LocalDate;
 import java.util.Map;
 import java.util.Scanner;
 
-import jakarta.enterprise.context.SessionScoped;
+import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.servlet.http.HttpServletRequest;
@@ -60,7 +60,7 @@ import fr.paris.lutece.portal.web.upload.MultipartHttpServletRequest;
 /**
  * This class provides the user interface to manage ControllerUserCode features ( manage, create, modify, remove )
  */
-@SessionScoped
+@RequestScoped
 @Named
 @Controller( controllerJsp = "ManageControllerUserCode.jsp", controllerPath = "jsp/admin/plugins/accesscontrol/", right = "USERCODES_MANAGEMENT" )
 public class UserCodeControllerJspBean extends AbstractManageAccessControlJspBean
