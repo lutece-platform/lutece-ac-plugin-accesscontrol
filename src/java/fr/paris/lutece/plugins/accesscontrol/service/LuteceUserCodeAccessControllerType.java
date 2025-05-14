@@ -35,13 +35,17 @@ package fr.paris.lutece.plugins.accesscontrol.service;
 
 import java.util.Locale;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Named;
+import jakarta.servlet.http.HttpServletRequest;
 
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.security.LuteceUser;
 import fr.paris.lutece.portal.service.security.SecurityService;
 import fr.paris.lutece.portal.service.security.UserNotSignedException;
 
+@ApplicationScoped
+@Named( LuteceUserCodeAccessControllerType.BEAN_NAME )
 public class LuteceUserCodeAccessControllerType extends AbstractUserCodeAccessControllerType
 {
     public static final String BEAN_NAME = "accesscontrol.luteceUserCodeAccessControllerType";

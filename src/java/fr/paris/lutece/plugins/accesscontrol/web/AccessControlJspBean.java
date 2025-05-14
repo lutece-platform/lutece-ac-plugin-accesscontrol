@@ -35,19 +35,22 @@ package fr.paris.lutece.plugins.accesscontrol.web;
 
 import java.sql.Date;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.enterprise.context.SessionScoped;
+import jakarta.enterprise.inject.literal.NamedLiteral;
+import jakarta.enterprise.inject.spi.CDI;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.servlet.http.HttpServletRequest;
 
 import fr.paris.lutece.plugins.accesscontrol.business.AccessControl;
 import fr.paris.lutece.plugins.accesscontrol.business.AccessControlHome;
 import fr.paris.lutece.plugins.accesscontrol.business.AccessController;
 import fr.paris.lutece.plugins.accesscontrol.business.AccessControllerHome;
-import fr.paris.lutece.plugins.accesscontrol.service.AccessControlService;
 import fr.paris.lutece.plugins.accesscontrol.service.IAccessControlService;
 import fr.paris.lutece.plugins.accesscontrol.service.IAccessControllerType;
 import fr.paris.lutece.plugins.accesscontrol.util.BoolCondition;
@@ -55,8 +58,6 @@ import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.admin.AccessDeniedException;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
-import fr.paris.lutece.portal.service.security.SecurityTokenService;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.service.workgroup.AdminWorkgroupService;
 import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
@@ -69,6 +70,8 @@ import fr.paris.lutece.util.url.UrlItem;
 /**
  * This class provides the user interface to manage AccessControl features ( manage, create, modify, remove )
  */
+@SessionScoped
+@Named
 @Controller( controllerJsp = "ManageAccessControls.jsp", controllerPath = "jsp/admin/plugins/accesscontrol/", right = "ACCESSCONTROL_MANAGEMENT" )
 public class AccessControlJspBean extends AbstractManageAccessControlJspBean
 {
@@ -133,14 +136,15 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
     private static final String ACTION_CHANGE_CONDITON = "changeCondition";
     private static final String ACTION_CHANGE_ORDER = "changeOrder";
     private static final String ACTION_REMOVE_ACCESSCONTROLLER = "removeAccessController";
-    private static final String ACTION_MODIFY_CONTROLLER = "modifyController";
+    private static final String ACTION_MODIFY_CONFIG_CONTROLLER = "modifyConfigController";
 
     // Infos
     private static final String INFO_ACCESSCONTROL_CREATED = "accesscontrol.info.accesscontrol.created";
     private static final String INFO_ACCESSCONTROL_UPDATED = "accesscontrol.info.accesscontrol.updated";
     private static final String INFO_ACCESSCONTROL_REMOVED = "accesscontrol.info.accesscontrol.removed";
 
-    private IAccessControlService _accessControlService = SpringContextService.getBean( AccessControlService.BEAN_NAME );
+    @Inject
+    private IAccessControlService _accessControlService;
 
     // Session variable to store working values
     private AccessControl _accesControl;
@@ -180,7 +184,6 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
         model.put( MARK_ACCESSCONTROL, _accesControl );
         model.put( MARK_USER_WORKGROUP_REF_LIST, AdminWorkgroupService.getUserWorkgroups( adminUser, locale ) );
         model.put( MARK_DEFAULT_VALUE_WORKGROUP_KEY, AdminWorkgroupService.ALL_GROUPS );
-        model.put( SecurityTokenService.MARK_TOKEN, SecurityTokenService.getInstance( ).getToken( request, ACTION_CREATE_ACCESSCONTROL ) );
 
         return getPage( PROPERTY_PAGE_TITLE_CREATE_ACCESSCONTROL, TEMPLATE_CREATE_ACCESSCONTROL, model );
     }
@@ -197,11 +200,6 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
     public String doCreateAccessControl( HttpServletRequest request ) throws AccessDeniedException
     {
         populate( _accesControl, request, getLocale( ) );
-
-        if ( !SecurityTokenService.getInstance( ).validate( request, ACTION_CREATE_ACCESSCONTROL ) )
-        {
-            throw new AccessDeniedException( "Invalid security token" );
-        }
 
         // Check constraints
         if ( !validateBean( _accesControl, VALIDATION_ATTRIBUTES_PREFIX ) )
@@ -223,15 +221,15 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
      *            The Http request
      * @return the html code to confirm
      */
-    @Action( ACTION_CONFIRM_REMOVE_ACCESSCONTROL )
+    @Action( value = ACTION_CONFIRM_REMOVE_ACCESSCONTROL, securityTokenAction = ACTION_REMOVE_ACCESSCONTROL )
     public String getConfirmRemoveAccessControl( HttpServletRequest request )
     {
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_ACCESSCONTROL ) );
         UrlItem url = new UrlItem( getActionUrl( ACTION_REMOVE_ACCESSCONTROL ) );
         url.addParameter( PARAMETER_ID_ACCESSCONTROL, nId );
 
-        String strMessageUrl = AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_ACCESSCONTROL, url.getUrl( ),
-                AdminMessage.TYPE_CONFIRMATION );
+        String strMessageUrl = AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_ACCESSCONTROL, null, null, url.getUrl( ), null,
+                AdminMessage.TYPE_CONFIRMATION, null, JSP_MANAGE_ACCESSCONTROLS );
 
         return redirect( request, strMessageUrl );
     }
@@ -243,7 +241,7 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
      *            The Http request
      * @return the html code to confirm
      */
-    @Action( ACTION_CONFIRM_REMOVE_ACCESSCONTROLLER )
+    @Action( value = ACTION_CONFIRM_REMOVE_ACCESSCONTROLLER, securityTokenAction = ACTION_REMOVE_ACCESSCONTROLLER )
     public String getConfirmRemoveAccessController( HttpServletRequest request )
     {
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_CONTROLLER ) );
@@ -257,7 +255,7 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
     }
 
     /**
-     * Manages the modificaqtion form of a accesscontroller whose identifier is in the http request
+     * Manages the modification form of a accesscontroller whose identifier is in the http request
      *
      * @param request
      *            The Http request
@@ -274,15 +272,15 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
             throw new AccessDeniedException( "AccessController not found for ID " + nId );
         }
 
-        IAccessControllerType controllerType = SpringContextService.getBean( controller.getType( ) );
+        IAccessControllerType controllerType = CDI.current( ).select( IAccessControllerType.class ).select( NamedLiteral.of( controller.getType( ) ) ).get( );
+
         if ( controllerType == null )
         {
             throw new AccessDeniedException( "Unknown controller type " + controller.getType( ) );
         }
 
-        Map<String, Object> model = new HashMap<>( );
+        Map<String, Object> model = getModel( );
         model.put( MARK_CONTROLLER_CONFIG, controllerType.getControllerConfigForm( request, getLocale( ), controller ) );
-        model.put( SecurityTokenService.MARK_TOKEN, SecurityTokenService.getInstance( ).getToken( request, ACTION_MODIFY_CONTROLLER ) );
 
         setPageTitleProperty( PROPERTY_MODIFY_CONTROLLER_PAGE_TITLE );
 
@@ -292,13 +290,13 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
     }
 
     /**
-     * Do the modificaqtion form of a accesscontroller whose identifier is in the http request
+     * Do the modification form of a accesscontroller whose identifier is in the http request
      *
      * @param request
      *            The Http request
      * @return the html code to confirm
      */
-    @Action( ACTION_MODIFY_CONTROLLER )
+    @Action( value = ACTION_MODIFY_CONFIG_CONTROLLER )
     public String doModifyConfigController( HttpServletRequest request ) throws AccessDeniedException
     {
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_CONTROLLER ) );
@@ -311,7 +309,9 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
 
         if ( request.getParameter( PARAMETER_CANCEL ) == null )
         {
-            IAccessControllerType controllerType = SpringContextService.getBean( controller.getType( ) );
+            IAccessControllerType controllerType = CDI.current( ).select( IAccessControllerType.class ).select( NamedLiteral.of( controller.getType( ) ) ).get( );
+
+            
             if ( controllerType == null )
             {
                 throw new AccessDeniedException( "Unknown controller type " + controller.getType( ) );
@@ -412,7 +412,6 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
         model.put( MARK_USER_WORKGROUP_REF_LIST, AdminWorkgroupService.getUserWorkgroups( adminUser, locale ) );
         model.put( MARK_CONTROLLER_LIST, listController );
         model.put( MARK_CONTROLLER_TYPE_LIST, _accessControlService.createAccessControllerReferenceList( locale ) );
-        model.put( SecurityTokenService.MARK_TOKEN, SecurityTokenService.getInstance( ).getToken( request, ACTION_MODIFY_ACCESSCONTROL ) );
 
         return getPage( PROPERTY_PAGE_TITLE_MODIFY_ACCESSCONTROL, TEMPLATE_MODIFY_ACCESSCONTROL, model );
     }
@@ -432,11 +431,6 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
         if ( request.getParameter( PARAMETER_CANCEL ) == null )
         {
             populate( _accesControl, request, getLocale( ) );
-
-            if ( !SecurityTokenService.getInstance( ).validate( request, ACTION_MODIFY_ACCESSCONTROL ) )
-            {
-                throw new AccessDeniedException( "Invalid security token" );
-            }
 
             // Check constraints
             if ( !validateBean( _accesControl, VALIDATION_ATTRIBUTES_PREFIX ) )
@@ -498,7 +492,7 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
      * @param request
      * @return
      */
-    @Action( ACTION_CREATE_CONTROLLER )
+    @Action( value = ACTION_CREATE_CONTROLLER, securityTokenDisabled = true )
     public String doCreateController( HttpServletRequest request )
     {
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_ACCESSCONTROL ) );
@@ -528,7 +522,7 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
      * @param request
      * @return
      */
-    @Action( ACTION_CHANGE_CONDITON )
+    @Action( value = ACTION_CHANGE_CONDITON, securityTokenDisabled = true  )
     public String doChangeControllerCondition( HttpServletRequest request )
     {
         int nIdController = Integer.parseInt( request.getParameter( PARAMETER_ID_CONTROLLER ) );
@@ -549,7 +543,7 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
      * @param request
      * @return
      */
-    @Action( ACTION_CHANGE_ORDER )
+    @Action( value = ACTION_CHANGE_ORDER, securityTokenDisabled = true )
     public String doChangeControllerOrder( HttpServletRequest request )
     {
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_ACCESSCONTROL ) );

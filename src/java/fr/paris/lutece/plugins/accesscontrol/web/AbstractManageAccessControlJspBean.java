@@ -36,7 +36,9 @@ package fr.paris.lutece.plugins.accesscontrol.web;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.enterprise.inject.Instance;
+import jakarta.inject.Inject;
+import jakarta.servlet.http.HttpServletRequest;
 
 import fr.paris.lutece.api.user.User;
 import fr.paris.lutece.plugins.accesscontrol.business.AccessControl;
@@ -45,7 +47,6 @@ import fr.paris.lutece.plugins.accesscontrol.service.rbac.AccessControlResourceI
 import fr.paris.lutece.portal.business.rbac.RBAC;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.rbac.RBACService;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.util.mvc.admin.MVCAdminJspBean;
 import fr.paris.lutece.portal.web.util.LocalizedPaginator;
@@ -76,6 +77,9 @@ public abstract class AbstractManageAccessControlJspBean extends MVCAdminJspBean
     // Variables
     private String _strCurrentPageIndex;
     private int _nItemsPerPage;
+    
+    @Inject
+    private Instance<AccessControlRbacAction> _accessControlRbacAction;
 
     /**
      * Return a model that contains the list and paginator infos
@@ -103,7 +107,7 @@ public abstract class AbstractManageAccessControlJspBean extends MVCAdminJspBean
         LocalizedPaginator<AccessControl> paginator = new LocalizedPaginator<>( list, _nItemsPerPage, strUrl, PARAMETER_PAGE_INDEX, _strCurrentPageIndex,
                 getLocale( ) );
 
-        List<AccessControlRbacAction> listActions = SpringContextService.getBeansOfType( AccessControlRbacAction.class );
+        List<AccessControlRbacAction> listActions = _accessControlRbacAction.stream( ).toList( );
         listActions = I18nService.localizeCollection( listActions, getLocale( ) );
         for ( AccessControl template : paginator.getPageItems( ) )
         {

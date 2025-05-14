@@ -37,21 +37,22 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.servlet.http.HttpServletRequest;
 
 import fr.paris.lutece.plugins.accesscontrol.business.AccessController;
 import fr.paris.lutece.plugins.accesscontrol.business.config.CommentAccessControllerConfig;
-import fr.paris.lutece.plugins.accesscontrol.business.config.CommentAccessControllerConfigDAO;
 import fr.paris.lutece.plugins.accesscontrol.business.config.IAccessControllerConfigDAO;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 
+@ApplicationScoped
+@Named( CommentAccessControllerType.BEAN_NAME )
 public class CommentAccessControllerType implements IAccessControllerType
 {
     @Inject
-    @Named( CommentAccessControllerConfigDAO.BEAN_NAME )
     private IAccessControllerConfigDAO<CommentAccessControllerConfig> _dao;
 
     public static final String BEAN_NAME = "accesscontrol.commentAccessControllerType";

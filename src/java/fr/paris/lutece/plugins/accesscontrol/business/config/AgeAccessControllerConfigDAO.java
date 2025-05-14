@@ -35,14 +35,14 @@ package fr.paris.lutece.plugins.accesscontrol.business.config;
 
 import fr.paris.lutece.plugins.accesscontrol.util.AccessControlUtils;
 import fr.paris.lutece.util.sql.DAOUtil;
+import jakarta.enterprise.context.ApplicationScoped;
 
 /**
  * Dao for {@link CommentAccessControllerConfig}
  */
+@ApplicationScoped
 public class AgeAccessControllerConfigDAO implements IAccessControllerConfigDAO<AgeAccessControllerConfig>
 {
-    public static final String BEAN_NAME = "accesscontrol.ageAccessControllerConfigDAO";
-
     private static final String SQL_QUERY_SELECT = "SELECT id_access_controller, comment, error_message, age_min, age_max, data_handler FROM accesscontrol_controller_age_config WHERE id_access_controller = ? ";
     private static final String SQL_QUERY_INSERT = "INSERT INTO accesscontrol_controller_age_config (id_access_controller, comment, error_message, age_min, age_max, data_handler ) VALUES (?,?,?,?,?,?) ";
     private static final String SQL_QUERY_UPDATE = "UPDATE accesscontrol_controller_age_config SET comment = ?, error_message = ?, age_min = ?, age_max = ?, data_handler = ? WHERE id_access_controller = ? ";

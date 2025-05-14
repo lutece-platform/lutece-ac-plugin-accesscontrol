@@ -33,8 +33,10 @@
  */
 package fr.paris.lutece.plugins.accesscontrol.business.config;
 
-import fr.paris.lutece.portal.service.spring.SpringContextService;
+import org.junit.jupiter.api.Test;
+
 import fr.paris.lutece.test.LuteceTestCase;
+import jakarta.enterprise.inject.spi.CDI;
 
 public class UserCodeAccessControllerConfigDAOTest extends LuteceTestCase
 {
@@ -44,10 +46,11 @@ public class UserCodeAccessControllerConfigDAOTest extends LuteceTestCase
     private static final String MSG_1 = "msg1";
     private static final String MSG_2 = "msg2";
 
+    @Test
     public void testDao( )
     {
-        IAccessControllerConfigDAO<UserCodeAccessControllerConfig> dao = SpringContextService.getBean( UserCodeAccessControllerConfigDAO.BEAN_NAME );
-
+        IAccessControllerConfigDAO<UserCodeAccessControllerConfig> dao = CDI.current( ).select( UserCodeAccessControllerConfigDAO.class ).get( );
+        
         UserCodeAccessControllerConfig config = new UserCodeAccessControllerConfig( );
         config.setIdAccessController( ID );
         config.setComment( COMMENT_1 );

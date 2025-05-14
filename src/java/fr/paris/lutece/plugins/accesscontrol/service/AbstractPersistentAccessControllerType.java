@@ -38,14 +38,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.collections4.CollectionUtils;
+import jakarta.enterprise.inject.spi.CDI;
+import jakarta.servlet.http.HttpServletRequest;
 
 import fr.paris.lutece.plugins.accesscontrol.business.AccessController;
 import fr.paris.lutece.plugins.accesscontrol.business.config.AbstractControllerConfig;
 import fr.paris.lutece.portal.business.accesscontrol.AccessControlSessionData;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.util.ReferenceList;
 
 public abstract class AbstractPersistentAccessControllerType<C extends AbstractControllerConfig> implements IPersistentAccessControllerType
@@ -58,7 +56,7 @@ public abstract class AbstractPersistentAccessControllerType<C extends AbstractC
 
     protected void addPersistentDataToModel( Locale locale, AbstractControllerConfig config, Map<String, Object> model )
     {
-        List<IPersistentDataHandler> dataHandlerList = SpringContextService.getBeansOfType( IPersistentDataHandler.class );
+        List<IPersistentDataHandler> dataHandlerList = CDI.current( ).select( IPersistentDataHandler.class ).stream( ).toList( );
         ReferenceList list = new ReferenceList( );
         list.addItem( "", "-" );
         for ( IPersistentDataHandler dataHandler : dataHandlerList )
@@ -70,7 +68,7 @@ public abstract class AbstractPersistentAccessControllerType<C extends AbstractC
         {
             model.put( MARK_DATA_HANDLER_CONFIG_TEMPLATE, dataHandler.getDataHandlerConfigForm( locale, config.getIdAccessController( ) ) );
         }
-        if ( CollectionUtils.isNotEmpty( list ) && list.size( ) > 1 )
+        if ( !list.isEmpty( ) && list.size( ) > 1 )
         {
             model.put( MARK_PERSISTENT_DATA_HANDLER_LIST, list );
         }

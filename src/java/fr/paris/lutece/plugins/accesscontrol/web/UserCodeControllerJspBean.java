@@ -39,17 +39,18 @@ import java.time.LocalDate;
 import java.util.Map;
 import java.util.Scanner;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.servlet.http.HttpServletRequest;
 
-import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import fr.paris.lutece.plugins.accesscontrol.business.UserCodeControllerData;
 import fr.paris.lutece.plugins.accesscontrol.business.UserCodeControllerDataHome;
-import fr.paris.lutece.plugins.accesscontrol.service.AccessControlService;
 import fr.paris.lutece.plugins.accesscontrol.service.IAccessControlService;
 import fr.paris.lutece.portal.business.user.AdminUser;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
+import fr.paris.lutece.portal.service.upload.MultipartItem;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
@@ -59,8 +60,9 @@ import fr.paris.lutece.portal.web.upload.MultipartHttpServletRequest;
 /**
  * This class provides the user interface to manage ControllerUserCode features ( manage, create, modify, remove )
  */
+@RequestScoped
+@Named
 @Controller( controllerJsp = "ManageControllerUserCode.jsp", controllerPath = "jsp/admin/plugins/accesscontrol/", right = "USERCODES_MANAGEMENT" )
-
 public class UserCodeControllerJspBean extends AbstractManageAccessControlJspBean
 {
 
@@ -87,7 +89,8 @@ public class UserCodeControllerJspBean extends AbstractManageAccessControlJspBea
     // Templates
     private static final String TEMPLATE_MANAGE_USER_CODE = "/admin/plugins/accesscontrol/manage_usercodes.html";
 
-    private IAccessControlService _accessControlService = SpringContextService.getBean( AccessControlService.BEAN_NAME );
+    @Inject
+    private IAccessControlService _accessControlService;
 
     /**
      * Build the Manage View
@@ -107,20 +110,20 @@ public class UserCodeControllerJspBean extends AbstractManageAccessControlJspBea
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_ACCESSCONTROLS, TEMPLATE_MANAGE_USER_CODE, model );
     }
 
-    @Action( ACTION_CANCEL_IMPORT )
+    @Action( value = ACTION_CANCEL_IMPORT, securityTokenDisabled = true )
     public String doCancelImport( HttpServletRequest request )
     {
         return redirectView( request, VIEW_MANAGE_USER_CODE );
     }
 
-    @Action( ACTION_DO_IMPORT )
+    @Action( value = ACTION_DO_IMPORT, securityTokenDisabled = true )
     public String doImport( HttpServletRequest request )
     {
         int accessControlId = NumberUtils.toInt( request.getParameter( PARAMETER_ACCESS_CONTROL ), -1 );
         if ( request instanceof MultipartHttpServletRequest )
         {
             MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
-            FileItem fileItem = multipartRequest.getFile( PARAMETER_FILE );
+            MultipartItem fileItem = multipartRequest.getFile( PARAMETER_FILE );
             try ( Scanner scanner = new Scanner( fileItem.getInputStream( ) ) )
             {
                 while ( scanner.hasNextLine( ) )

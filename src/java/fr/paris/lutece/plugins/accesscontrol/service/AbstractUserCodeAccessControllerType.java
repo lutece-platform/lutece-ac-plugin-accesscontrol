@@ -37,9 +37,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.inject.Inject;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -47,7 +46,6 @@ import fr.paris.lutece.plugins.accesscontrol.business.AccessController;
 import fr.paris.lutece.plugins.accesscontrol.business.UserCodeControllerDataHome;
 import fr.paris.lutece.plugins.accesscontrol.business.config.IAccessControllerConfigDAO;
 import fr.paris.lutece.plugins.accesscontrol.business.config.UserCodeAccessControllerConfig;
-import fr.paris.lutece.plugins.accesscontrol.business.config.UserCodeAccessControllerConfigDAO;
 import fr.paris.lutece.portal.service.security.UserNotSignedException;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 
@@ -57,7 +55,6 @@ import fr.paris.lutece.portal.service.template.AppTemplateService;
 public abstract class AbstractUserCodeAccessControllerType implements IAccessControllerType
 {
     @Inject
-    @Named( UserCodeAccessControllerConfigDAO.BEAN_NAME )
     private IAccessControllerConfigDAO<UserCodeAccessControllerConfig> _dao;
 
     private static final String MARK_CONFIG = "config";

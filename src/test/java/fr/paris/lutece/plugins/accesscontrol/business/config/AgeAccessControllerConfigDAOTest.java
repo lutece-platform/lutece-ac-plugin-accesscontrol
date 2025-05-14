@@ -33,8 +33,10 @@
  */
 package fr.paris.lutece.plugins.accesscontrol.business.config;
 
-import fr.paris.lutece.portal.service.spring.SpringContextService;
+import org.junit.jupiter.api.Test;
+
 import fr.paris.lutece.test.LuteceTestCase;
+import jakarta.enterprise.inject.spi.CDI;
 
 public class AgeAccessControllerConfigDAOTest extends LuteceTestCase
 {
@@ -48,9 +50,10 @@ public class AgeAccessControllerConfigDAOTest extends LuteceTestCase
     private static final int AGE_MAX_1 = 13;
     private static final int AGE_MAX_2 = 14;
 
+    @Test
     public void testDao( )
     {
-        IAccessControllerConfigDAO<AgeAccessControllerConfig> dao = SpringContextService.getBean( AgeAccessControllerConfigDAO.BEAN_NAME );
+        IAccessControllerConfigDAO<AgeAccessControllerConfig> dao = CDI.current( ).select( AgeAccessControllerConfigDAO.class ).get( );
 
         AgeAccessControllerConfig config = new AgeAccessControllerConfig( );
         config.setIdAccessController( ID );

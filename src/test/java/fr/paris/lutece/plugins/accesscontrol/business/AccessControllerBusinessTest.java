@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.accesscontrol.business;
 
+import org.junit.jupiter.api.Test;
+
 import fr.paris.lutece.test.LuteceTestCase;
 
 /**
@@ -52,6 +54,7 @@ public class AccessControllerBusinessTest extends LuteceTestCase
     /**
      * test AccessController
      */
+    @Test
     public void testBusiness( )
     {
         // Initialize an object

@@ -4,7 +4,6 @@
 		<@tform name='create_accesscontrol' action='jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp' id='create_accesscontrol_page' boxed=true>
 			<@messages errors=errors />
 			<@input type='hidden' id='id' name='id'/>
-			<@input type='hidden' value='${token}' name='token' />
 
 			<@formGroup labelFor='name' labelKey='#i18n{accesscontrol.manage_accesscontrols.columnName}' mandatory=true>
 				<@input type='text' id='name' name='name'  maxlength=255 value='${accesscontrol.name!\'\'}' />

@@ -35,10 +35,12 @@ package fr.paris.lutece.plugins.accesscontrol.business;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
+import jakarta.enterprise.context.ApplicationScoped;
 
 /**
  * This class provides Data Access methods for AccessControlResource objects
  */
+@ApplicationScoped
 public class AccessControlResourceDAO implements IAccessControlResourceDAO
 {
     private static final String SQL_QUERY_INSERT = "INSERT INTO accesscontrol_resource_accesscontrol ( id_resource, resource_type, id_access_control ) VALUES (?,?,?) ";

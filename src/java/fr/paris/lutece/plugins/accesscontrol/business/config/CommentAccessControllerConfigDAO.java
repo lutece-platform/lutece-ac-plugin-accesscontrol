@@ -35,14 +35,15 @@ package fr.paris.lutece.plugins.accesscontrol.business.config;
 
 import fr.paris.lutece.plugins.accesscontrol.util.AccessControlUtils;
 import fr.paris.lutece.util.sql.DAOUtil;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Named;
 
 /**
  * Dao for {@link CommentAccessControllerConfig}
  */
+@ApplicationScoped
 public class CommentAccessControllerConfigDAO implements IAccessControllerConfigDAO<CommentAccessControllerConfig>
 {
-    public static final String BEAN_NAME = "accesscontrol.commentAccessControllerConfigDAO";
-
     private static final String SQL_QUERY_SELECT = "SELECT id_access_controller, comment FROM accesscontrol_controller_comment_config WHERE id_access_controller = ? ";
     private static final String SQL_QUERY_INSERT = "INSERT INTO accesscontrol_controller_comment_config (id_access_controller, comment) VALUES (?,?) ";
     private static final String SQL_QUERY_UPDATE = "UPDATE accesscontrol_controller_comment_config SET comment = ? WHERE id_access_controller = ? ";
