@@ -1,9 +1,10 @@
 <#if data_handler_list?? && data_handler_list?has_content>
     <@formGroup labelFor='data_handler' labelKey='#i18n{accesscontrol.modify_controller.data_hanlder_config.title}'>
+        <@input type='hidden' id='apply' name='apply' value='' />
     	<@inputGroup>
 			<@select name='data_handler' id='data_handler' items=data_handler_list default_value='${config.dataHandler!}'/>
 			<@inputGroupItem type='btn'>
-				<@button type='submit' buttonIcon='check' name='apply' value='select_code' />
+				<@button type='submit' id='applyButton' buttonIcon='check' name='action_modifyConfigController' value='select_code' />
 			</@inputGroupItem>
 		</@inputGroup>
     </@formGroup>
@@ -11,3 +12,10 @@
    		${data_handler_config}
     </#if>
 </#if>
+<script>
+const applyButton = document.getElementById('applyButton');
+
+applyButton.addEventListener( 'click',  (e) => {
+	      document.getElementById('apply').value = 'true';
+	});
+</script>
