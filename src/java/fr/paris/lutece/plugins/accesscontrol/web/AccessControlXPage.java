@@ -131,15 +131,16 @@ public class AccessControlXPage extends MVCApplication
 
     /**
      * Return the default XPage with the list of all available Form
-     * 
+     * if there is nothing to ask or display to the user
+     * In ControllerType getControllerForm you must return null
+     *
      * @param request
      *            The HttpServletRequest
      * @return the list of all available forms
      * @throws SiteMessageException
      */
     @View( value = VIEW_CONTROLLER )
-    public XPage getControllerView( HttpServletRequest request ) throws SiteMessageException
-    {
+    public XPage getControllerView( HttpServletRequest request ) throws SiteMessageException, UserNotSignedException {
         if ( BooleanUtils.toBoolean( request.getParameter( PARAMETER_INIT ) ) )
         {
             init( request );
@@ -164,8 +165,14 @@ public class AccessControlXPage extends MVCApplication
         }
         IAccessControllerType currentControllerType = CDI.current( ).select( IAccessControllerType.class ).select( NamedLiteral.of( _currentController.getType( ) ) ).get( );
 
+        String controllerForm = currentControllerType.getControllerForm( request, locale, _currentController );
+        if ( controllerForm == null )
+        {
+            return doValidateController( request );
+        }
+
         Map<String, Object> model = getModel( );
-        model.put( MARK_CONTROLLER_HTML, currentControllerType.getControllerForm( request, locale, _currentController ) );
+        model.put( MARK_CONTROLLER_HTML, controllerForm );
         model.put( MARK_FIRST_CONTROLLER, _nCurrentControllerOrder == 1 );
 
         XPage xPage = getXPage( TEMPLATE_CONTROLLER_VIEW, locale, model );

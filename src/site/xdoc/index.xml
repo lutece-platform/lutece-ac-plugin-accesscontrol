@@ -1,30 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document>
     <properties>
-        <title>Plugin accesscontrol</title>
+        <title>Plugin AccessControl</title>
     </properties>
     <head>
-        <!-- Keywords example : "cms, authentication, cms, workflow, seo, collaborative, ..." 
-             Use the language of this xdoc -->
-        <meta name="keywords" content="" />
+        <meta name="keywords" content="accesscontrol, lutece, plugin, authentication, security" />
     </head>
     <body>
-        <section name="Plugin accesscontrol">
-            <!--
-            <p>
-                <img src="images/accesscontrol.png" />
-            </p>
-            -->
+        <section name="Plugin AccessControl">
+
             <subsection name="Introduction">
-                <p></p>
+                <p>
+                    The <strong>Access Control plugin</strong> manages access to resources within a <strong>Lutece</strong> application by defining access rules and strategies.
+                    It provides an administration interface that allows users to configure access rules and apply them to various system resources.
+                </p>
             </subsection>
-            <subsection name="Configuration">
-                <p></p>
-            </subsection>
+
             <subsection name="Usage">
-                <p></p>
+                <p>
+                    Once the plugin is installed and activated, the Lutece administration panel offers an interface to:
+                </p>
+                <ol>
+                    <li><strong>Create access rules</strong> (e.g., restrict access by user role).</li>
+                    <li><strong>Assign these rules to specific resources</strong> (pages, actions, APIs).</li>
+                    <li><strong>View and modify existing access controls</strong>.</li>
+                </ol>
             </subsection>
         </section>
     </body>
 </document>
-
