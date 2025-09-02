@@ -112,9 +112,11 @@ public interface IAccessControllerType
 
     /**
      * Get the html form for the config of the controller.
-     * 
+     * if there is nothing to ask or display to the user
+     * And to skip form return null
+     *
      * @param idController
-     * @return
+     * @return controllerForm
      */
     String getControllerForm( HttpServletRequest request, Locale locale, AccessController controller );
 }
