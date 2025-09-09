@@ -38,6 +38,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+
 import jakarta.enterprise.inject.spi.CDI;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -100,7 +102,7 @@ public abstract class AbstractPersistentAccessControllerType<C extends AbstractC
     {
         String action = request.getParameter( PARAMETER_ACTION );
         IPersistentDataHandler oldDataHandler = config.getPersistentDataHandler( );
-        if ( action != null )
+        if ( StringUtils.isNotBlank( action ) )
         {
             config.setDataHandler( request.getParameter( PARAMETER_DATA_HANDLER ) );
         }

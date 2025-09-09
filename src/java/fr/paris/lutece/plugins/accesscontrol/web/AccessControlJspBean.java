@@ -40,6 +40,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
+
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.enterprise.inject.literal.NamedLiteral;
 import jakarta.enterprise.inject.spi.CDI;
@@ -91,7 +93,6 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
     private static final String PARAMETER_ORDER = "new_order";
     private static final String PARAMETER_BOOL_CONDITON = "boolCond";
     private static final String PARAMETER_CONTROLLER_TYPE = "controller_type";
-    private static final String PARAMETER_CANCEL = "cancel";
     private static final String PARAMETER_ACTION = "apply";
 
     // Properties for page titles
@@ -137,6 +138,7 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
     private static final String ACTION_CHANGE_ORDER = "changeOrder";
     private static final String ACTION_REMOVE_ACCESSCONTROLLER = "removeAccessController";
     private static final String ACTION_MODIFY_CONFIG_CONTROLLER = "modifyConfigController";
+    private static final String ACTION_CANCEL_MODIFY_CONFIG_CONTROLLER = "cancelModifyConfigController";
 
     // Infos
     private static final String INFO_ACCESSCONTROL_CREATED = "accesscontrol.info.accesscontrol.created";
@@ -306,27 +308,44 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
         {
             throw new AccessDeniedException( "AccessController not found for ID " + nId );
         }
-
-        if ( request.getParameter( PARAMETER_CANCEL ) == null )
-        {
-            IAccessControllerType controllerType = CDI.current( ).select( IAccessControllerType.class ).select( NamedLiteral.of( controller.getType( ) ) ).get( );
+       
+        IAccessControllerType controllerType = CDI.current( ).select( IAccessControllerType.class ).select( NamedLiteral.of( controller.getType( ) ) ).get( );
 
             
-            if ( controllerType == null )
-            {
-                throw new AccessDeniedException( "Unknown controller type " + controller.getType( ) );
-            }
+        if ( controllerType == null )
+        {
+            throw new AccessDeniedException( "Unknown controller type " + controller.getType( ) );
+        }
 
-            controllerType.saveControllerConfig( request, getLocale( ), controller );
-            String action = request.getParameter( PARAMETER_ACTION );
-            if ( action != null )
-            {
-                return redirect( request, VIEW_MODIFY_CONFIG_CONTROLLER, PARAMETER_ID_CONTROLLER, nId );
-            }
+        controllerType.saveControllerConfig( request, getLocale( ), controller );
+        String action = request.getParameter( PARAMETER_ACTION );
+        if ( StringUtils.isNotBlank( action ) )
+        {
+            return redirect( request, VIEW_MODIFY_CONFIG_CONTROLLER, PARAMETER_ID_CONTROLLER, nId );
         }
         return redirect( request, VIEW_MODIFY_ACCESSCONTROL, PARAMETER_ID_ACCESSCONTROL, controller.getIdAccesscontrol( ) );
     }
 
+    /**
+     * Cancel the modification form of a accesscontroller whose identifier is in the http request
+     *
+     * @param request
+     *            The Http request
+     * @return the html code to confirm
+     */
+    @Action( value = ACTION_CANCEL_MODIFY_CONFIG_CONTROLLER, securityTokenDisabled = true )
+    public String cancelModifyConfigController( HttpServletRequest request ) throws AccessDeniedException
+    {
+        int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_CONTROLLER ) );
+
+        AccessController controller = AccessControllerHome.findByPrimaryKey( nId );
+        if ( controller == null )
+        {
+            throw new AccessDeniedException( "AccessController not found for ID " + nId );
+        }
+    	return redirect( request, VIEW_MODIFY_ACCESSCONTROL, PARAMETER_ID_ACCESSCONTROL, controller.getIdAccesscontrol( ) );
+    }
+    
     /**
      * Handles the removal form of a accesscontrol
      *
@@ -427,20 +446,17 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
     @Action( ACTION_MODIFY_ACCESSCONTROL )
     public String doModifyAccessControl( HttpServletRequest request ) throws AccessDeniedException
     {
+        populate( _accesControl, request, getLocale( ) );
 
-        if ( request.getParameter( PARAMETER_CANCEL ) == null )
+        // Check constraints
+        if ( !validateBean( _accesControl, VALIDATION_ATTRIBUTES_PREFIX ) )
         {
-            populate( _accesControl, request, getLocale( ) );
-
-            // Check constraints
-            if ( !validateBean( _accesControl, VALIDATION_ATTRIBUTES_PREFIX ) )
-            {
-                return redirect( request, VIEW_MODIFY_ACCESSCONTROL, PARAMETER_ID_ACCESSCONTROL, _accesControl.getId( ) );
-            }
-
-            AccessControlHome.update( _accesControl );
-            addInfo( INFO_ACCESSCONTROL_UPDATED, getLocale( ) );
+            return redirect( request, VIEW_MODIFY_ACCESSCONTROL, PARAMETER_ID_ACCESSCONTROL, _accesControl.getId( ) );
         }
+
+        AccessControlHome.update( _accesControl );
+        addInfo( INFO_ACCESSCONTROL_UPDATED, getLocale( ) );
+        
         return redirectView( request, VIEW_MANAGE_ACCESSCONTROLS );
     }
 
