@@ -72,7 +72,7 @@ import fr.paris.lutece.util.url.UrlItem;
  */
 @SessionScoped
 @Named
-@Controller( controllerJsp = "ManageAccessControls.jsp", controllerPath = "jsp/admin/plugins/accesscontrol/", right = "ACCESSCONTROL_MANAGEMENT" )
+@Controller( controllerJsp = "ManageAccessControls.jsp", controllerPath = "jsp/admin/plugins/accesscontrol/", right = "ACCESSCONTROL_MANAGEMENT", securityTokenEnabled = true )
 public class AccessControlJspBean extends AbstractManageAccessControlJspBean
 {
     private static final long serialVersionUID = 128971112958212947L;
