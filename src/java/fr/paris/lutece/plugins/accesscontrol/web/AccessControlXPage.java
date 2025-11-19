@@ -81,6 +81,7 @@ public class AccessControlXPage extends MVCApplication
 
     public static final String XPAGE_NAME = "accesscontrol";
     private static final String URL_PORTAL = "Portal.jsp";
+    private static final String PATH_PORTAL = "jsp/site/Portal.jsp";
 
     // Messages
     protected static final String MESSAGE_PAGE_TITLE = "accesscontrol.xpage.form.view.pageTitle";
@@ -220,7 +221,7 @@ public class AccessControlXPage extends MVCApplication
         UrlItem url = null;
         if ( StringUtils.isEmpty( _accessControl.getReturnUrl( ) ) )
         {
-            url = new UrlItem( URL_PORTAL );
+            url = new UrlItem( PATH_PORTAL );
         }
         else
         {
