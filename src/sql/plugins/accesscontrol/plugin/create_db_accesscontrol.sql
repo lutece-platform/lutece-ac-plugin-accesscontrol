@@ -1,6 +1,6 @@
---liquibase formatted sql
---changeset accesscontrol:create_db_accesscontrol.sql
---preconditions onFail:MARK_RAN onError:WARN
+-- liquibase formatted sql
+-- changeset accesscontrol:create_db_accesscontrol.sql
+-- preconditions onFail:MARK_RAN onError:WARN
 --
 -- Structure for table accesscontrol_accesscontrol
 --
