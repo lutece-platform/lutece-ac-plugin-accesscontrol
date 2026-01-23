@@ -2,52 +2,41 @@
     <@pageColumn>
 		<@pageHeader title='#i18n{accesscontrol.manage_accesscontrols.title}'>
 			<#if permission_create_ac>
-				<@tform class='form-inline pull-right' name='manage_accesscontrol' action='jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp'>
-					<@button type='submit' name='view_createAccessControl' buttonIcon='plus' title='#i18n{accesscontrol.manage_accesscontrols.buttonAdd}' hideTitle=['xs','sm'] />
-				</@tform>
+				<@offcanvas targetUrl='jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp?view_createAccessControl=' targetElement='#create_accesscontrol_page' redirectForm=false id='manage_accesscontrol' title='#i18n{accesscontrol.manage_accesscontrols.buttonAdd}' btnTitle='#i18n{accesscontrol.manage_accesscontrols.buttonAdd}' btnIcon='plus' position='end' />
 			</#if>
 		</@pageHeader>
 		<@messages infos=infos />
-		<@paginationAdmin paginator=paginator combo=1 />
-		<@table>
-			<@tr>
-				<@th>#i18n{accesscontrol.manage_accesscontrols.columnName}</@th>
-				<@th>#i18n{accesscontrol.manage_accesscontrols.columnDescription}</@th>
-				<@th>#i18n{portal.util.labelActions}</@th>
-			</@tr>
-			<@tableHeadBodySeparator />
-			<#list accesscontrol_list as accesscontrol >
-				<@tr>
-					<@td>${accesscontrol.name}</@td>
-					<@td>${accesscontrol.description}</@td>
-					<@td>
-						<#if accesscontrol.actionList?exists>
-							 <#list accesscontrol.actionList as action>
-								<#assign color='' />
-								<#assign perm=action.permission?lower_case />
-								<#assign params='' />
-								<#if action.permission=='DELETE'>
+		<@manageFeature>
+		<#list accesscontrol_list as accesscontrol >
+			<@manageFeatureItem>
+				<@manageFeatureItemColumn auto=true>${accesscontrol.name} - ${accesscontrol.description}</@manageFeatureItemColumn>
+				<@manageFeatureItemColumn align='end'>
+				<#if accesscontrol.actionList?exists>
+					<#list accesscontrol.actionList as action>
+						<#assign color='primary' />
+						<#assign perm=action.permission?lower_case />
+						<#assign params='' />
+						<#if action.permission=='DELETE'>
+							<#assign color = 'danger' />
+							<#assign perm='' />
+						<#elseif action.permission=='ENABLE'>
+							<#if action.enabled == accesscontrol.enabled>
+								<#if accesscontrol.enabled>
 									<#assign color = 'danger' />
-									<#assign perm='' />
-								<#else>
-									<#assign color = 'primary' />
+								<#else>	
+									<#assign color = 'success' />
 								</#if>
-								<#if action.permission=='ENABLE'>
-									<#if action.enabled == accesscontrol.enabled>
-										<#if accesscontrol.enabled>
-											<#assign color = 'danger' />
-										</#if>
-										<@aButton href='${action.url}&id=${accesscontrol.id}' title='${action.name}' hideTitle=['all'] color='${color}' class='${perm}' buttonIcon=action.iconUrl params=params size='sm' />
-									</#if>
-								<#else>
-									<@aButton href='${action.url}&id=${accesscontrol.id}' title='${action.name}' hideTitle=['all'] color='${color}' class='${perm}' buttonIcon=action.iconUrl params=params size='sm' />
-								</#if>
-							 </#list>
+								<@aButton href='${action.url}&id=${accesscontrol.id}' title='${action.name}' hideTitle=['all'] color='${color}' class='${perm}' buttonIcon=action.iconUrl params=params size='sm' />
+							</#if>
+						<#else>
+							<@aButton href='${action.url}&id=${accesscontrol.id}' title='${action.name}' hideTitle=['all'] color='${color}' class='${perm}' buttonIcon=action.iconUrl params=params size='sm' />
 						</#if>
-					</@td>
-				</@tr>
-			</#list>
-		</@table>
-		<@paginationAdmin paginator=paginator />
+					</#list>
+				</#if>
+				</@manageFeatureItemColumn>
+			</@manageFeatureItem>
+		</#list>
+		</@manageFeature>
+		<@paginationAdmin paginator=paginator combo=1 />
 	</@pageColumn>
 </@pageContainer>

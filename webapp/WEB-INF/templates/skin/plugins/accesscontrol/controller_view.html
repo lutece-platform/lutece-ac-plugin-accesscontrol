@@ -1,11 +1,19 @@
-<form class="form-horizontal" id="form-validate" action="jsp/site/Portal.jsp?page=accesscontrol" method="post">
-	<@messages warnings=warnings />
-	<#if messageInfo?? >
-	<div class="alert alert-info" role="alert">
-		${messageInfo}
-	</div>
+<@cTpl>
+<@cForm id='form-validate' action='jsp/site/Portal.jsp?page=accesscontrol'>
+	<#if warnings??>
+		<#if warnings?size gt 0 >
+			<@cAlert type='warning' title='#i18n{portal.util.message.titleWarning}'>
+				<@chList class'list-unstyled'>
+				<#list warnings as warning ><#if warning.message??><@chItem>${warning.message!'#i18n{portal.util.message.titleWarning}'}</@chItem></#if></#list>
+				</@chList>
+			</@cAlert>
+		</#if>
 	</#if>
+	<#if messageInfo?? ><@cAlert title=messageInfo /></#if>
 	${controller_html!}
-	<#if !first_controller><button class="btn btn-primary btn-sm" name="action_doReturnController"  type="submit" >#i18n{portal.util.labelBack}</button></#if>
-	<button class="btn btn-primary btn-sm" name="action_doValidateController"  type="submit">#i18n{portal.util.labelValidate}</button>
-</form>
+	<@cRow class='justify-content-center mt-m'>
+		<#if !first_controller><@cCol><@cBtn params='name="action_doReturnController"' label='#i18n{portal.util.labelBack}' /></@cCol></#if>
+		<@cCol><@cBtn params='name="action_doValidateController"' label='#i18n{portal.util.labelValidate}' /></@cCol>
+	</@cRow>
+</@cForm>
+</@cTpl>

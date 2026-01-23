@@ -1,5 +1,13 @@
-${config.comment!}
-
-<label for="code">#i18n{accesscontrol.controller.userCodeAccessController.labelCode}</label>
-<input type='code' name='code' />
-<br />
+<@cTpl>
+<@cRow>
+    <@cCol>
+        ${config.comment!}
+    </@cCol>
+</@cRow>
+<@cRow>
+    <@cCol>
+        <@cLabel for='code' labelKey='#i18n{accesscontrol.controller.userCodeAccessController.labelCode}' />
+        <@cInput id='code' name='code' />
+    </@cCol>
+</@cRow>
+</@cTpl>

@@ -1,5 +1,12 @@
-${config.comment!}
-
-<input type='checkbox' value='1' name='check' />
-<label for="check">#i18n{accesscontrol.controller.tosAccessController.accept}</label>
-<br />
+<@cTpl>
+    <@cRow>
+        <@cCol>
+            ${config.comment!}
+        </@cCol>
+    </@cRow>
+    <@cRow>
+        <@cCol>
+            <@cCheckbox id='check' name='check' label='#i18n{accesscontrol.controller.tosAccessController.accept}' value='1' />
+        </@cCol>
+    </@cRow>
+</@cTpl>

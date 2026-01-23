@@ -6,7 +6,7 @@
 				${controller_config!}
 				<@formGroup>
 					<@button type='submit' name='action_modifyConfigController' buttonIcon='device-floppy' title='#i18n{portal.util.labelValidate}' />
-					<@button type='submit' name='action_cancelModifyConfigController' buttonIcon='x' title='#i18n{portal.util.labelCancel}' />
+					<@button cancel=true type='submit' name='action_cancelModifyConfigController' buttonIcon='x' title='#i18n{portal.util.labelCancel}' params='formnovalidate' />
 				</@formGroup>
 			</@fieldSet>
 		</@tform>

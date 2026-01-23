@@ -1,6 +1,14 @@
-${config.comment!}
-
-<label for="birth_date">#i18n{accesscontrol.controller.ageAccessController.labelDate}</label>
-<input type='text' name='birth_date' id='birth_date'/>
-<@getDate idField='birth_date' language=language format='Y-m-d' showFormat='' minDate='' maxDate='' defaultDate='' dateOptions=[] />
-<br />
+<@cTpl>
+<@cRow>
+    <@cCol>
+        ${config.comment!}
+    </@cCol>
+</@cRow>
+<@cRow>
+    <@cCol>
+        <@cLabel for='birth_date' labelKey='#i18n{accesscontrol.controller.ageAccessController.labelDate}' />
+        <@cInput  name='birth_date' id='birth_date' />
+        <@getDate idField='birth_date' language=language format='Y-m-d' showFormat='' minDate='' maxDate='' defaultDate='' dateOptions=[] />
+    </@cCol>
+</@cRow>
+</@cTpl>
