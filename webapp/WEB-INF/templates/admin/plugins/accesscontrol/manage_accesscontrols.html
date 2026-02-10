@@ -6,6 +6,7 @@
 			</#if>
 		</@pageHeader>
 		<@messages infos=infos />
+		<#if accesscontrol_list?size gt 0>
 		<@manageFeature>
 		<#list accesscontrol_list as accesscontrol >
 			<@manageFeatureItem>
@@ -38,5 +39,10 @@
 		</#list>
 		</@manageFeature>
 		<@paginationAdmin paginator=paginator combo=1 />
+		<#else>
+			<@box>
+				<@empty />
+			</@box>
+		</#if>
 	</@pageColumn>
 </@pageContainer>
