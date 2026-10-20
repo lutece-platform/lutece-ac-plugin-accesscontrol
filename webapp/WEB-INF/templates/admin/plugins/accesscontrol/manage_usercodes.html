@@ -4,10 +4,10 @@
 			<@aButton href='jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp' title='#i18n{accesscontrol.manage_usercodes.linkBackToManageAccessControls}' buttonIcon='lock-access' color='secondary'  />
 		</@pageHeader>
 		<@tform class='form' method='post' name='upload_workflow' action='jsp/admin/plugins/accesscontrol/ManageControllerUserCode.jsp' enctype="multipart/form-data" boxed=true>
-			<@formGroup labelKey='#i18n{accesscontrol.manage_usercode.labelAccessControl}' mandatory=true rows=2>
+			<@formGroup labelFor='access_control' labelKey='#i18n{accesscontrol.manage_usercode.labelAccessControl}' mandatory=true rows=2>
 				<@select name='access_control' items=access_control_list />
 			</@formGroup>
-			<@formGroup labelKey='#i18n{accesscontrol.manage_usercode.labelImportFile}' helpKey='#i18n{accesscontrol.manage_usercode.labelImportFile.help}' rows=2>
+			<@formGroup labelFor='csv_file' labelKey='#i18n{accesscontrol.manage_usercode.labelImportFile}' helpKey='#i18n{accesscontrol.manage_usercode.labelImportFile.help}' rows=2>
 				<@input type='file' name='csv_file'/>
 			</@formGroup>
 			<@formGroup>

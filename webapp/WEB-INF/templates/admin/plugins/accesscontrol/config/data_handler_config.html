@@ -3,7 +3,7 @@
     	<@input type='hidden' id='apply' name='apply' value='' />
     	<@inputGroup>
 			<@select name='data_handler' id='data_handler' items=data_handler_list default_value='${config.dataHandler!}'/>
-			<@button type='submit' id='applyButton' buttonIcon='check' name='action_modifyConfigController' value='select_code' />
+			<@button type='submit' id='applyButton' buttonIcon='check' title='#i18n{accesscontrol.modify_controller.data_hanlder_config.labelApply}' hideTitle=['all'] name='action_modifyConfigController' value='select_code' />
 		</@inputGroup>
     </@formGroup>
     <#if data_handler_config??>

@@ -1,12 +1,12 @@
 <@cTpl>
     <@cRow>
         <@cCol>
-            ${richText(config.comment!)}
+            <div id="tos_comment">${richText(config.comment!)}</div>
         </@cCol>
     </@cRow>
     <@cRow>
         <@cCol>
-            <@cCheckbox id='check' name='check' label='#i18n{accesscontrol.controller.tosAccessController.accept}' value='1' />
+            <@cCheckbox id='check' name='check' label='#i18n{accesscontrol.controller.tosAccessController.accept}' value='1' required=true params={ 'aria-describedby': 'tos_comment' } />
         </@cCol>
     </@cRow>
 </@cTpl>

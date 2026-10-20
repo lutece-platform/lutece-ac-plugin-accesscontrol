@@ -26,10 +26,10 @@
 								<#else>	
 									<#assign color = 'success' />
 								</#if>
-								<@aButton href='${action.url}&id=${accesscontrol.id}' title='${action.name}' hideTitle=['all'] color='${color}' class='${perm}' buttonIcon=action.iconUrl size='sm' />
+								<@aButton href='${action.url}&id=${accesscontrol.id}' title='${action.name}' hideTitle=['all'] color='${color}' class='${perm}' buttonIcon=action.iconUrl size='sm' params={ 'aria-label': action.name + ' - ' + accesscontrol.name } />
 							</#if>
 						<#else>
-							<@aButton href='${action.url}&id=${accesscontrol.id}' title='${action.name}' hideTitle=['all'] color='${color}' class='${perm}' buttonIcon=action.iconUrl size='sm' />
+							<@aButton href='${action.url}&id=${accesscontrol.id}' title='${action.name}' hideTitle=['all'] color='${color}' class='${perm}' buttonIcon=action.iconUrl size='sm' params={ 'aria-label': action.name + ' - ' + accesscontrol.name } />
 						</#if>
 					</#list>
 				</#if>
