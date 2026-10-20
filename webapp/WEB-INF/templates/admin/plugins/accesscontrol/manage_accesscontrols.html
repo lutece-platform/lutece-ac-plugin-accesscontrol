@@ -16,7 +16,6 @@
 					<#list accesscontrol.actionList as action>
 						<#assign color='primary' />
 						<#assign perm=action.permission?lower_case />
-						<#assign params='' />
 						<#if action.permission=='DELETE'>
 							<#assign color = 'danger' />
 							<#assign perm='' />
@@ -27,10 +26,10 @@
 								<#else>	
 									<#assign color = 'success' />
 								</#if>
-								<@aButton href='${action.url}&id=${accesscontrol.id}' title='${action.name}' hideTitle=['all'] color='${color}' class='${perm}' buttonIcon=action.iconUrl params=params size='sm' />
+								<@aButton href='${action.url}&id=${accesscontrol.id}' title='${action.name}' hideTitle=['all'] color='${color}' class='${perm}' buttonIcon=action.iconUrl size='sm' />
 							</#if>
 						<#else>
-							<@aButton href='${action.url}&id=${accesscontrol.id}' title='${action.name}' hideTitle=['all'] color='${color}' class='${perm}' buttonIcon=action.iconUrl params=params size='sm' />
+							<@aButton href='${action.url}&id=${accesscontrol.id}' title='${action.name}' hideTitle=['all'] color='${color}' class='${perm}' buttonIcon=action.iconUrl size='sm' />
 						</#if>
 					</#list>
 				</#if>

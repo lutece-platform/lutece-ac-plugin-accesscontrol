@@ -12,8 +12,8 @@
 	<#if messageInfo?? ><@cAlert title=messageInfo /></#if>
 	${controller_html!}
 	<@cRow class='justify-content-center mt-m'>
-		<#if !first_controller><@cCol><@cBtn params='name="action_doReturnController"' label='#i18n{portal.util.labelBack}' /></@cCol></#if>
-		<@cCol><@cBtn params='name="action_doValidateController"' label='#i18n{portal.util.labelValidate}' /></@cCol>
+		<#if !first_controller><@cCol><@cBtn params={"name": "action_doReturnController"} label='#i18n{portal.util.labelBack}' /></@cCol></#if>
+		<@cCol><@cBtn params={"name": "action_doValidateController"} label='#i18n{portal.util.labelValidate}' /></@cCol>
 	</@cRow>
 </@cForm>
 </@cTpl>
