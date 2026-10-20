@@ -42,6 +42,14 @@ import fr.paris.lutece.portal.service.security.UserNotSignedException;
 
 /**
  * Interface for access controllers
+ * <p>
+ * HTML escaping contract: the methods returning HTML ({@link #getControllerConfigForm}, {@link #getControllerForm}) return
+ * HTML the controller type rendered, usually with {@code template.getHtml( )}, from a template where every value is
+ * auto-escaped. plugin-accesscontrol marks this HTML as markup where it puts it in its own models ({@code HtmlMarkup.of}),
+ * so a controller type returns it as a {@code String}, never escapes it again, and never puts in it a value it did not
+ * escape (a value typed by a user, a request parameter) outside a template. A rich text of the configuration (the comment)
+ * is written in the template with {@code richText( )}.
+ * </p>
  */
 public interface IAccessControllerType
 {
@@ -80,9 +88,10 @@ public interface IAccessControllerType
 
     /**
      * Get the html form for the config of the controller.
-     * 
+     *
      * @param idController
-     * @return
+     * @return the fields of the configuration form: HTML rendered by the controller type, written as HTML in the
+     *         configuration page of plugin-accesscontrol; blank when the controller has no configuration
      */
     default String getControllerConfigForm( HttpServletRequest request, Locale locale, AccessController controller )
     {
@@ -116,7 +125,8 @@ public interface IAccessControllerType
      * And to skip form return null
      *
      * @param idController
-     * @return controllerForm
+     * @return controllerForm: HTML rendered by the controller type, written as HTML in the front office page of the
+     *         access control; null to skip the form
      */
     String getControllerForm( HttpServletRequest request, Locale locale, AccessController controller );
 }
