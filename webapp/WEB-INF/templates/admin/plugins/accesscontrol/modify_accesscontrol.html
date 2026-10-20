@@ -4,7 +4,7 @@
 		<@row>
 			<@columns sm=12 lg=4>
 				<@box>
-					<@boxHeader titleLevel='h3' i18nTitleKey='accesscontrol.manage_accesscontrols.pageTitle' />
+					<@boxHeader titleLevel='h2' i18nTitleKey='accesscontrol.manage_accesscontrols.pageTitle' />
 					<@boxBody>
 						<@tform action='jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp'>
 							<@messages errors=errors />
@@ -31,7 +31,7 @@
 			</@columns>
 			<@columns sm=12 lg=8>
 				<@box>
-					<@boxHeader titleLevel='h3' i18nTitleKey='accesscontrol.modify_accesscontrol.controller.title' class='d-flex align-items-center p-2'>
+					<@boxHeader titleLevel='h2' i18nTitleKey='accesscontrol.modify_accesscontrol.controller.title' class='d-flex align-items-center p-2'>
 					<@tform type='inline' action='jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp?action=createController&id=${accesscontrol.id}'>
 						<@formGroup labelFor='controller_type' labelKey='#i18n{accesscontrol.modify_accesscontrol.add_controller}' hideLabel=['all'] formStyle=''>
 						<@inputGroup>
