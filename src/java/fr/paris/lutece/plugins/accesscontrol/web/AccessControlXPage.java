@@ -65,6 +65,7 @@ import fr.paris.lutece.portal.service.message.SiteMessage;
 import fr.paris.lutece.portal.service.message.SiteMessageException;
 import fr.paris.lutece.portal.service.message.SiteMessageService;
 import fr.paris.lutece.portal.service.security.UserNotSignedException;
+import fr.paris.lutece.portal.service.template.HtmlMarkup;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.portal.util.mvc.xpage.MVCApplication;
@@ -173,7 +174,8 @@ public class AccessControlXPage extends MVCApplication
         }
 
         Map<String, Object> model = getModel( );
-        model.put( MARK_CONTROLLER_HTML, controllerForm );
+        // HTML the controller type rendered from its template (see IAccessControllerType#getControllerForm): written as HTML
+        model.put( MARK_CONTROLLER_HTML, HtmlMarkup.of( controllerForm ) );
         model.put( MARK_FIRST_CONTROLLER, _nCurrentControllerOrder == 1 );
 
         XPage xPage = getXPage( TEMPLATE_CONTROLLER_VIEW, locale, model );

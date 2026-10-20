@@ -63,10 +63,16 @@ public interface IPersistentDataHandler
 
     /**
      * Get the html for the config of the handler
-     * 
+     * <p>
+     * HTML escaping contract: HTML the handler rendered, usually with {@code template.getHtml( )}, from a template where
+     * every value is auto-escaped. plugin-accesscontrol marks it as markup ({@code HtmlMarkup.of}) where it puts it in the
+     * configuration form of the controller: return it as a {@code String}, never escape it again, and never put in it a
+     * value that was not escaped (a value typed by a user, a request parameter) outside a template.
+     * </p>
+     *
      * @param locale
      * @param idConfig
-     * @return
+     * @return the fields of the configuration form of the handler, written as HTML
      */
     String getDataHandlerConfigForm( Locale locale, int idConfig );
 

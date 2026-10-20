@@ -46,6 +46,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import fr.paris.lutece.plugins.accesscontrol.business.AccessController;
 import fr.paris.lutece.plugins.accesscontrol.business.config.AbstractControllerConfig;
 import fr.paris.lutece.portal.business.accesscontrol.AccessControlSessionData;
+import fr.paris.lutece.portal.service.template.HtmlMarkup;
 import fr.paris.lutece.util.ReferenceList;
 
 public abstract class AbstractPersistentAccessControllerType<C extends AbstractControllerConfig> implements IPersistentAccessControllerType
@@ -68,7 +69,8 @@ public abstract class AbstractPersistentAccessControllerType<C extends AbstractC
         IPersistentDataHandler dataHandler = config.getPersistentDataHandler( );
         if ( dataHandler != null )
         {
-            model.put( MARK_DATA_HANDLER_CONFIG_TEMPLATE, dataHandler.getDataHandlerConfigForm( locale, config.getIdAccessController( ) ) );
+            // HTML the data handler rendered from its template (see IPersistentDataHandler#getDataHandlerConfigForm): written as HTML
+            model.put( MARK_DATA_HANDLER_CONFIG_TEMPLATE, HtmlMarkup.of( dataHandler.getDataHandlerConfigForm( locale, config.getIdAccessController( ) ) ) );
         }
         if ( !list.isEmpty( ) && list.size( ) > 1 )
         {
