@@ -10,7 +10,7 @@
 			<@formGroup labelFor='description' labelKey='#i18n{accesscontrol.manage_accesscontrols.columnDescription}' mandatory=true>
 				<@input type='text' id='description' name='description'  value='${accesscontrol.description!\'\'}' />
 			</@formGroup>
-			<@formGroup labelFor='workgroup_key' labelKey='#i18n{accesscontrol.modify_accesscontrol.labelWorkgroupKey}' mandatory=true>
+			<@formGroup labelFor='workgroup' labelKey='#i18n{accesscontrol.modify_accesscontrol.labelWorkgroupKey}' mandatory=true>
 				<@select name='workgroup' items=user_workgroup_list default_value=workgroup_key_default_value />
 			</@formGroup>
 			<@formGroup labelFor='returnUrl' labelKey='#i18n{accesscontrol.manage_accesscontrols.labelReturnUrl}'>

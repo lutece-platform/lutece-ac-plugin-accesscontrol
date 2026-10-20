@@ -168,7 +168,8 @@ public class AccessControlTemplatesRenderTest
         assertTrue( strHtml.contains( "<li>" + HOSTILE_ESCAPED + "</li>" ), strHtml );
         assertTrue( strHtml.contains( "<p>" + HOSTILE_ESCAPED + "</p>" ), strHtml );
         assertFalse( strHtml.contains( HOSTILE ), strHtml );
-        assertTrue( strHtml.contains( "<button name=\"action_doReturnController\">" ), strHtml );
+        // The back button skips the browser validation: a required field of the step must not block going back
+        assertTrue( strHtml.contains( "<button name=\"action_doReturnController\" formnovalidate>" ), strHtml );
         assertTrue( strHtml.contains( "<button name=\"action_doValidateController\">" ), strHtml );
     }
 
