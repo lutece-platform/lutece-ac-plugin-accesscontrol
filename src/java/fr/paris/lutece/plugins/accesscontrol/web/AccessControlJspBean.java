@@ -69,6 +69,7 @@ import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
+import fr.paris.lutece.portal.service.template.HtmlMarkup;
 import fr.paris.lutece.portal.service.workgroup.AdminWorkgroupService;
 import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
@@ -387,7 +388,8 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
         }
 
         Map<String, Object> model = getModel( );
-        model.put( MARK_CONTROLLER_CONFIG, controllerType.getControllerConfigForm( request, getLocale( ), controller ) );
+        // HTML the controller type rendered from its template (see IAccessControllerType#getControllerConfigForm): written as HTML
+        model.put( MARK_CONTROLLER_CONFIG, HtmlMarkup.of( controllerType.getControllerConfigForm( request, getLocale( ), controller ) ) );
 
         setPageTitleProperty( PROPERTY_MODIFY_CONTROLLER_PAGE_TITLE );
 
