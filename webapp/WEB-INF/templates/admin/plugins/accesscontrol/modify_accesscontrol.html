@@ -10,12 +10,12 @@
 							<@messages errors=errors />
 							<@input type="hidden" id="id" name="id" value="${accesscontrol.id}"/>
 							<@formGroup labelFor='name' labelKey='#i18n{accesscontrol.manage_accesscontrols.columnName}' mandatory=true rows=2>
-								<@input type='text' id='name' name='name'  maxlength=255 value='${accesscontrol.name!\'\'}' tabIndex='0' />
+								<@input type='text' id='name' name='name'  maxlength=255 value='${accesscontrol.name!\'\'}' />
 							</@formGroup>
 							<@formGroup labelFor='description' labelKey='#i18n{accesscontrol.manage_accesscontrols.columnDescription}' mandatory=true rows=2>
-								<@input type='text' id='description' name='description'  value='${accesscontrol.description!\'\'}' tabIndex='1' />
+								<@input type='text' id='description' name='description'  value='${accesscontrol.description!\'\'}' />
 							</@formGroup>
-							<@formGroup labelFor='workgroup_key' labelKey='#i18n{accesscontrol.modify_accesscontrol.labelWorkgroupKey}' mandatory=true rows=2>
+							<@formGroup labelFor='workgroup' labelKey='#i18n{accesscontrol.modify_accesscontrol.labelWorkgroupKey}' mandatory=true rows=2>
 								<@select name='workgroup' items=user_workgroup_list default_value='${accesscontrol.workgroup}' />
 							</@formGroup>
 							<@formGroup labelFor='returnUrl' labelKey='#i18n{accesscontrol.manage_accesscontrols.labelReturnUrl}' rows=2>
@@ -54,8 +54,8 @@
 											<@input type='hidden' name='id' value=accesscontrol.id />
 											<@input type='hidden' name='id_controller' value=controller.id />
 											<@inputGroup>
-												<@select name='boolCond' default_value=controller.boolCond items=condition_list />
-												<@button type='submit' buttonIcon='check' color='default' hideTitle=['all'] size='sm'/>
+												<@select name='boolCond' id='boolCond_${controller.id}' default_value=controller.boolCond items=condition_list params={ 'aria-label': '#i18n{accesscontrol.modify_accesscontrol.labelCondition} - ' + controller.title } />
+												<@button type='submit' buttonIcon='check' color='default' title='#i18n{accesscontrol.modify_accesscontrol.labelApplyCondition}' hideTitle=['all'] size='sm' params={ 'aria-label': '#i18n{accesscontrol.modify_accesscontrol.labelApplyCondition} - ' + controller.title } />
 											</@inputGroup>
 										</@tform>
 									</#if>${controller.title}
@@ -65,18 +65,18 @@
 											<@input type='hidden' name='id' value=accesscontrol.id />
 											<@input type='hidden' name='id_controller' value=controller.id />
 											<@inputGroup>
-												<@select name='new_order'>
+												<@select name='new_order' id='new_order_${controller.id}' params={ 'aria-label': '#i18n{accesscontrol.modify_accesscontrol.labelOrder} - ' + controller.title }>
 													<#list 1..controller_list?size as i>
 														<@option selected=(controller.order==i) value=i label=i />
 													</#list>
 												</@select>
-												<@button type='submit' buttonIcon='check' color='default' hideTitle=['all'] size='sm'/>
+												<@button type='submit' buttonIcon='check' color='default' title='#i18n{accesscontrol.modify_accesscontrol.labelApplyOrder}' hideTitle=['all'] size='sm' params={ 'aria-label': '#i18n{accesscontrol.modify_accesscontrol.labelApplyOrder} - ' + controller.title } />
 											</@inputGroup>
 										</@tform>
 										<#if controller.config>
-											<@aButton href='jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp?view=modifyConfigController&id_controller=${controller.id}' title='#i18n{accesscontrol.modify_accesscontrol.controller.labelModifyConfig}' buttonIcon='pencil' hideTitle=['all']   />
+											<@aButton href='jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp?view=modifyConfigController&id_controller=${controller.id}' title='#i18n{accesscontrol.modify_accesscontrol.controller.labelModifyConfig}' buttonIcon='pencil' hideTitle=['all'] params={ 'aria-label': '#i18n{accesscontrol.modify_accesscontrol.controller.labelModifyConfig} - ' + controller.title } />
 										</#if>
-										<@aButton href='jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp?view=confirmRemoveAccessController&id_controller=${controller.id}' title='#i18n{portal.util.labelDelete}' buttonIcon='trash' hideTitle=['all'] color='danger' />
+										<@aButton href='jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp?view=confirmRemoveAccessController&id_controller=${controller.id}' title='#i18n{portal.util.labelDelete}' buttonIcon='trash' hideTitle=['all'] color='danger' params={ 'aria-label': '#i18n{portal.util.labelDelete} - ' + controller.title } />
 									</@manageFeatureItemColumn>
 									<#assign first=false>
 								</@manageFeatureItem>
