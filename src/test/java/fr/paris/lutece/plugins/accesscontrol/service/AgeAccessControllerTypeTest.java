@@ -34,10 +34,12 @@
 package fr.paris.lutece.plugins.accesscontrol.service;
 
 import java.time.LocalDate;
+import java.util.Locale;
 
 import org.junit.jupiter.api.Test;
 
 import fr.paris.lutece.plugins.accesscontrol.business.AccessController;
+import fr.paris.lutece.plugins.accesscontrol.business.AccessControllerHome;
 import fr.paris.lutece.plugins.accesscontrol.business.config.AgeAccessControllerConfig;
 import fr.paris.lutece.plugins.accesscontrol.business.config.AgeAccessControllerConfigDAO;
 import fr.paris.lutece.plugins.accesscontrol.business.config.IAccessControllerConfigDAO;
@@ -84,6 +86,37 @@ public class AgeAccessControllerTypeTest extends LuteceTestCase
         assertEquals( ERROR_MSG, controller.validate( requestKO2, accessController ) );
 
         controller.deleteConfig( accessController.getId( ) );
+    }
+
+    /**
+     * The front office form of the age controller is displayed: its label is given to the label macro, which requires it
+     */
+    @Test
+    public void testControllerFormIsDisplayed( )
+    {
+        AccessController accessController = new AccessController( );
+        accessController.setIdAccesscontrol( 1 );
+        AccessControllerHome.create( accessController );
+        AgeAccessControllerConfig config = new AgeAccessControllerConfig( );
+        config.setIdAccessController( accessController.getId( ) );
+        config.setAgeMin( 10 );
+        config.setAgeMax( 20 );
+        config.setErrorMessage( ERROR_MSG );
+        _dao.insert( config );
+
+        AgeAccessControllerType controller = CDI.current( ).select( AgeAccessControllerType.class )
+                .select( NamedLiteral.of( AgeAccessControllerType.BEAN_NAME ) ).get( );
+
+        try
+        {
+            String strHtml = controller.getControllerForm( new MockHttpServletRequest( ), Locale.FRENCH, accessController );
+            assertTrue( strHtml.contains( "for=\"birth_date\"" ) );
+        }
+        finally
+        {
+            controller.deleteConfig( accessController.getId( ) );
+            AccessControllerHome.remove( accessController.getId( ) );
+        }
     }
 
 }
