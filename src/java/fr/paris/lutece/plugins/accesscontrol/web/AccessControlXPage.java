@@ -84,8 +84,8 @@ public class AccessControlXPage extends MVCApplication
     private static final String PATH_PORTAL = "jsp/site/Portal.jsp";
 
     // Messages
-    protected static final String MESSAGE_PAGE_TITLE = "accesscontrol.xpage.form.view.pageTitle";
-    protected static final String MESSAGE_PATH = "accesscontrol.xpage.form.view.pagePathLabel";
+    protected static final String MESSAGE_PAGE_TITLE = "accesscontrol.xpage.accesscontrol.pageTitle";
+    protected static final String MESSAGE_PATH = "accesscontrol.xpage.accesscontrol.pagePathLabel";
 
     // Views
     public static final String VIEW_CONTROLLER = "controllerView";
