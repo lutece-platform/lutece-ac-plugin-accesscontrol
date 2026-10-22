@@ -1,5 +1,5 @@
 -- liquibase formatted sql
--- changeset accesscontrol:update_db_accesscontrol-2.0.0-2.0.1.sql
+-- changeset accesscontrol:update_db_accesscontrol-2.0.1-2.0.2.sql
 -- preconditions onFail:MARK_RAN onError:WARN
 -- LUT-34233 : the access controls are managed through RBAC (resource type ACCESCONTROL_ACCESCONTROL), now checked by the server (LUT-34234):
 -- the role accesscontrol_manager and the super_admin role of the core (held by admin) get every permission on every access control.
