@@ -35,12 +35,14 @@ package fr.paris.lutece.plugins.accesscontrol.web;
 
 import java.sql.Date;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.enterprise.inject.literal.NamedLiteral;
@@ -48,6 +50,7 @@ import jakarta.enterprise.inject.spi.CDI;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import fr.paris.lutece.plugins.accesscontrol.business.AccessControl;
 import fr.paris.lutece.plugins.accesscontrol.business.AccessControlHome;
@@ -55,16 +58,22 @@ import fr.paris.lutece.plugins.accesscontrol.business.AccessController;
 import fr.paris.lutece.plugins.accesscontrol.business.AccessControllerHome;
 import fr.paris.lutece.plugins.accesscontrol.service.IAccessControlService;
 import fr.paris.lutece.plugins.accesscontrol.service.IAccessControllerType;
+import fr.paris.lutece.plugins.accesscontrol.service.rbac.AccessControlResourceIdService;
 import fr.paris.lutece.plugins.accesscontrol.util.BoolCondition;
+import fr.paris.lutece.api.user.User;
+import fr.paris.lutece.portal.business.rbac.RBAC;
 import fr.paris.lutece.portal.business.user.AdminUser;
+import fr.paris.lutece.portal.service.admin.AdminUserService;
 import fr.paris.lutece.portal.service.admin.AccessDeniedException;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
+import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.service.workgroup.AdminWorkgroupService;
 import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
+import fr.paris.lutece.portal.util.mvc.utils.MVCUtils;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.url.UrlItem;
@@ -144,6 +153,31 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
     private static final String ACTION_MODIFY_CONFIG_CONTROLLER = "modifyConfigController";
     private static final String ACTION_CANCEL_MODIFY_CONFIG_CONTROLLER = "cancelModifyConfigController";
 
+    // RBAC permission required by each view and action, on the access control it concerns
+    private static final Map<String, String> MAP_PERMISSIONS = new HashMap<>( );
+
+    static
+    {
+        MAP_PERMISSIONS.put( VIEW_CREATE_ACCESSCONTROL, AccessControlResourceIdService.PERMISSION_CREATE );
+        MAP_PERMISSIONS.put( ACTION_CREATE_ACCESSCONTROL, AccessControlResourceIdService.PERMISSION_CREATE );
+        for ( String strKey : new String [ ] {
+                VIEW_MODIFY_ACCESSCONTROL, ACTION_MODIFY_ACCESSCONTROL, VIEW_MODIFY_CONFIG_CONTROLLER, ACTION_MODIFY_CONFIG_CONTROLLER,
+                ACTION_CANCEL_MODIFY_CONFIG_CONTROLLER, VIEW_CONFIRM_REMOVE_ACCESSCONTROLLER, ACTION_REMOVE_ACCESSCONTROLLER, ACTION_CREATE_CONTROLLER,
+                ACTION_CHANGE_CONDITON, ACTION_CHANGE_ORDER
+        } )
+        {
+            MAP_PERMISSIONS.put( strKey, AccessControlResourceIdService.PERMISSION_MODIFY );
+        }
+        MAP_PERMISSIONS.put( VIEW_CONFIRM_REMOVE_ACCESSCONTROL, AccessControlResourceIdService.PERMISSION_DELETE );
+        MAP_PERMISSIONS.put( ACTION_REMOVE_ACCESSCONTROL, AccessControlResourceIdService.PERMISSION_DELETE );
+        for ( String strKey : new String [ ] {
+                VIEW_CONFIRM_ENABLE_ACCESSCONTROL, VIEW_CONFIRM_DISABLE_ACCESSCONTROL, ACTION_ENABLE_ACCESSCONTROL, ACTION_DISABLE_ACCESSCONTROL
+        } )
+        {
+            MAP_PERMISSIONS.put( strKey, AccessControlResourceIdService.PERMISSION_ENABLE );
+        }
+    }
+
     // Infos
     private static final String INFO_ACCESSCONTROL_CREATED = "accesscontrol.info.accesscontrol.created";
     private static final String INFO_ACCESSCONTROL_UPDATED = "accesscontrol.info.accesscontrol.updated";
@@ -154,6 +188,73 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
 
     // Session variable to store working values
     private AccessControl _accesControl;
+
+    /**
+     * {@inheritDoc} The RBAC permission of the requested view or action is checked on the access control it concerns: the list only displays the authorized
+     * actions, a request built by hand must be refused too
+     */
+    @Override
+    public String processController( HttpServletRequest request, HttpServletResponse response ) throws AccessDeniedException
+    {
+        checkAccessControlPermission( request );
+
+        return super.processController( request, response );
+    }
+
+    /**
+     * Checks that the user has the RBAC permission required by the requested view and action
+     *
+     * @param request
+     *            The Http request
+     * @throws AccessDeniedException
+     *             if the user is not authorized
+     */
+    private void checkAccessControlPermission( HttpServletRequest request ) throws AccessDeniedException
+    {
+        for ( String strKey : new String [ ] {
+                MVCUtils.getView( request ), MVCUtils.getAction( request )
+        } )
+        {
+            String strPermission = ( strKey != null ) ? MAP_PERMISSIONS.get( strKey ) : null;
+
+            if ( strPermission != null )
+            {
+                String strIdResource = AccessControlResourceIdService.PERMISSION_CREATE.equals( strPermission ) ? RBAC.WILDCARD_RESOURCES_ID
+                        : String.valueOf( getIdAccessControl( request ) );
+
+                if ( !RBACService.isAuthorized( AccessControl.RESOURCE_TYPE, strIdResource, strPermission, (User) AdminUserService.getAdminUser( request ) ) )
+                {
+                    throw new AccessDeniedException( "Permission " + strPermission + " denied on access control " + strIdResource );
+                }
+            }
+        }
+    }
+
+    /**
+     * Gets the access control concerned by the request: the access control parameter, else the access control of the controller parameter, else the
+     * access control being modified
+     *
+     * @param request
+     *            The Http request
+     * @return the id of the access control, -1 if unknown
+     */
+    private int getIdAccessControl( HttpServletRequest request )
+    {
+        int nIdAccessControl = NumberUtils.toInt( request.getParameter( PARAMETER_ID_ACCESSCONTROL ), -1 );
+
+        if ( nIdAccessControl == -1 && request.getParameter( PARAMETER_ID_CONTROLLER ) != null )
+        {
+            AccessController controller = AccessControllerHome.findByPrimaryKey( NumberUtils.toInt( request.getParameter( PARAMETER_ID_CONTROLLER ), -1 ) );
+            nIdAccessControl = ( controller != null ) ? controller.getIdAccesscontrol( ) : -1;
+        }
+
+        if ( nIdAccessControl == -1 && _accesControl != null )
+        {
+            nIdAccessControl = _accesControl.getId( );
+        }
+
+        return nIdAccessControl;
+    }
 
     /**
      * Build the Manage View
