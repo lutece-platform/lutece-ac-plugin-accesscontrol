@@ -20,6 +20,7 @@
 						<#if action.permission=='DELETE'>
 							<#assign color = 'danger' />
 							<#assign perm='' />
+							<@aButton href='${action.url}&id=${accesscontrol.id}' title='${action.name}' hideTitle=['all'] color='${color}' class='${perm}' buttonIcon=action.iconUrl params=params size='sm' />
 						<#elseif action.permission=='ENABLE'>
 							<#if action.enabled == accesscontrol.enabled>
 								<#if accesscontrol.enabled>
