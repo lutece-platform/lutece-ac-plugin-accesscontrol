@@ -35,6 +35,7 @@ package fr.paris.lutece.plugins.accesscontrol.service;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.Locale;
 
 import org.junit.jupiter.api.Test;
 
@@ -99,5 +100,37 @@ public class UserCodeAccessControllerTypeTest extends LuteceTestCase
         controller.deleteConfig( accessController.getId( ) );
         UserCodeControllerDataHome.remove( USER, ID_ACCESS_CONTROL );
         AccessControllerHome.remove( accessController.getId( ) );
+    }
+
+    /**
+     * The front office forms of the user code controllers are displayed: their labels are given to the label macro, which requires them
+     */
+    @Test
+    public void testControllerFormsAreDisplayed( )
+    {
+        AccessController accessController = new AccessController( );
+        accessController.setIdAccesscontrol( ID_ACCESS_CONTROL );
+        AccessControllerHome.create( accessController );
+        UserCodeAccessControllerConfig config = new UserCodeAccessControllerConfig( );
+        config.setIdAccessController( accessController.getId( ) );
+        config.setErrorMessage( ERROR_MSG );
+        _dao.insert( config );
+
+        UserCodeAccessControllerType controller = CDI.current( ).select( UserCodeAccessControllerType.class )
+                .select( NamedLiteral.of( UserCodeAccessControllerType.BEAN_NAME ) ).get( );
+        LuteceUserCodeAccessControllerType luteceUserController = CDI.current( ).select( LuteceUserCodeAccessControllerType.class )
+                .select( NamedLiteral.of( LuteceUserCodeAccessControllerType.BEAN_NAME ) ).get( );
+
+        try
+        {
+            String strHtml = controller.getControllerForm( new MockHttpServletRequest( ), Locale.FRENCH, accessController );
+            assertTrue( strHtml.contains( "for=\"userId\"" ) && strHtml.contains( "for=\"code\"" ) );
+            assertTrue( luteceUserController.getControllerForm( new MockHttpServletRequest( ), Locale.FRENCH, accessController ).contains( "for=\"code\"" ) );
+        }
+        finally
+        {
+            controller.deleteConfig( accessController.getId( ) );
+            AccessControllerHome.remove( accessController.getId( ) );
+        }
     }
 }
