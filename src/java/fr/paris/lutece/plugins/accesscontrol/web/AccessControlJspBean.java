@@ -115,6 +115,8 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
     // Properties
     private static final String MESSAGE_CONFIRM_REMOVE_ACCESSCONTROL = "accesscontrol.message.confirmRemoveAccessControl";
     private static final String MESSAGE_CONFIRM_REMOVE_ACCESSCONTROLLER = "accesscontrol.message.confirmRemoveAccessController";
+    private static final String MESSAGE_CONFIRM_ENABLE_ACCESSCONTROL = "accesscontrol.message.confirmEnableAccessControl";
+    private static final String MESSAGE_CONFIRM_DISABLE_ACCESSCONTROL = "accesscontrol.message.confirmDisableAccessControl";
 
     // Validations
     private static final String VALIDATION_ATTRIBUTES_PREFIX = "accesscontrol.model.entity.accesscontrol.attribute.";
@@ -124,13 +126,15 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
     private static final String VIEW_CREATE_ACCESSCONTROL = "createAccessControl";
     private static final String VIEW_MODIFY_ACCESSCONTROL = "modifyAccessControl";
     private static final String VIEW_MODIFY_CONFIG_CONTROLLER = "modifyConfigController";
+    private static final String VIEW_CONFIRM_REMOVE_ACCESSCONTROL = "confirmRemoveAccessControl";
+    private static final String VIEW_CONFIRM_REMOVE_ACCESSCONTROLLER = "confirmRemoveAccessController";
+    private static final String VIEW_CONFIRM_ENABLE_ACCESSCONTROL = "confirmEnableAccessControl";
+    private static final String VIEW_CONFIRM_DISABLE_ACCESSCONTROL = "confirmDisableAccessControl";
 
     // Actions
     private static final String ACTION_CREATE_ACCESSCONTROL = "createAccessControl";
     private static final String ACTION_MODIFY_ACCESSCONTROL = "modifyAccessControl";
     private static final String ACTION_REMOVE_ACCESSCONTROL = "removeAccessControl";
-    private static final String ACTION_CONFIRM_REMOVE_ACCESSCONTROL = "confirmRemoveAccessControl";
-    private static final String ACTION_CONFIRM_REMOVE_ACCESSCONTROLLER = "confirmRemoveAccessController";
     private static final String ACTION_ENABLE_ACCESSCONTROL = "enableAccessControl";
     private static final String ACTION_DISABLE_ACCESSCONTROL = "disableAccessControl";
     private static final String ACTION_CREATE_CONTROLLER = "createController";
@@ -223,7 +227,7 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
      *            The Http request
      * @return the html code to confirm
      */
-    @Action( value = ACTION_CONFIRM_REMOVE_ACCESSCONTROL, securityTokenAction = ACTION_REMOVE_ACCESSCONTROL )
+    @View( value = VIEW_CONFIRM_REMOVE_ACCESSCONTROL, securityTokenAction = ACTION_REMOVE_ACCESSCONTROL )
     public String getConfirmRemoveAccessControl( HttpServletRequest request )
     {
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_ACCESSCONTROL ) );
@@ -243,7 +247,7 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
      *            The Http request
      * @return the html code to confirm
      */
-    @Action( value = ACTION_CONFIRM_REMOVE_ACCESSCONTROLLER, securityTokenAction = ACTION_REMOVE_ACCESSCONTROLLER )
+    @View( value = VIEW_CONFIRM_REMOVE_ACCESSCONTROLLER, securityTokenAction = ACTION_REMOVE_ACCESSCONTROLLER )
     public String getConfirmRemoveAccessController( HttpServletRequest request )
     {
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_CONTROLLER ) );
@@ -458,6 +462,54 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
         addInfo( INFO_ACCESSCONTROL_UPDATED, getLocale( ) );
         
         return redirectView( request, VIEW_MANAGE_ACCESSCONTROLS );
+    }
+
+    /**
+     * Asks the confirmation of the activation of the accesscontrol whose identifier is in the http request; the confirmation posts the activation
+     *
+     * @param request
+     *            The Http request
+     * @return the url of the confirmation message
+     */
+    @View( value = VIEW_CONFIRM_ENABLE_ACCESSCONTROL, securityTokenAction = ACTION_ENABLE_ACCESSCONTROL )
+    public String getConfirmEnableAccessControl( HttpServletRequest request )
+    {
+        return redirect( request, getConfirmationUrl( request, ACTION_ENABLE_ACCESSCONTROL, MESSAGE_CONFIRM_ENABLE_ACCESSCONTROL ) );
+    }
+
+    /**
+     * Asks the confirmation of the deactivation of the accesscontrol whose identifier is in the http request; the confirmation posts the
+     * deactivation
+     *
+     * @param request
+     *            The Http request
+     * @return the url of the confirmation message
+     */
+    @View( value = VIEW_CONFIRM_DISABLE_ACCESSCONTROL, securityTokenAction = ACTION_DISABLE_ACCESSCONTROL )
+    public String getConfirmDisableAccessControl( HttpServletRequest request )
+    {
+        return redirect( request, getConfirmationUrl( request, ACTION_DISABLE_ACCESSCONTROL, MESSAGE_CONFIRM_DISABLE_ACCESSCONTROL ) );
+    }
+
+    /**
+     * Builds the url of the confirmation message whose button posts the given action on the accesscontrol whose identifier is in the http request
+     *
+     * @param request
+     *            The Http request
+     * @param strAction
+     *            The action posted by the confirmation
+     * @param strMessageKey
+     *            The key of the confirmation message
+     * @return the url of the confirmation message
+     */
+    private String getConfirmationUrl( HttpServletRequest request, String strAction, String strMessageKey )
+    {
+        int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_ACCESSCONTROL ) );
+        UrlItem url = new UrlItem( getActionUrl( strAction ) );
+        url.addParameter( PARAMETER_ID_ACCESSCONTROL, nId );
+
+        return AdminMessageService.getMessageUrl( request, strMessageKey, null, null, url.getUrl( ), null, AdminMessage.TYPE_CONFIRMATION, null,
+                JSP_MANAGE_ACCESSCONTROLS );
     }
 
     /**

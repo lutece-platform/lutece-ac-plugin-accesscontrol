@@ -76,7 +76,7 @@
 										<#if controller.config>
 											<@aButton href='jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp?view=modifyConfigController&id_controller=${controller.id}' title='#i18n{accesscontrol.modify_accesscontrol.controller.labelModifyConfig}' buttonIcon='pencil' hideTitle=['all']   />
 										</#if>
-										<@aButton href='jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp?action=confirmRemoveAccessController&id_controller=${controller.id}' title='#i18n{portal.util.labelDelete}' buttonIcon='trash' hideTitle=['all'] color='danger' />
+										<@aButton href='jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp?view=confirmRemoveAccessController&id_controller=${controller.id}' title='#i18n{portal.util.labelDelete}' buttonIcon='trash' hideTitle=['all'] color='danger' />
 									</@manageFeatureItemColumn>
 									<#assign first=false>
 								</@manageFeatureItem>
