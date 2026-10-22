@@ -86,6 +86,8 @@ public class AccessControlXPage extends MVCApplication
     // Messages
     protected static final String MESSAGE_PAGE_TITLE = "accesscontrol.xpage.accesscontrol.pageTitle";
     protected static final String MESSAGE_PATH = "accesscontrol.xpage.accesscontrol.pagePathLabel";
+    private static final String MESSAGE_NO_ACCESS_CONTROL = "accesscontrol.xpage.accesscontrol.sitemessage.noAccessControl";
+    private static final String MESSAGE_SITEMESSAGE_TITLE = "accesscontrol.xpage.accesscontrol.sitemessage.title";
 
     // Views
     public static final String VIEW_CONTROLLER = "controllerView";
@@ -140,11 +142,16 @@ public class AccessControlXPage extends MVCApplication
      * @return the list of all available forms
      * @throws SiteMessageException
      */
-    @View( value = VIEW_CONTROLLER )
+    @View( value = VIEW_CONTROLLER, defaultView = true )
     public XPage getControllerView( HttpServletRequest request ) throws SiteMessageException, UserNotSignedException {
         if ( BooleanUtils.toBoolean( request.getParameter( PARAMETER_INIT ) ) )
         {
             init( request );
+        }
+
+        if ( _controllerList == null )
+        {
+            return noAccessControlMessage( request );
         }
 
         if ( _controllerList.isEmpty( ) )
@@ -235,9 +242,20 @@ public class AccessControlXPage extends MVCApplication
         return null;
     }
 
-    @Action( value = ACTION_VALIDATE_CONTROLLER, securityTokenDisabled = true )
-    public XPage doValidateController( HttpServletRequest request ) throws UserNotSignedException
+    private XPage noAccessControlMessage( HttpServletRequest request ) throws SiteMessageException
     {
+        SiteMessageService.setMessage( request, MESSAGE_NO_ACCESS_CONTROL, null, MESSAGE_SITEMESSAGE_TITLE, new UrlItem( PATH_PORTAL ).getUrl( ), null,
+                SiteMessage.TYPE_ERROR );
+        return null;
+    }
+
+    @Action( value = ACTION_VALIDATE_CONTROLLER, securityTokenDisabled = true )
+    public XPage doValidateController( HttpServletRequest request ) throws UserNotSignedException, SiteMessageException
+    {
+        if ( _currentController == null )
+        {
+            return noAccessControlMessage( request );
+        }
         IAccessControllerType currentControllerType = CDI.current( ).select( IAccessControllerType.class ).select( NamedLiteral.of( _currentController.getType( ) ) ).get( );
         String validationResult = currentControllerType.validate( request, _currentController );
 
