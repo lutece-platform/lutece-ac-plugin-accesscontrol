@@ -46,6 +46,8 @@ import freemarker.cache.FileTemplateLoader;
 import freemarker.cache.MultiTemplateLoader;
 import freemarker.cache.StringTemplateLoader;
 import freemarker.cache.TemplateLoader;
+import fr.paris.lutece.portal.service.editor.RichTextContentMethod;
+import freemarker.core.HTMLOutputFormat;
 import freemarker.template.Configuration;
 
 /**
@@ -89,6 +91,9 @@ public class AccessControllerFrontTemplatesRenderTest
         StringTemplateLoader stubs = new StringTemplateLoader( );
         stubs.putTemplate( MACROS, MACROS_SOURCE );
         Configuration cfg = new Configuration( Configuration.VERSION_2_3_0 );
+        cfg.setOutputFormat( HTMLOutputFormat.INSTANCE );
+        cfg.setAutoEscapingPolicy( Configuration.ENABLE_IF_DEFAULT_AUTO_ESCAPING_POLICY );
+        cfg.setSharedVariable( "richText", new RichTextContentMethod( ) );
         cfg.setTemplateLoader( new MultiTemplateLoader( new TemplateLoader[] {
                 stubs, new FileTemplateLoader( new File( TEMPLATES_ROOT ) ), new FileTemplateLoader( new File( CORE_TEMPLATES_ROOT ) )
         } ) );
