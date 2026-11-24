@@ -67,7 +67,7 @@ import fr.paris.lutece.portal.web.upload.MultipartHttpServletRequest;
  */
 @RequestScoped
 @Named
-@Controller( controllerJsp = "ManageControllerUserCode.jsp", controllerPath = "jsp/admin/plugins/accesscontrol/", right = "USERCODES_MANAGEMENT" )
+@Controller( controllerJsp = "ManageControllerUserCode.jsp", controllerPath = "jsp/admin/plugins/accesscontrol/", right = "USERCODES_MANAGEMENT", securityTokenEnabled = true )
 public class UserCodeControllerJspBean extends AbstractManageAccessControlJspBean
 {
 
@@ -126,7 +126,8 @@ public class UserCodeControllerJspBean extends AbstractManageAccessControlJspBea
         return redirectView( request, VIEW_MANAGE_USER_CODE );
     }
 
-    @Action( value = ACTION_DO_IMPORT, securityTokenDisabled = true )
+    // The token of the page is issued under the name of its view: the import posted from it is checked under that name
+    @Action( value = ACTION_DO_IMPORT, securityTokenAction = VIEW_MANAGE_USER_CODE )
     public String doImport( HttpServletRequest request )
     {
         int accessControlId = NumberUtils.toInt( request.getParameter( PARAMETER_ACCESS_CONTROL ), -1 );
