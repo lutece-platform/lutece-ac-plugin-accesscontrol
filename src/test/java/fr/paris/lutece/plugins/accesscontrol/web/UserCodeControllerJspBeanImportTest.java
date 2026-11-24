@@ -34,6 +34,7 @@
 package fr.paris.lutece.plugins.accesscontrol.web;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.junit.jupiter.api.Test;
@@ -65,5 +66,17 @@ public class UserCodeControllerJspBeanImportTest
         assertNull( UserCodeControllerJspBean.parseLine( "u2;C2;01/01/2030", 7 ) );
         assertNull( UserCodeControllerJspBean.parseLine( "u3;C3", 7 ) );
         assertNull( UserCodeControllerJspBean.parseLine( ";C4;2030-01-01", 7 ) );
+    }
+
+    /**
+     * A user or a code longer than its column is a wrong line: refused before anything is written
+     */
+    @Test
+    public void testParseLineTooLong( )
+    {
+        String strLong = "a".repeat( 101 );
+        assertNull( UserCodeControllerJspBean.parseLine( strLong + ";C1;2030-01-01", 7 ) );
+        assertNull( UserCodeControllerJspBean.parseLine( "u1;" + strLong + ";2030-01-01", 7 ) );
+        assertNotNull( UserCodeControllerJspBean.parseLine( "a".repeat( 100 ) + ";C1;2030-01-01", 7 ) );
     }
 }

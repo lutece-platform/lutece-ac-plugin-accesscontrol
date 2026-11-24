@@ -61,6 +61,7 @@ import fr.paris.lutece.plugins.accesscontrol.service.IAccessControllerType;
 import fr.paris.lutece.plugins.accesscontrol.service.rbac.AccessControlResourceIdService;
 import fr.paris.lutece.plugins.accesscontrol.util.BoolCondition;
 import fr.paris.lutece.api.user.User;
+import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.business.rbac.RBAC;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.admin.AdminUserService;
@@ -100,6 +101,8 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
     // Parameters
     private static final String PARAMETER_ID_ACCESSCONTROL = "id";
     private static final String PARAMETER_ID_CONTROLLER = "id_controller";
+    private static final String PARAMETER_ERROR_MESSAGE = "error_message";
+    private static final int MAX_LENGTH_ERROR_MESSAGE = 100;
     private static final String PARAMETER_ORDER = "new_order";
     private static final String PARAMETER_BOOL_CONDITON = "boolCond";
     private static final String PARAMETER_CONTROLLER_TYPE = "controller_type";
@@ -131,6 +134,7 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
     // Validations
     private static final String VALIDATION_ATTRIBUTES_PREFIX = "accesscontrol.model.entity.accesscontrol.attribute.";
     private static final String MESSAGE_ERROR_ACCESSCONTROL_NOT_FOUND = "accesscontrol.message.error.accessControlNotFound";
+    private static final String MESSAGE_ERROR_ERROR_MESSAGE_TOO_LONG = "accesscontrol.message.error.errorMessageTooLong";
     private static final String MESSAGE_ERROR_ACCESSCONTROLLER_NOT_FOUND = "accesscontrol.message.error.accessControllerNotFound";
 
     // Views
@@ -436,6 +440,14 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
             throw new AccessDeniedException( "Unknown controller type " + controller.getType( ) );
         }
 
+        // the error message is stored in a varchar(100) column
+        if ( StringUtils.length( request.getParameter( PARAMETER_ERROR_MESSAGE ) ) > MAX_LENGTH_ERROR_MESSAGE )
+        {
+            addError( I18nService.getLocalizedString( MESSAGE_ERROR_ERROR_MESSAGE_TOO_LONG, new Object [ ] {
+                    String.valueOf( MAX_LENGTH_ERROR_MESSAGE )
+            }, getLocale( ) ) );
+            return redirect( request, VIEW_MODIFY_CONFIG_CONTROLLER, PARAMETER_ID_CONTROLLER, nId );
+        }
         controllerType.saveControllerConfig( request, getLocale( ), controller );
         String action = request.getParameter( PARAMETER_ACTION );
         if ( StringUtils.isNotBlank( action ) )

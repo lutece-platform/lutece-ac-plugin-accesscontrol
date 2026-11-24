@@ -95,6 +95,7 @@ public class UserCodeControllerJspBean extends AbstractManageAccessControlJspBea
 
     private static final String PARAMETER_ACCESS_CONTROL = "access_control";
     private static final String PARAMETER_FILE = "csv_file";
+    private static final int MAX_LENGTH_USER_CODE = 100;
 
     // Templates
     private static final String TEMPLATE_MANAGE_USER_CODE = "/admin/plugins/accesscontrol/manage_usercodes.html";
@@ -220,8 +221,10 @@ public class UserCodeControllerJspBean extends AbstractManageAccessControlJspBea
     static UserCodeControllerData parseLine( String strLine, int accessControlId )
     {
         String [ ] strFields = strLine.split( ";" );
-        if ( strFields.length < 3 || StringUtils.isAnyBlank( strFields [0], strFields [1], strFields [2] ) )
+        if ( strFields.length < 3 || StringUtils.isAnyBlank( strFields [0], strFields [1], strFields [2] )
+                || strFields [0].trim( ).length( ) > MAX_LENGTH_USER_CODE || strFields [1].trim( ).length( ) > MAX_LENGTH_USER_CODE )
         {
+            // columns userId and code are varchar(100): a longer value is a wrong line, not an SQL error in the middle of the import
             return null;
         }
         UserCodeControllerData data = new UserCodeControllerData( );

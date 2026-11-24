@@ -12,7 +12,7 @@
 				<@input type='number' name='ageMax' id='ageMax' value='${config.ageMax!}' min=0 />
 			</@formGroup>
 			<@formGroup labelFor='error_message' labelKey='#i18n{accesscontrol.modify_controller.controller_error_config.title}' mandatory=true>
-				<@input type='text' name='error_message' id='error_message' value='${config.errorMessage!}' />
+				<@input type='text' name='error_message' id='error_message' value='${config.errorMessage!}' maxlength=100 />
 			</@formGroup>
 			<#include "./data_handler_config.html">
 		</@fieldSet>
