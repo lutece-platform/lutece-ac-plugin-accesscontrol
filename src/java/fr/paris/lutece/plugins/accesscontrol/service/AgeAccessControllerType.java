@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.accesscontrol.service;
 
+
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.Period;
@@ -51,6 +52,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 import fr.paris.lutece.plugins.accesscontrol.business.AccessController;
 import fr.paris.lutece.plugins.accesscontrol.business.config.AgeAccessControllerConfig;
 import fr.paris.lutece.plugins.accesscontrol.business.config.IAccessControllerConfigDAO;
+import fr.paris.lutece.plugins.accesscontrol.util.AccessControlUtils;
 import fr.paris.lutece.portal.business.accesscontrol.AccessControlSessionData;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
@@ -148,7 +150,7 @@ public class AgeAccessControllerType extends AbstractPersistentAccessControllerT
         String strDate = request.getParameter( PARAMETER_DATE );
         if ( StringUtils.isBlank( strDate ) )
         {
-            return config.getErrorMessage( );
+            return AccessControlUtils.getRefusalMessage( config.getErrorMessage( ), request );
         }
 
         LocalDate birthDate = LocalDate.parse( strDate );
@@ -157,12 +159,12 @@ public class AgeAccessControllerType extends AbstractPersistentAccessControllerT
 
         if ( config.getAgeMin( ) > 0 && currentAge < config.getAgeMin( ) )
         {
-            return config.getErrorMessage( );
+            return AccessControlUtils.getRefusalMessage( config.getErrorMessage( ), request );
         }
 
         if ( config.getAgeMax( ) > 0 && currentAge > config.getAgeMax( ) )
         {
-            return config.getErrorMessage( );
+            return AccessControlUtils.getRefusalMessage( config.getErrorMessage( ), request );
         }
 
         return null;

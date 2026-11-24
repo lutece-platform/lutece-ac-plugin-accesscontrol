@@ -33,8 +33,11 @@
  */
 package fr.paris.lutece.plugins.accesscontrol.util;
 
+import org.apache.commons.lang3.StringUtils;
+import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * Util class for plugin accessControl
@@ -43,6 +46,7 @@ import fr.paris.lutece.portal.service.plugin.PluginService;
 public final class AccessControlUtils
 {
     public static final String PLUGIN_NAME = "accesscontrol";
+    private static final String MESSAGE_DEFAULT_REFUSAL = "accesscontrol.xpage.accesscontrol.defaultRefusal";
 
     private AccessControlUtils( )
     {
@@ -56,5 +60,24 @@ public final class AccessControlUtils
     public static Plugin getPlugin( )
     {
         return PluginService.getPlugin( PLUGIN_NAME );
+    }
+
+    /**
+     * Gives the message of a refusal: the error message configured on the controller, or a default message when the controller has none
+     * (configuration page opened but never saved). A controller type must never answer null for a refusal: null means passed
+     *
+     * @param strErrorMessage
+     *            the error message of the configuration of the controller, may be null
+     * @param request
+     *            the request
+     * @return a non empty refusal message
+     */
+    public static String getRefusalMessage( String strErrorMessage, HttpServletRequest request )
+    {
+        if ( StringUtils.isNotBlank( strErrorMessage ) )
+        {
+            return strErrorMessage;
+        }
+        return I18nService.getLocalizedString( MESSAGE_DEFAULT_REFUSAL, request.getLocale( ) );
     }
 }

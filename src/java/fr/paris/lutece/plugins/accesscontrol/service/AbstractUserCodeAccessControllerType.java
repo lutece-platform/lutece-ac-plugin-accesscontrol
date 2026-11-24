@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.accesscontrol.service;
 
+
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -46,6 +47,7 @@ import fr.paris.lutece.plugins.accesscontrol.business.AccessController;
 import fr.paris.lutece.plugins.accesscontrol.business.UserCodeControllerDataHome;
 import fr.paris.lutece.plugins.accesscontrol.business.config.IAccessControllerConfigDAO;
 import fr.paris.lutece.plugins.accesscontrol.business.config.UserCodeAccessControllerConfig;
+import fr.paris.lutece.plugins.accesscontrol.util.AccessControlUtils;
 import fr.paris.lutece.portal.service.security.UserNotSignedException;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 
@@ -121,11 +123,11 @@ public abstract class AbstractUserCodeAccessControllerType implements IAccessCon
 
         if ( StringUtils.isEmpty( userId ) || StringUtils.isEmpty( code ) )
         {
-            return config.getErrorMessage( );
+            return AccessControlUtils.getRefusalMessage( config.getErrorMessage( ), request );
         }
         if ( !UserCodeControllerDataHome.checkUserCodeValid( userId, code, controller.getIdAccesscontrol( ) ) )
         {
-            return config.getErrorMessage( );
+            return AccessControlUtils.getRefusalMessage( config.getErrorMessage( ), request );
         }
         return null;
     }

@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.accesscontrol.service;
 
+
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -45,6 +46,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import fr.paris.lutece.plugins.accesscontrol.business.AccessController;
 import fr.paris.lutece.plugins.accesscontrol.business.config.IAccessControllerConfigDAO;
 import fr.paris.lutece.plugins.accesscontrol.business.config.TosAccessControllerConfig;
+import fr.paris.lutece.plugins.accesscontrol.util.AccessControlUtils;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 
@@ -133,6 +135,6 @@ public class TosAccessControllerType implements IAccessControllerType
             return null;
         }
         TosAccessControllerConfig config = _dao.load( controller.getId( ) );
-        return config.getErrorMessage( );
+        return AccessControlUtils.getRefusalMessage( config.getErrorMessage( ), request );
     }
 }
