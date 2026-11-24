@@ -768,7 +768,8 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
         else
             if ( nOrderToSet > controllerToChange.getOrder( ) )
             {
-                controllerList = controllerList.stream( ).filter( ac -> ac.getOrder( ) < nOrderToSet && ac.getOrder( ) > controllerToChange.getOrder( ) )
+                // The controller at the new position moves up too, or two controllers end on the same order
+                controllerList = controllerList.stream( ).filter( ac -> ac.getOrder( ) <= nOrderToSet && ac.getOrder( ) > controllerToChange.getOrder( ) )
                         .collect( Collectors.toList( ) );
                 for ( AccessController controller : controllerList )
                 {
