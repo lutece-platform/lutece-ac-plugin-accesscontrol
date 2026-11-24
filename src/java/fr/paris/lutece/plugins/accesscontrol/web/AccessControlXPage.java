@@ -166,7 +166,8 @@ public class AccessControlXPage extends MVCApplication
 
         if ( _controllerList.isEmpty( ) )
         {
-            return null;
+            // An access control without controller cannot be passed: a site message, a null page is an internal error
+            return noAccessControlMessage( request );
         }
 
         if ( _nCurrentControllerOrder > _controllerList.size( ) )

@@ -160,6 +160,37 @@ public class AccessControlXPageResourceTest extends LuteceTestCase
         assertNotNull( page );
     }
 
+    /**
+     * The access control of the resource has no controller: a site message, not a null page
+     */
+    @Test
+    public void testAccessControlWithoutController( )
+    {
+        AccessControl empty = createAccessControl( "empty" );
+        AccessControlResourceHome.removeByResource( ID_RESOURCE, RESOURCE_TYPE );
+        AccessControlResource resource = new AccessControlResource( );
+        resource.setIdResource( ID_RESOURCE );
+        resource.setResourceType( RESOURCE_TYPE );
+        resource.setIdAccessControl( empty.getId( ) );
+        AccessControlResourceHome.create( resource );
+        try
+        {
+            MockHttpServletRequest request = new MockHttpServletRequest( );
+            LocalVariables.setLocal( null, request, new RedirectResponse( ) );
+            AccessControlXPage xpage = CDI.current( ).select( AccessControlXPage.class ).get( );
+            request.addParameter( AccessControlXPage.PARAMETER_INIT, "true" );
+            request.addParameter( AccessControlXPage.PARAMETER_ID_ACCESS_CONTROL, String.valueOf( empty.getId( ) ) );
+            request.addParameter( AccessControlXPage.PARAMETER_RESOURCE_ID, String.valueOf( ID_RESOURCE ) );
+            request.addParameter( AccessControlXPage.PARAMETER_RESOURCE_TYPE, RESOURCE_TYPE );
+
+            assertThrows( fr.paris.lutece.portal.service.message.SiteMessageException.class, ( ) -> xpage.getControllerView( request ) );
+        }
+        finally
+        {
+            AccessControlHome.remove( empty.getId( ) );
+        }
+    }
+
     private interface Call
     {
         Object call( ) throws Exception;
