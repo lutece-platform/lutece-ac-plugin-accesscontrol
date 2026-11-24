@@ -309,6 +309,8 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
     @Action( ACTION_CREATE_ACCESSCONTROL )
     public String doCreateAccessControl( HttpServletRequest request ) throws AccessDeniedException
     {
+        // a new object: the one of the session may have been reset (list opened in another tab) or belong to another access control
+        _accesControl = new AccessControl( );
         populate( _accesControl, request, getLocale( ) );
 
         // Check constraints
@@ -561,6 +563,29 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
     }
 
     /**
+     * Gives the access control posted by the modification form: read from the database (the object of the session is the last one opened, maybe in
+     * another tab) and filled with the posted fields; its state and creation date, not posted, are kept
+     *
+     * @param request
+     *            The Http request
+     * @return the access control to store, or null if it does not exist
+     */
+    AccessControl getPostedAccessControl( HttpServletRequest request )
+    {
+        AccessControl accessControl = AccessControlHome.findByPrimaryKey( NumberUtils.toInt( request.getParameter( PARAMETER_ID_ACCESSCONTROL ), -1 ) );
+        if ( accessControl == null )
+        {
+            return null;
+        }
+        boolean bEnabled = accessControl.isEnabled( );
+        Date dateCreation = accessControl.getCreationDate( );
+        populate( accessControl, request, getLocale( ) );
+        accessControl.setEnabled( bEnabled );
+        accessControl.setCreationDate( dateCreation );
+        return accessControl;
+    }
+
+    /**
      * Process the change form of a accesscontrol
      *
      * @param request
@@ -571,7 +596,12 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
     @Action( ACTION_MODIFY_ACCESSCONTROL )
     public String doModifyAccessControl( HttpServletRequest request ) throws AccessDeniedException
     {
-        populate( _accesControl, request, getLocale( ) );
+        AccessControl accessControl = getPostedAccessControl( request );
+        if ( accessControl == null )
+        {
+            return redirectNotFound( request, MESSAGE_ERROR_ACCESSCONTROL_NOT_FOUND );
+        }
+        _accesControl = accessControl;
 
         // Check constraints
         if ( !validateBean( _accesControl, VALIDATION_ATTRIBUTES_PREFIX ) )
