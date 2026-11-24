@@ -123,6 +123,11 @@ public class AccessControlService implements IAccessControlService
         for ( Integer id : persistentData.keySet( ) )
         {
             AccessController controller = AccessControllerHome.findByPrimaryKey( id );
+            if ( controller == null )
+            {
+                // data kept in the session for a controller removed since
+                continue;
+            }
             IAccessControllerType controllerType = CDI.current( ).select( IAccessControllerType.class ).select( NamedLiteral.of( controller.getType( ) ) ).get( );
             if ( controllerType instanceof IPersistentAccessControllerType )
             {
