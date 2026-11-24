@@ -34,6 +34,7 @@
 package fr.paris.lutece.plugins.accesscontrol.web;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -204,8 +205,32 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
     public String processController( HttpServletRequest request, HttpServletResponse response ) throws AccessDeniedException
     {
         checkAccessControlPermission( request );
+        checkAccessControlWorkgroup( request );
 
         return super.processController( request, response );
+    }
+
+    /**
+     * Checks that the access control concerned by the request belongs to a workgroup of the user: the list hides the others, a request built by hand
+     * must be refused too
+     *
+     * @param request
+     *            The Http request
+     * @throws AccessDeniedException
+     *             if the access control is outside the workgroups of the user
+     */
+    void checkAccessControlWorkgroup( HttpServletRequest request ) throws AccessDeniedException
+    {
+        if ( MVCUtils.getView( request ) == null && MVCUtils.getAction( request ) == null )
+        {
+            return;
+        }
+        int nIdAccessControl = getIdAccessControl( request );
+        AccessControl accessControl = ( nIdAccessControl != -1 ) ? AccessControlHome.findByPrimaryKey( nIdAccessControl ) : null;
+        if ( accessControl != null && !AdminWorkgroupService.isAuthorized( accessControl, (User) AdminUserService.getAdminUser( request ) ) )
+        {
+            throw new AccessDeniedException( "Access control " + nIdAccessControl + " is outside the workgroups of the user" );
+        }
     }
 
     /**
@@ -274,7 +299,9 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
     public String getManageAccessControls( HttpServletRequest request )
     {
         _accesControl = null;
-        List<AccessControl> listAccessControls = AccessControlHome.getAccessControlsList( );
+        // only the access controls of the workgroups of the user, as the select of the forms and the import of the user codes
+        List<AccessControl> listAccessControls = new ArrayList<>( AdminWorkgroupService.getAuthorizedCollection( AccessControlHome.getAccessControlsList( ),
+                (User) getUser( ) ) );
         Map<String, Object> model = getPaginatedListModel( request, MARK_ACCESSCONTROL_LIST, listAccessControls, JSP_MANAGE_ACCESSCONTROLS );
 
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_ACCESSCONTROLS, TEMPLATE_MANAGE_ACCESSCONTROLS, model );
