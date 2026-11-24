@@ -116,6 +116,12 @@ public class CommentAccessControllerType implements IAccessControllerType
     public String getControllerForm( HttpServletRequest request, Locale locale, AccessController controller )
     {
         CommentAccessControllerConfig config = _dao.load( controller.getId( ) );
+        if ( config == null )
+        {
+            // controller never configured: its screen is shown without comment
+            config = new CommentAccessControllerConfig( );
+            config.setIdAccessController( controller.getId( ) );
+        }
         Map<String, Object> model = new HashMap<>( );
         model.put( MARK_CONFIG, config );
 

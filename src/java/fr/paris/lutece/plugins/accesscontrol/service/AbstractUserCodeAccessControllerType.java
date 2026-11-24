@@ -107,6 +107,12 @@ public abstract class AbstractUserCodeAccessControllerType implements IAccessCon
     public String getControllerForm( HttpServletRequest request, Locale locale, AccessController controller )
     {
         UserCodeAccessControllerConfig config = _dao.load( controller.getId( ) );
+        if ( config == null )
+        {
+            // controller never configured: its screen is shown without comment
+            config = new UserCodeAccessControllerConfig( );
+            config.setIdAccessController( controller.getId( ) );
+        }
         Map<String, Object> model = new HashMap<>( );
         model.put( MARK_CONFIG, config );
 
@@ -117,6 +123,11 @@ public abstract class AbstractUserCodeAccessControllerType implements IAccessCon
     public String validate( HttpServletRequest request, AccessController controller ) throws UserNotSignedException
     {
         UserCodeAccessControllerConfig config = _dao.load( controller.getId( ) );
+        if ( config == null )
+        {
+            // controller never configured: refused, it cannot be checked
+            return AccessControlUtils.getRefusalMessage( null, request );
+        }
 
         String userId = getUserId( request );
         String code = request.getParameter( PARAMETER_USER_CODE );

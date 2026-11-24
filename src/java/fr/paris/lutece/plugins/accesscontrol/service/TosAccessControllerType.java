@@ -121,6 +121,12 @@ public class TosAccessControllerType implements IAccessControllerType
     public String getControllerForm( HttpServletRequest request, Locale locale, AccessController controller )
     {
         TosAccessControllerConfig config = _dao.load( controller.getId( ) );
+        if ( config == null )
+        {
+            // controller never configured: its screen is shown without comment
+            config = new TosAccessControllerConfig( );
+            config.setIdAccessController( controller.getId( ) );
+        }
         Map<String, Object> model = new HashMap<>( );
         model.put( MARK_CONFIG, config );
 
@@ -130,11 +136,11 @@ public class TosAccessControllerType implements IAccessControllerType
     @Override
     public String validate( HttpServletRequest request, AccessController controller )
     {
-        if ( request.getParameter( PARAMETER_CHECK ) != null )
+        if ( request.getParameter( PARAMETER_CHECK ) != null && _dao.load( controller.getId( ) ) != null )
         {
             return null;
         }
         TosAccessControllerConfig config = _dao.load( controller.getId( ) );
-        return AccessControlUtils.getRefusalMessage( config.getErrorMessage( ), request );
+        return AccessControlUtils.getRefusalMessage( ( config != null ) ? config.getErrorMessage( ) : null, request );
     }
 }

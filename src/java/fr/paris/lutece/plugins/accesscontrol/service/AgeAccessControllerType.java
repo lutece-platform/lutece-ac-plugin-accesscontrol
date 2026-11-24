@@ -124,6 +124,12 @@ public class AgeAccessControllerType extends AbstractPersistentAccessControllerT
     public String getControllerForm( HttpServletRequest request, Locale locale, AccessController controller )
     {
         AgeAccessControllerConfig config = _dao.load( controller.getId( ) );
+        if ( config == null )
+        {
+            // controller never configured: its screen is shown without comment
+            config = new AgeAccessControllerConfig( );
+            config.setIdAccessController( controller.getId( ) );
+        }
         Map<String, Object> model = new HashMap<>( );
         model.put( MARK_CONFIG, config );
 
@@ -147,6 +153,11 @@ public class AgeAccessControllerType extends AbstractPersistentAccessControllerT
     public String validate( HttpServletRequest request, AccessController controller )
     {
         AgeAccessControllerConfig config = _dao.load( controller.getId( ) );
+        if ( config == null )
+        {
+            // controller never configured: refused, it cannot be checked
+            return AccessControlUtils.getRefusalMessage( null, request );
+        }
         String strDate = request.getParameter( PARAMETER_DATE );
         if ( StringUtils.isBlank( strDate ) )
         {
