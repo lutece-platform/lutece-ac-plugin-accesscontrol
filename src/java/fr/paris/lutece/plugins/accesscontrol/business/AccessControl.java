@@ -39,6 +39,9 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
+
 import fr.paris.lutece.plugins.accesscontrol.service.rbac.AccessControlRbacAction;
 import fr.paris.lutece.portal.service.rbac.RBACResource;
 import fr.paris.lutece.portal.service.workgroup.AdminWorkgroupResource;
@@ -55,7 +58,10 @@ public class AccessControl implements Serializable, AdminWorkgroupResource, RBAC
     // Variables declarations
     private int _nId;
 
+    @NotEmpty( message = "#i18n{accesscontrol.validation.accesscontrol.Name.notEmpty}" )
+    @Size( max = 255, message = "#i18n{accesscontrol.validation.accesscontrol.Name.size}" )
     private String _strName;
+    @NotEmpty( message = "#i18n{accesscontrol.validation.accesscontrol.Description.notEmpty}" )
     private String _strDescription;
     private Date _dateCreationDate;
     private boolean _bIsEnabled;
