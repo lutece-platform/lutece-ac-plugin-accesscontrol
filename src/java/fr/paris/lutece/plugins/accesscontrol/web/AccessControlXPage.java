@@ -203,29 +203,7 @@ public class AccessControlXPage extends MVCApplication
 
     private XPage validateAccessControlAndRedirect( HttpServletRequest request ) throws SiteMessageException
     {
-        boolean result = true;
-        for ( int i = 0; i < _controllerList.size( ); i++ )
-        {
-            int order = i + 1;
-            boolean valid = _accessControlResult.get( order ) == null;
-
-            AccessController controller = _controllerList.stream( ).filter( c -> c.getOrder( ) == order ).findFirst( ).orElse( null );
-
-            if ( controller != null )
-            {
-                BoolCondition condition = BoolCondition.valueOf( controller.getBoolCond( ) );
-
-                if ( condition == BoolCondition.AND )
-                {
-                    result = result && valid;
-                }
-                else
-                    if ( condition == BoolCondition.OR )
-                    {
-                        result = result || valid;
-                    }
-            }
-        }
+        boolean result = isPassed( _controllerList, _accessControlResult );
 
         if ( result && _accessControlResult.size() == _controllerList.size() )
         {
@@ -256,6 +234,51 @@ public class AccessControlXPage extends MVCApplication
         SiteMessageService.setMessage( request, "accesscontrol.xpage.accesscontrol.sitemessage.error", messageArgs,
                 "accesscontrol.xpage.accesscontrol.sitemessage.title", url.getUrl( ), null, SiteMessage.TYPE_ERROR );
         return null;
+    }
+
+    /**
+     * Combines the results of the controllers in their order. The first controller gives the starting result: its condition (AND / OR, not
+     * shown for the first row) is ignored, otherwise a first controller in OR would be passed whatever its result
+     *
+     * @param listController
+     *            the controllers of the access control
+     * @param mapResult
+     *            the result of each controller by order: null when passed, the error message otherwise
+     * @return true if the access control is passed
+     */
+    static boolean isPassed( List<AccessController> listController, Map<Integer, String> mapResult )
+    {
+        boolean result = true;
+        boolean bFirst = true;
+        for ( int i = 0; i < listController.size( ); i++ )
+        {
+            int order = i + 1;
+            boolean valid = mapResult.get( order ) == null;
+
+            AccessController controller = listController.stream( ).filter( c -> c.getOrder( ) == order ).findFirst( ).orElse( null );
+
+            if ( controller != null )
+            {
+                if ( bFirst )
+                {
+                    result = valid;
+                    bFirst = false;
+                    continue;
+                }
+                BoolCondition condition = BoolCondition.valueOf( controller.getBoolCond( ) );
+
+                if ( condition == BoolCondition.AND )
+                {
+                    result = result && valid;
+                }
+                else
+                    if ( condition == BoolCondition.OR )
+                    {
+                        result = result || valid;
+                    }
+            }
+        }
+        return result;
     }
 
     private XPage noAccessControlMessage( HttpServletRequest request ) throws SiteMessageException
