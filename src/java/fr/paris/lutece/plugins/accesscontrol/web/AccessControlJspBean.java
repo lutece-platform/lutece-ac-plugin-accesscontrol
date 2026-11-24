@@ -130,6 +130,8 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
 
     // Validations
     private static final String VALIDATION_ATTRIBUTES_PREFIX = "accesscontrol.model.entity.accesscontrol.attribute.";
+    private static final String MESSAGE_ERROR_ACCESSCONTROL_NOT_FOUND = "accesscontrol.message.error.accessControlNotFound";
+    private static final String MESSAGE_ERROR_ACCESSCONTROLLER_NOT_FOUND = "accesscontrol.message.error.accessControllerNotFound";
 
     // Views
     private static final String VIEW_MANAGE_ACCESSCONTROLS = "manageAccessControls";
@@ -332,7 +334,11 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
     @View( value = VIEW_CONFIRM_REMOVE_ACCESSCONTROL, securityTokenAction = ACTION_REMOVE_ACCESSCONTROL )
     public String getConfirmRemoveAccessControl( HttpServletRequest request )
     {
-        int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_ACCESSCONTROL ) );
+        int nId = NumberUtils.toInt( request.getParameter( PARAMETER_ID_ACCESSCONTROL ), -1 );
+        if ( AccessControlHome.findByPrimaryKey( nId ) == null )
+        {
+            return redirectNotFound( request, MESSAGE_ERROR_ACCESSCONTROL_NOT_FOUND );
+        }
         UrlItem url = new UrlItem( getActionUrl( ACTION_REMOVE_ACCESSCONTROL ) );
         url.addParameter( PARAMETER_ID_ACCESSCONTROL, nId );
 
@@ -352,7 +358,11 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
     @View( value = VIEW_CONFIRM_REMOVE_ACCESSCONTROLLER, securityTokenAction = ACTION_REMOVE_ACCESSCONTROLLER )
     public String getConfirmRemoveAccessController( HttpServletRequest request )
     {
-        int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_CONTROLLER ) );
+        int nId = NumberUtils.toInt( request.getParameter( PARAMETER_ID_CONTROLLER ), -1 );
+        if ( AccessControllerHome.findByPrimaryKey( nId ) == null )
+        {
+            return redirectNotFound( request, MESSAGE_ERROR_ACCESSCONTROLLER_NOT_FOUND );
+        }
         UrlItem url = new UrlItem( getActionUrl( ACTION_REMOVE_ACCESSCONTROLLER ) );
         url.addParameter( PARAMETER_ID_CONTROLLER, nId );
 
@@ -372,12 +382,12 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
     @View( VIEW_MODIFY_CONFIG_CONTROLLER )
     public String getModifyConfigController( HttpServletRequest request ) throws AccessDeniedException
     {
-        int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_CONTROLLER ) );
+        int nId = NumberUtils.toInt( request.getParameter( PARAMETER_ID_CONTROLLER ), -1 );
 
         AccessController controller = AccessControllerHome.findByPrimaryKey( nId );
         if ( controller == null )
         {
-            throw new AccessDeniedException( "AccessController not found for ID " + nId );
+            return redirectNotFound( request, MESSAGE_ERROR_ACCESSCONTROLLER_NOT_FOUND );
         }
 
         IAccessControllerType controllerType = CDI.current( ).select( IAccessControllerType.class ).select( NamedLiteral.of( controller.getType( ) ) ).get( );
@@ -486,9 +496,13 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
     @Action( ACTION_REMOVE_ACCESSCONTROLLER )
     public String doRemoveAccessController( HttpServletRequest request )
     {
-        int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_CONTROLLER ) );
+        int nId = NumberUtils.toInt( request.getParameter( PARAMETER_ID_CONTROLLER ), -1 );
 
         AccessController controllerToDelete = AccessControllerHome.findByPrimaryKey( nId );
+        if ( controllerToDelete == null )
+        {
+            return redirectNotFound( request, MESSAGE_ERROR_ACCESSCONTROLLER_NOT_FOUND );
+        }
         int idAccessControl = controllerToDelete.getIdAccesscontrol( );
 
         _accessControlService.deleteAccessController( nId );
@@ -513,7 +527,7 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
     @View( VIEW_MODIFY_ACCESSCONTROL )
     public String getModifyAccessControl( HttpServletRequest request )
     {
-        int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_ACCESSCONTROL ) );
+        int nId = NumberUtils.toInt( request.getParameter( PARAMETER_ID_ACCESSCONTROL ), -1 );
 
         AdminUser adminUser = getUser( );
         Locale locale = getLocale( );
@@ -521,6 +535,10 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
         if ( _accesControl == null || ( _accesControl.getId( ) != nId ) )
         {
             _accesControl = AccessControlHome.findByPrimaryKey( nId );
+        }
+        if ( _accesControl == null )
+        {
+            return redirectNotFound( request, MESSAGE_ERROR_ACCESSCONTROL_NOT_FOUND );
         }
 
         List<AccessController> listController = AccessControllerHome.getAccessControllersListByAccessControlId( nId );
@@ -607,7 +625,11 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
      */
     private String getConfirmationUrl( HttpServletRequest request, String strAction, String strMessageKey )
     {
-        int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_ACCESSCONTROL ) );
+        int nId = NumberUtils.toInt( request.getParameter( PARAMETER_ID_ACCESSCONTROL ), -1 );
+        if ( AccessControlHome.findByPrimaryKey( nId ) == null )
+        {
+            return AdminMessageService.getMessageUrl( request, MESSAGE_ERROR_ACCESSCONTROL_NOT_FOUND, AdminMessage.TYPE_STOP );
+        }
         UrlItem url = new UrlItem( getActionUrl( strAction ) );
         url.addParameter( PARAMETER_ID_ACCESSCONTROL, nId );
 
@@ -761,5 +783,19 @@ public class AccessControlJspBean extends AbstractManageAccessControlJspBean
         AccessControllerHome.update( controllerToChange );
 
         return redirect( request, VIEW_MODIFY_ACCESSCONTROL, PARAMETER_ID_ACCESSCONTROL, nId );
+    }
+
+    /**
+     * Redirects to a Lutece message saying that the access control or the controller asked for does not exist
+     *
+     * @param request
+     *            The Http request
+     * @param strMessageKey
+     *            The key of the message
+     * @return the url of the message
+     */
+    private String redirectNotFound( HttpServletRequest request, String strMessageKey )
+    {
+        return redirect( request, AdminMessageService.getMessageUrl( request, strMessageKey, AdminMessage.TYPE_STOP ) );
     }
 }
