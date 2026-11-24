@@ -1,48 +1,57 @@
+<#assign createUrl = 'jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp?view=createAccessControl' />
+<#assign pageTitle><span class="avatar avatar-sm bg-red-lt me-2" aria-hidden="true"><@icon style='lock-access' /></span>#i18n{accesscontrol.manage_accesscontrols.title}</#assign>
 <@pageContainer>
-    <@pageColumn>
-		<@pageHeader title='#i18n{accesscontrol.manage_accesscontrols.title}'>
+	<@pageColumn>
+		<@pageHeader title=pageTitle>
 			<#if permission_create_ac>
-				<@offcanvas targetUrl='jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp?view_createAccessControl=' targetElement='#create_accesscontrol_page' redirectForm=false id='manage_accesscontrol' title='#i18n{accesscontrol.manage_accesscontrols.buttonAdd}' btnTitle='#i18n{accesscontrol.manage_accesscontrols.buttonAdd}' btnIcon='plus' position='end' />
+				<@aButton href=createUrl title='#i18n{accesscontrol.manage_accesscontrols.buttonAdd}' buttonIcon='plus' color='primary' hideTitle=['xs','sm','md'] />
 			</#if>
 		</@pageHeader>
-		<@messages infos=infos />
-		<#if accesscontrol_list?size gt 0>
-		<@manageFeature>
-		<#list accesscontrol_list as accesscontrol >
-			<@manageFeatureItem>
-				<@manageFeatureItemColumn auto=true>${accesscontrol.name} - ${accesscontrol.description}</@manageFeatureItemColumn>
-				<@manageFeatureItemColumn align='end'>
-				<#if accesscontrol.actionList?exists>
-					<#list accesscontrol.actionList as action>
-						<#assign color='primary' />
-						<#assign perm=action.permission?lower_case />
-						<#if action.permission=='DELETE'>
-							<#assign color = 'danger' />
-							<#assign perm='' />
-							<@aButton href='${action.url}&id=${accesscontrol.id}' title='${action.name}' hideTitle=['all'] color='${color}' class='${perm}' buttonIcon=action.iconUrl size='sm' />
-						<#elseif action.permission=='ENABLE'>
-							<#if action.enabled == accesscontrol.enabled>
-								<#if accesscontrol.enabled>
-									<#assign color = 'danger' />
-								<#else>	
-									<#assign color = 'success' />
-								</#if>
-								<@aButton href='${action.url}&id=${accesscontrol.id}' title='${action.name}' hideTitle=['all'] color='${color}' class='${perm}' buttonIcon=action.iconUrl size='sm' params={ 'aria-label': action.name + ' - ' + accesscontrol.name } />
-							</#if>
+		<@messages infos=infos![] errors=errors![] warnings=warnings![] />
+		<#if ( accesscontrol_list![] )?has_content>
+			<@manageFeature layout='list' id='accesscontrols'>
+				<#list accesscontrol_list as accesscontrol>
+				<@manageFeatureItem id='accesscontrol_${accesscontrol.id}'>
+					<@manageFeatureItemColumn class='d-flex align-items-center gap-2 text-truncate'>
+						<span class="avatar avatar-sm <#if accesscontrol.enabled>bg-red-lt<#else>bg-secondary-lt</#if>" aria-hidden="true"><@icon style='lock-access' /></span>
+						<@div class='text-truncate'>
+							<@div class='fw-semibold text-truncate'>${accesscontrol.name}</@div>
+							<@div class='text-secondary small text-truncate'>${accesscontrol.description!}</@div>
+						</@div>
+					</@manageFeatureItemColumn>
+					<@manageFeatureItemColumn auto=true align='end'>
+						<#if accesscontrol.enabled>
+							<@tag color='' class='bg-green-lt' tagIcon='check'>#i18n{portal.util.labelEnabled}</@tag>
 						<#else>
-							<@aButton href='${action.url}&id=${accesscontrol.id}' title='${action.name}' hideTitle=['all'] color='${color}' class='${perm}' buttonIcon=action.iconUrl size='sm' params={ 'aria-label': action.name + ' - ' + accesscontrol.name } />
+							<@tag color='' class='bg-secondary-lt' tagIcon='ban'>#i18n{portal.util.labelDisabled}</@tag>
 						</#if>
-					</#list>
-				</#if>
-				</@manageFeatureItemColumn>
-			</@manageFeatureItem>
-		</#list>
-		</@manageFeature>
-		<@paginationAdmin paginator=paginator combo=1 />
+						<@div class='btn-actions'>
+						<#if accesscontrol.actionList??>
+							<#list accesscontrol.actionList as action>
+								<#if action.permission=='DELETE'>
+									<@aButton href='${action.url}&id=${accesscontrol.id}' style='btn-action text-danger' color='' buttonIcon=action.iconUrl title='${action.name}' hideTitle=['all'] params={ 'aria-label': action.name + ' - ' + accesscontrol.name } />
+								<#elseif action.permission=='ENABLE'>
+									<#if action.enabled == accesscontrol.enabled>
+										<#assign enableStyle = accesscontrol.enabled?then( 'btn-action text-danger', 'btn-action text-success' ) />
+										<@aButton href='${action.url}&id=${accesscontrol.id}' style=enableStyle color='' buttonIcon=action.iconUrl title='${action.name}' hideTitle=['all'] params={ 'aria-label': action.name + ' - ' + accesscontrol.name } />
+									</#if>
+								<#else>
+									<@aButton href='${action.url}&id=${accesscontrol.id}' style='btn-action' color='' buttonIcon=action.iconUrl title='${action.name}' hideTitle=['all'] params={ 'aria-label': action.name + ' - ' + accesscontrol.name } />
+								</#if>
+							</#list>
+						</#if>
+						</@div>
+					</@manageFeatureItemColumn>
+				</@manageFeatureItem>
+				</#list>
+			</@manageFeature>
+			<#if paginator?? && ( paginator.pagesCount gt 1 || paginator.itemsCount gt 10 )>
+				<@paginationAdmin paginator=paginator combo=1 />
+			</#if>
 		<#else>
-			<@box>
-				<@empty />
-			</@box>
+			<@card>
+				<@empty title='#i18n{accesscontrol.manage_accesscontrols.title}' iconName='lock-off' subtitle=' ' actionTitle='#i18n{accesscontrol.manage_accesscontrols.buttonAdd}' actionUrl=createUrl />
+			</@card>
 		</#if>
 	</@pageColumn>
 </@pageContainer>

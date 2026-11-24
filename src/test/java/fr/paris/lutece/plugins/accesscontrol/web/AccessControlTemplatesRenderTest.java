@@ -90,7 +90,8 @@ public class AccessControlTemplatesRenderTest
             + "<#else><input type=\"${type}\" name=\"${name}\" value=\"${value}\"></#if></#macro>"
             + "<#macro select name='' items=[] rest...><select name=\"${name}\"><#list items as item><option value=\"${item.code}\">${item.name}</option></#list></select></#macro>"
             + "<#macro button name='' title='' params={} rest...><button name=\"${name}\"<@attributes params />>${title}</button></#macro>"
-            + "<#macro aButton rest...></#macro>"
+            + "<#macro aButton rest...></#macro><#macro icon rest...></#macro><#macro card rest...><div class=\"card\"><#nested></div></#macro>"
+            + "<#macro empty title='' rest...><div class=\"empty\">${title}</div></#macro>"
             + "<#macro messages errors=[] rest...><#list errors as error><div class=\"alert\">${error.message}</div></#list></#macro>";
     /** Stand-in of the core editor include of the configuration forms. */
     private static final String EDITOR = "admin/util/editor/editor.html";
@@ -263,9 +264,25 @@ public class AccessControlTemplatesRenderTest
     @Test
     public void testUserCodesFormIsMultipart( ) throws Exception
     {
-        String strHtml = render( TEMPLATE_MANAGE_USERCODES, Map.of( "access_control_list", List.of( Map.of( "code", "3", "name", HOSTILE ) ), "errors", List.of( ) ) );
+        // The list of the service always starts with the empty choice "-"
+        String strHtml = render( TEMPLATE_MANAGE_USERCODES, Map.of( "access_control_list",
+                List.of( Map.of( "code", "-1", "name", "-" ), Map.of( "code", "3", "name", HOSTILE ) ), "errors", List.of( ) ) );
 
         assertTrue( strHtml.contains( "enctype=\"multipart/form-data\"" ), strHtml );
         assertTrue( strHtml.contains( "<option value=\"3\">" + HOSTILE_ESCAPED + "</option>" ), strHtml );
+        assertFalse( strHtml.contains( "class=\"empty\"" ), strHtml );
+    }
+
+    /**
+     * Without any enabled access control the list holds only the empty choice: the page says so instead of showing a form that
+     * could only import into no access control
+     */
+    @Test
+    public void testUserCodesWithoutAccessControlShowsEmptyState( ) throws Exception
+    {
+        String strHtml = render( TEMPLATE_MANAGE_USERCODES, Map.of( "access_control_list", List.of( Map.of( "code", "-1", "name", "-" ) ), "errors", List.of( ) ) );
+
+        assertTrue( strHtml.contains( "class=\"empty\"" ), strHtml );
+        assertFalse( strHtml.contains( "<form" ), strHtml );
     }
 }

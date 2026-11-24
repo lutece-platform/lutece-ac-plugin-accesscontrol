@@ -1,19 +1,29 @@
+<#assign listUrl = 'jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp' />
+<#assign pageTitle><span class="avatar avatar-sm bg-red-lt me-2" aria-hidden="true"><@icon style='lock-access' /></span>#i18n{accesscontrol.manage_usercodes.pageTitle}</#assign>
 <@pageContainer>
-    <@pageColumn>
-		<@pageHeader title='#i18n{accesscontrol.manage_usercodes.pageTitle}'>
-			<@aButton href='jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp' title='#i18n{accesscontrol.manage_usercodes.linkBackToManageAccessControls}' buttonIcon='lock-access' color='secondary'  />
+	<@pageColumn>
+		<@pageHeader title=pageTitle>
+			<@aButton href=listUrl title='#i18n{accesscontrol.manage_usercodes.linkBackToManageAccessControls}' buttonIcon='arrow-left' color='light' hideTitle=['xs','sm'] />
 		</@pageHeader>
-		<@messages errors=errors />
-		<@tform class='form' method='post' name='upload_workflow' action='jsp/admin/plugins/accesscontrol/ManageControllerUserCode.jsp' enctype="multipart/form-data" boxed=true>
+		<@messages infos=infos![] errors=errors![] warnings=warnings![] />
+		<#-- The list always starts with the empty choice "-": there is nothing to import into while it holds no access control -->
+		<#if ( access_control_list![] )?size gt 1>
+		<@tform name='import_usercodes' action='jsp/admin/plugins/accesscontrol/ManageControllerUserCode.jsp' enctype='multipart/form-data' boxed=true>
 			<@formGroup labelFor='access_control' labelKey='#i18n{accesscontrol.manage_usercode.labelAccessControl}' mandatory=true rows=2>
-				<@select name='access_control' items=access_control_list />
+				<@select name='access_control' id='access_control' items=access_control_list mandatory=true />
 			</@formGroup>
-			<@formGroup labelFor='csv_file' labelKey='#i18n{accesscontrol.manage_usercode.labelImportFile}' helpKey='#i18n{accesscontrol.manage_usercode.labelImportFile.help}' rows=2>
-				<@input type='file' name='csv_file'/>
+			<@formGroup labelFor='csv_file' labelKey='#i18n{accesscontrol.manage_usercode.labelImportFile}' helpKey='#i18n{accesscontrol.manage_usercode.labelImportFile.help}' mandatory=true rows=2>
+				<@input type='file' name='csv_file' id='csv_file' accept='.csv,.txt,text/csv,text/plain' mandatory=true />
 			</@formGroup>
-			<@formGroup>
-				<@button type='submit' name='action_doImport' buttonIcon='check' title='#i18n{portal.admin.message.buttonValidate}' />
+			<@formGroup rows=2>
+				<@button type='submit' name='action_doImport' color='primary' buttonIcon='upload' title='#i18n{accesscontrol.manage_usercode.buttonImport}' />
+				<@aButton href=listUrl color='light' buttonIcon='x' title='#i18n{portal.util.labelCancel}' />
 			</@formGroup>
 		</@tform>
+		<#else>
+		<@card>
+			<@empty title='#i18n{portal.util.labelNoItem}' iconName='lock-off' subtitle=' ' actionTitle='#i18n{accesscontrol.manage_usercodes.linkBackToManageAccessControls}' actionIcon='arrow-left' actionUrl=listUrl />
+		</@card>
+		</#if>
 	</@pageColumn>
 </@pageContainer>

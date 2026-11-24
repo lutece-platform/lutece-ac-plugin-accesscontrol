@@ -1,12 +1,14 @@
+<#assign pageTitle><span class="avatar avatar-sm bg-red-lt me-2" aria-hidden="true"><@icon style='lock-access' /></span>#i18n{accesscontrol.modify_controller.page_title}</#assign>
 <@pageContainer>
-    <@pageColumn>
-		<@pageHeader title='#i18n{accesscontrol.modify_controller.page_title}' />
+	<@pageColumn>
+		<@pageHeader title=pageTitle />
+		<@messages infos=infos![] errors=errors![] warnings=warnings![] />
 		<@tform action='jsp/admin/plugins/accesscontrol/ManageAccessControls.jsp' id='edit_controller_page' boxed=true>
 			<@fieldSet>
 				${controller_config!}
 				<@formGroup>
-					<@button type='submit' name='action_modifyConfigController' buttonIcon='device-floppy' title='#i18n{portal.util.labelValidate}' />
-					<@button cancel=true type='submit' name='action_cancelModifyConfigController' buttonIcon='x' title='#i18n{portal.util.labelCancel}' params={"formnovalidate": true} />
+					<@button type='submit' name='action_modifyConfigController' color='primary' buttonIcon='device-floppy' title='#i18n{portal.util.labelValidate}' />
+					<@button color='light' type='submit' name='action_cancelModifyConfigController' buttonIcon='x' title='#i18n{portal.util.labelCancel}' params={"formnovalidate": true} />
 				</@formGroup>
 			</@fieldSet>
 		</@tform>
