@@ -53,6 +53,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 
 import fr.paris.lutece.plugins.accesscontrol.business.AccessControl;
 import fr.paris.lutece.plugins.accesscontrol.business.AccessControlHome;
+import fr.paris.lutece.plugins.accesscontrol.business.AccessControlResourceHome;
 import fr.paris.lutece.plugins.accesscontrol.business.AccessController;
 import fr.paris.lutece.plugins.accesscontrol.business.AccessControllerHome;
 import fr.paris.lutece.plugins.accesscontrol.service.IAccessControllerType;
@@ -124,11 +125,19 @@ public class AccessControlXPage extends MVCApplication
 
     private void init( HttpServletRequest request )
     {
-        int idAccessControl = NumberUtils.toInt( request.getParameter( PARAMETER_ID_ACCESS_CONTROL ), -1 );
         _idResource = NumberUtils.toInt( request.getParameter( PARAMETER_RESOURCE_ID ), -1 );
         _resourceType = request.getParameter( PARAMETER_RESOURCE_TYPE );
         _nCurrentControllerOrder = 1;
         _accessControlResult = new HashMap<>( );
+        // The controllers to pass are the ones of the access control linked to the resource: the access control given by the request is only
+        // accepted when it is that one, otherwise passing any other access control would unlock the resource
+        int idAccessControl = NumberUtils.toInt( request.getParameter( PARAMETER_ID_ACCESS_CONTROL ), -1 );
+        if ( StringUtils.isEmpty( _resourceType ) || idAccessControl != AccessControlResourceHome.findByResource( _idResource, _resourceType ) )
+        {
+            _accessControl = null;
+            _controllerList = null;
+            return;
+        }
         _accessControl = AccessControlHome.findByPrimaryKey( idAccessControl );
         _controllerList = AccessControllerHome.getAccessControllersListByAccessControlId( idAccessControl );
     }
