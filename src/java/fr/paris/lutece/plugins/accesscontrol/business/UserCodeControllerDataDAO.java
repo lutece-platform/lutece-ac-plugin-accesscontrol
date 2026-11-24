@@ -52,7 +52,7 @@ public class UserCodeControllerDataDAO implements IUserCodeControllerDataDAO
     private static final String SQL_QUERY_SELECT_ALL = "SELECT userId, code, id_access_control, date_validity FROM accesscontrol_controller_user_code_data ";
     private static final String SQL_QUERY_SELECT_BY_USER = SQL_QUERY_SELECT_ALL + "WHERE userId = ? ";
     private static final String SQL_QUERY_SELECT_BY_USER_AND_CODE = SQL_QUERY_SELECT_ALL
-            + "WHERE userId = ? AND CODE = ? AND id_access_control = ? AND ( date_validity IS NULL OR date_validity > ? )";
+            + "WHERE userId = ? AND CODE = ? AND id_access_control = ? AND ( date_validity IS NULL OR date_validity >= ? )";
     private static final String SQL_QUERY_INSERT = "INSERT INTO accesscontrol_controller_user_code_data ( userId, code, id_access_control, date_validity ) VALUES ( ?, ?, ?, ? )";
     private static final String SQL_QUERY_DELETE = "DELETE FROM accesscontrol_controller_user_code_data WHERE userId = ? AND id_access_control = ? ";
     private static final String SQL_QUERY_DELETE_BU_ACCESS_CONTROL = "DELETE FROM accesscontrol_controller_user_code_data WHERE id_access_control = ? ";
