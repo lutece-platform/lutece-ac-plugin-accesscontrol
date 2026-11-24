@@ -221,6 +221,11 @@ public class AccessControlXPage extends MVCApplication
         if ( result && _accessControlResult.size() == _controllerList.size() )
         {
             AccessControlSessionData sessionData = _service.getSessionDataForResource( request, _idResource, _resourceType );
+            if ( sessionData == null )
+            {
+                // No protected resource sent the visitor here (its plugin creates the session data before): nothing to return to
+                return noAccessControlMessage( request );
+            }
             sessionData.setAccessControlResult( true );
             request.getSession( ).setAttribute( sessionData.getSessionKey( ), sessionData );
 
@@ -264,6 +269,10 @@ public class AccessControlXPage extends MVCApplication
         if ( currentControllerType instanceof IPersistentAccessControllerType && validationResult == null )
         {
             AccessControlSessionData sessionData = _service.getSessionDataForResource( request, _idResource, _resourceType );
+            if ( sessionData == null )
+            {
+                return noAccessControlMessage( request );
+            }
             ( (IPersistentAccessControllerType) currentControllerType ).persistDataToSession( sessionData, request, getLocale( request ),
                     _currentController.getId( ) );
         }
