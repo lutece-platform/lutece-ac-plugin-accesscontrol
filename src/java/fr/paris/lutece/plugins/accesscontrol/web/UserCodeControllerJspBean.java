@@ -80,6 +80,8 @@ public class UserCodeControllerJspBean extends AbstractManageAccessControlJspBea
 
     private static final String MESSAGE_ERROR_NO_FILE = "accesscontrol.manage_usercode.error.noFile";
     private static final String MESSAGE_ERROR_INVALID_LINE = "accesscontrol.manage_usercode.error.invalidLine";
+    private static final String MESSAGE_ERROR_NO_ACCESS_CONTROL = "accesscontrol.manage_usercode.error.noAccessControl";
+    private static final String MESSAGE_INFO_IMPORTED = "accesscontrol.manage_usercode.info.imported";
 
     // View
     private static final String VIEW_MANAGE_USER_CODE = "manageUserCodeView";
@@ -128,6 +130,11 @@ public class UserCodeControllerJspBean extends AbstractManageAccessControlJspBea
     public String doImport( HttpServletRequest request )
     {
         int accessControlId = NumberUtils.toInt( request.getParameter( PARAMETER_ACCESS_CONTROL ), -1 );
+        if ( !isAccessControlOffered( accessControlId ) )
+        {
+            addError( MESSAGE_ERROR_NO_ACCESS_CONTROL, getLocale( ) );
+            return redirectView( request, VIEW_MANAGE_USER_CODE );
+        }
         if ( request instanceof MultipartHttpServletRequest )
         {
             MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
@@ -174,9 +181,30 @@ public class UserCodeControllerJspBean extends AbstractManageAccessControlJspBea
                 UserCodeControllerDataHome.remove( data.getUser( ), data.getIdAccessControl( ) );
                 UserCodeControllerDataHome.create( data );
             }
+            addInfo( I18nService.getLocalizedString( MESSAGE_INFO_IMPORTED, new Object [ ] {
+                    String.valueOf( listData.size( ) )
+            }, getLocale( ) ) );
         }
 
         return redirectView( request, VIEW_MANAGE_USER_CODE );
+    }
+
+    /**
+     * Whether the access control is one of those the page offers: enabled and in a workgroup of the user. The empty choice "-" of the
+     * list (-1) is not one, nor an id posted by hand that the user is not allowed to see.
+     * 
+     * @param accessControlId
+     *            the id of the access control
+     * @return true if the user codes may be imported into it
+     */
+    private boolean isAccessControlOffered( int accessControlId )
+    {
+        if ( accessControlId <= 0 )
+        {
+            return false;
+        }
+        String strId = String.valueOf( accessControlId );
+        return _accessControlService.getAccessControlsEnabled( getUser( ), getLocale( ) ).stream( ).anyMatch( item -> strId.equals( item.getCode( ) ) );
     }
 
     /**
