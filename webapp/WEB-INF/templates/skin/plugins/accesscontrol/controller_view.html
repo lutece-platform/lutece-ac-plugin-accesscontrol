@@ -4,7 +4,7 @@
 		<#if warnings?size gt 0 >
 			<@cAlert type='warning' id='accesscontrol_errors' title='#i18n{portal.util.message.titleWarning}' params={ 'tabindex': '-1' }>
 				<@chList class='list-unstyled'>
-				<#list warnings as warning ><#if warning.message??><@chItem>${warning.message!'#i18n{portal.util.message.titleWarning}'}</@chItem></#if></#list>
+				<#list warnings as warning ><#assign warningText = (warning?is_hash)?then(warning.message!'', warning) /><#if warningText?has_content><@chItem>${warningText}</@chItem></#if></#list>
 				</@chList>
 			</@cAlert>
 		</#if>
